@@ -1,0 +1,45 @@
+{
+    "version": "0.1.0",
+    "showOutput": "always",
+    "suppressTaskName": true,
+    "windows": {
+            "command": "cmd",
+            "isShellCommand": true,
+            "args": ["/C"],
+            "showOutput": "always",
+            "tasks": [
+                {
+                    "taskName": "Build",
+                    "args": [
+                        "mkdir Build & g++ -std=c++11 main.cpp -o Build/build"
+                    ],
+                    "isBuildCommand": true,
+                    "suppressTaskName": true,
+                    "problemMatcher": [
+                        "$tsc",
+                        "$lessCompile"
+                    ]
+                }
+            ]
+    },
+    "linux": {
+            "command": "sh",
+            "isShellCommand": true,
+            "args": ["-c"],
+            "showOutput": "always",
+            "tasks": [
+                {
+                    "taskName": "Build",
+                    "args": [
+                        "mkdir Build & g++ -std=c++11 main.cpp -o Build/build"
+                    ],
+                    "isBuildCommand": true,
+                    "suppressTaskName": true,
+                    "problemMatcher": [
+                        "$tsc",
+                        "$lessCompile"
+                    ]
+                }
+            ]
+    }
+}

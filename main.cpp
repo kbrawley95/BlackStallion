@@ -1,9 +1,9 @@
-#include <iostream>
+#include "include/common.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::cout<<"hello world"<<std::endl;
-    std::cin.get();
+    Engine* engine;
+    engine->start();
 
     return 0;
 }

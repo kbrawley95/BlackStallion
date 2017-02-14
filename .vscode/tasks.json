@@ -11,13 +11,27 @@
                 {
                     "taskName": "Build",
                     "args": [
-                        "mkdir Build & g++ -std=c++11 main.cpp -o Build/build"
+                        "mkdir Build & g++ -std=c++11 main.cpp -lopengl32 -lglew32 -lglew32mx -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf  -o Build/build"
                     ],
                     "isBuildCommand": true,
                     "suppressTaskName": true,
                     "problemMatcher": [
                         "$tsc",
                         "$lessCompile"
+                    ]
+                },
+                {
+                    "taskName": "Clean",
+                    "args": [
+                        "rmdir Build & mkdir Build"
+                    ],
+                    "suppressTaskName": true
+                },
+                {
+                    "taskName": "Setup",
+                    "suppressTaskName": true,
+                    "args": [
+                        "mkdir Build & robocopy Dependencies C:/MinGW /E & robocopy Dependencies/bin Build"
                     ]
                 }
             ]
@@ -31,13 +45,27 @@
                 {
                     "taskName": "Build",
                     "args": [
-                        "mkdir Build & g++ -std=c++11 main.cpp -o Build/build"
+                        "mkdir Build & g++ -std=c++11 main.cpp  -lopengl32 -lglew32 -lglew23mx lSDL2 -lSDL2_image lSDL2_ttf -lzib1 -o Build/build"
                     ],
                     "isBuildCommand": true,
                     "suppressTaskName": true,
                     "problemMatcher": [
                         "$tsc",
                         "$lessCompile"
+                    ]
+                },
+                {
+                    "taskName": "Clean",
+                    "args": [
+                        "rm -r Build & mkdir Build"
+                    ],
+                    "suppressTaskName": true
+                },
+                {
+                    "taskName": "Setup",
+                    "suppressTaskName": true,
+                    "args": [
+                        "mkdir Build & cp Dependencies C:/MinGW -e & cp Dependencies/bin Build"
                     ]
                 }
             ]

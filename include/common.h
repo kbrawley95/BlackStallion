@@ -19,6 +19,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glu.h>
+#include <GL/gl.h>
 
 //SDL
 #include <SDL2/SDL.h>
@@ -41,7 +42,7 @@ using namespace glm;
 using namespace std;
 
 //PATHS
-const std::string ASSET_PATH = "assets/";
+const std::string ASSET_PATH = "../assets/";
 const std::string SHADER_PATH = ASSET_PATH + "shaders/";
 const std::string TEXTURE_PATH= ASSET_PATH + "textures/";
 const std::string FONT_PATH= ASSET_PATH + "fonts/";

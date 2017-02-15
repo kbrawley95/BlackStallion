@@ -1,5 +1,7 @@
 #include "../include/engine.h"
 
+GLuint shaderProgram = 0;
+
 const int WIDTH=1027;
 const int HEIGHT=720;
 
@@ -12,6 +14,7 @@ Graphics* graphics;
 
 GLuint vertexBufferID;
 GLuint elementsBufferID;
+GLuint vertexArrayID;
 
 Vertex verts[]={
 
@@ -111,6 +114,11 @@ int Engine::start()
         SDL_Log("SDL initialized");
     }
 
+    //Specify OpenGL Version (4.2)
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
     //Generate Application Window
      window=createWindow("Black Stallion");
     //Map OpenGL context to window
@@ -186,6 +194,10 @@ int Engine::start()
 
 void Engine::initScene()
 {
+
+    glGenVertexArrays(1, &vertexArrayID);
+    glBindVertexArray(vertexArrayID);
+
     //Create Vertex vertexBuffer
     glGenBuffers(1, &vertexBufferID);
     //Make the new VBO active (Bind it to pipeline)
@@ -199,7 +211,32 @@ void Engine::initScene()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferID);
     //Copy Index data to the EBO
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    
+
+    //Tell the shader that 0 is the position elementsBufferID
+    glEnableVertexPointerArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), NULL);
+
+    GLuint vertexShaderProgram=0;
+    string vsPath = SHADER_PATH + "simpleVS.glsl";
+    vertexShaderProgram = loadShaderFromFile(vsPath, VERTEX_SHADER);
+    checkForCompilerErrors(vertexShaderProgram);
+
+    GLuint fragmentShaderProgram=0;
+    string fsPath = SHADER_PATH + "simpleFS.glsl";
+    fragmentShaderProgram = loadShaderFromFile(fsPath, FRAGMENT_SHADER);
+    checkForCompilerErrors(fragmentShaderProgram);
+
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShaderProgram);
+    glAttachShader(shaderProgram, fragmentShaderProgram);
+    glLinkProgram(shaderProgram);
+    checkForLinkErrors(shaderProgram);
+
+    //Now we ccan delete the VS & FS Programs
+    glDeleteShader(vertexShaderProgram);
+    glDeleteShader(fragmentShaderProgam);
+
+    glBindAttribLocation(shaderProgram, 0, "vertexPosition");
     
 }
 
@@ -210,34 +247,9 @@ void Engine::render()
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-    //Make the new VB0 active. Repeat here as a sanity check(may have changed since Initialisation)
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+    glBindVertexArray(vertexArrayID);
 
-    //Make the new EBO active. Sanity check #2
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferID);
-    
-    //Establish its 3 coordinates per vertex with zero stride (space between elements)
-    //in array and contain floating point numbers (Size of each vertex)
-    glVertexPointer(3, GL_FLOAT, sizeof(Vertex), NULL);
-
-    //The last parameter basically says that the colours start 3 floats into each element of the array
-    glColorPointer(4, GL_FLOAT, sizeof(Vertex), (void**)(3 * sizeof(float)));
-
-    //Establish array contains vertices(vertices)
-    glEnableClientState(GL_VERTEX_ARRAY);
-    //Establish array contains colours
-    glEnableClientState(GL_COLOR_ARRAY);
-
-    //SwitchtoModelView
-    glMatrixMode(GL_MODELVIEW);
-    //Reset using the Identity Matrix
-    glLoadIdentity();
-    //Add perspective to viewport (Enable 3D)
-    gluLookAt(xPos, 0.0, zPos,/*Cam pos*/ 0.0, 0.0, -1.0f, /*Centre (focus point) in 3d space*/ 0.0, 1.0, 0.0 /*Up Axis of Camera*/);
-    //Translateto-5.0fonz-axis
-    glTranslatef(0.0f,0.0f,-6.0f);
-    //Begindrawingtriangles
-    //glDrawArrays(GL_TRIANGLES, 0, sizeof(verts)/sizeof(float));
+    glUseProgram(shaderProgram);
 
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
@@ -249,6 +261,8 @@ void Engine::update()
 
 void Engine::cleanUp()
 {
+    glDeleteProgram(shaderProgram);
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementsBufferID);
+    glDeleteBuffers(1, &vertexArrayID);
 }

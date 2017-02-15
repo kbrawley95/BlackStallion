@@ -2,6 +2,7 @@
 
 const int WIDTH=1027;
 const int HEIGHT=720;
+Graphics* graphics;
 
 SDL_Window* Engine::createWindow(const char* windowName)
 {
@@ -82,7 +83,9 @@ int Engine::start()
 
 void Engine::render()
 {
-
+    //Clear the background to black
+    glClearColor(1.0f,0.0f,0.0f,0.0f);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 }
 
 void Engine::update()

@@ -6,7 +6,7 @@
 class Engine
 {
     public:
-    Graphics* graphics;
+ 
     SDL_Window* window;
     
     int start();

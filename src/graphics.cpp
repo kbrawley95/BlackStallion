@@ -29,6 +29,13 @@ void Graphics::initOpenGL()
 
     //Turn on best persepctive correction
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+    GLenum err=glewInit();
+    if(GLEW_OK!=err)
+    {
+        /*Problem: glewInit failed, something is seriously wrong*/
+        std::cout<<"Error: "<<glewGetErrorString(err)<<std::endl;
+    }
 }
 
 void Graphics::setViewport(int width, int height)

@@ -4,6 +4,26 @@ const int WIDTH=1027;
 const int HEIGHT=720;
 Graphics* graphics;
 
+Vertex verts[]={
+
+    //Top
+    {0.0f, 1.0f, 0.0f,
+    1.0f, 0.0f,0.0f, 1.0f}, 
+
+    //Bottom Left
+    {-1.0f, -1.0f, 0.0f, 
+    0.0f, 1.0f,0.0f, 1.0f},
+
+    //Bottom Right
+    {1.0f, -1.0f, 0.0f, 
+    0.0f, 0.0f, 1.0f, 1.0f},
+
+    
+};
+
+GLuint vertexBufferID;
+GLuint elementsBufferID;
+
 SDL_Window* Engine::createWindow(const char* windowName)
 {
     SDL_Window* window = SDL_CreateWindow(windowName, //Window Title 
@@ -35,6 +55,7 @@ int Engine::start()
 
     // //OpenGL Initialisation
     graphics->initOpenGL();
+    initScene();
     graphics->setViewport(WIDTH,HEIGHT);
 
     //Main Game Loop
@@ -78,6 +99,20 @@ int Engine::start()
         }
 
     }
+    cleanUp();
+    SDL_GL_DeleteContext(glContext);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
+void Engine::initScene()
+{
+    //Create Vertex vertexBuffer
+    glGenBuffers(1, &vertexBufferID);
+    //Make the new VBO active (Bind it to pipeline)
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+    //Copy Vertex Data to VBO
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 }
 
 
@@ -87,22 +122,37 @@ void Engine::render()
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+    //Make the new VB0 active. Repeat here as a sanity check(may have changed since Initialisation)
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+    
+    //Establish its 3 coordinates per vertex with zero stride (space between elements)
+    //in array and contain floating point numbers (Size of each vertex)
+    glVertexPointer(3, GL_FLOAT, sizeof(Vertex), NULL);
+
+    //The last parameter basically says that the colours start 3 floats into each element of the array
+    glColorPointer(4, GL_FLOAT, sizeof(Vertex), (void**)(3 * sizeof(float)));
+
+    //Establish array contains vertices(vertices)
+    glEnableClientState(GL_VERTEX_ARRAY);
+    //Establish array contains colours
+    glEnableClientState(GL_COLOR_ARRAY);
+
     //SwitchtoModelView
     glMatrixMode(GL_MODELVIEW);
-    //ResetusingtheIdentityMatrix
+    //Reset using the Identity Matrix
     glLoadIdentity();
     //Translateto-5.0fonz-axis
-    glTranslatef(0.0f,0.0f,-5.0f);
+    glTranslatef(0.0f,0.0f,-6.0f);
     //Begindrawingtriangles
-    glBegin(GL_TRIANGLES);
-        glColor3f(1.0f,0.0f,0.0f);//Colourofthevertices
-        glVertex3f(0.0f,1.0f,0.0f);//Top
-        glVertex3f(-1.0f,-1.0f,0.0f);//BottomLeft
-        glVertex3f(1.0f,-1.0f,0.0f);//BottomRight
-    glEnd();
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(verts)/sizeof(float));
 
 }
 
 void Engine::update()
 {
+}
+
+void Engine::cleanUp()
+{
+    glDeleteBuffers(1, &vertexBufferID);
 }

@@ -48,7 +48,8 @@ const std::string FONT_PATH= ASSET_PATH + "fonts/";
 const std::string MODEL_PATH= ASSET_PATH + "models/";
 
 //CLASS HEADERS
-#include "engine.h"
+#include "vertex.h"
 #include "graphics.h"
+#include "engine.h"
 
 #endif

@@ -84,8 +84,23 @@ int Engine::start()
 void Engine::render()
 {
     //Clear the background to black
-    glClearColor(1.0f,0.0f,0.0f,0.0f);
+    glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+    //SwitchtoModelView
+    glMatrixMode(GL_MODELVIEW);
+    //ResetusingtheIdentityMatrix
+    glLoadIdentity();
+    //Translateto-5.0fonz-axis
+    glTranslatef(0.0f,0.0f,-5.0f);
+    //Begindrawingtriangles
+    glBegin(GL_TRIANGLES);
+        glColor3f(1.0f,0.0f,0.0f);//Colourofthevertices
+        glVertex3f(0.0f,1.0f,0.0f);//Top
+        glVertex3f(-1.0f,-1.0f,0.0f);//BottomLeft
+        glVertex3f(1.0f,-1.0f,0.0f);//BottomRight
+    glEnd();
+
 }
 
 void Engine::update()

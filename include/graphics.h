@@ -1,11 +1,15 @@
 #ifndef _GRAPHICS_H
 #define _GRAPHICS_H
 
-#include "Common.h"
+#include "common.h"
 
 class Graphics
 {
     public:
+
+    Graphics();
+    ~Graphics();
+
     void initOpenGL();
     void paintGL();
     void setViewport(int width, int height);
@@ -15,7 +19,5 @@ class Graphics
     void sendDataToOpenGL();
 
 };
-
-
 
 #endif

@@ -49,5 +49,6 @@ const std::string MODEL_PATH= ASSET_PATH + "models/";
 
 //CLASS HEADERS
 #include "engine.h"
+#include "graphics.h"
 
 #endif

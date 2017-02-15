@@ -1,12 +1,12 @@
-#ifndef ENGINE_H 
-#define ENGINE_H
+#ifndef _ENGINE_H 
+#define _ENGINE_H
 
 #include "common.h"
 
 class Engine
 {
     public:
-    //Game* game;
+    Graphics* graphics;
     SDL_Window* window;
     
     int start();

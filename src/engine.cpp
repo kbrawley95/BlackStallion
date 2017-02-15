@@ -17,8 +17,6 @@ SDL_Window* Engine::createWindow(const char* windowName)
 
 int Engine::start()
 {
-   
-
      bool isRunning=true;
     //Error Checking
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -35,8 +33,8 @@ int Engine::start()
     SDL_GLContext glContext = SDL_GL_CreateContext(window);
 
     // //OpenGL Initialisation
-    // graphics->initOpenGL();
-    // graphics->setViewport(WIDTH,HEIGHT);
+    graphics->initOpenGL();
+    graphics->setViewport(WIDTH,HEIGHT);
 
     //Main Game Loop
     SDL_Event event;

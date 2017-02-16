@@ -1,6 +1,6 @@
 #include "../include/engine.h"
 
-GLuint shaderProgram = 0;
+
 
 const int WIDTH=1027;
 const int HEIGHT=720;
@@ -11,6 +11,8 @@ float zPos=0.0f;
 float speed=0.2f;
 
 Graphics* graphics;
+Shader* shader;
+Transform* transform;
 
 GLuint vertexBufferID;
 GLuint elementsBufferID;
@@ -21,20 +23,20 @@ Vertex verts[]={
     /*FRONT*/
 
     //Top Left
-    {-0.5f, 0.5f, 0.5f,
-    1.0f, 0.0f,0.0f, 1.0f}, 
+    {vec3(-0.5f, 0.5f, 0.5f),
+    vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
 
     //Bottom Left
-    {-0.5f, -0.5f, 0.5f, 
-    0.0f, 1.0f,0.0f, 1.0f},
+    {vec3(-0.5f, -0.5f, 0.5f), 
+    vec4(0.0f, 1.0f,0.0f, 1.0f)},
 
     //Bottom Right
-    {0.5f, -0.5f, 0.5f, 
-    0.0f, 0.0f, 1.0f, 1.0f},
+    {vec3(0.5f, -0.5f, 0.5f), 
+    vec4(0.0f, 0.0f, 1.0f, 1.0f)},
 
     //Top Right
-    {0.5f, 0.5f, 0.5f,
-    1.0f, 0.0f,0.0f, 1.0f}, 
+    {vec3(0.5f, 0.5f, 0.5f),
+    vec4(.0f, 0.0f,0.0f, 1.0f)}, 
 
   
 
@@ -42,20 +44,20 @@ Vertex verts[]={
     /*BACK*/
 
     //Top Left
-    {-0.5f, 0.5f, -0.5f,
-    1.0f, 0.0f,0.0f, 1.0f}, 
+    {vec3(-0.5f, 0.5f, -0.5f),
+    vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
 
     //Bottom Left
-    {-0.5f, -0.5f, -0.5f, 
-    0.0f, 1.0f,0.0f, 1.0f},
+    {vec3(-0.5f, -0.5f, -0.5f), 
+    vec4(0.0f, 1.0f,0.0f, 1.0f)},
 
     //Bottom Right
-    {0.5f, -0.5f, -0.5f, 
-    0.0f, 0.0f, 1.0f, 1.0f},
+    {vec3(0.5f, -0.5f, -0.5f), 
+    vec4(0.0f, 0.0f, 1.0f, 1.0f)},
 
     //Top Right
-    {0.5f, 0.5f, -0.5f,
-    1.0f, 0.0f,0.0f, 1.0f}, 
+    {vec3(0.5f, 0.5f, -0.5f),
+    vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
 
 
     
@@ -213,30 +215,12 @@ void Engine::initScene()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     //Tell the shader that 0 is the position elementsBufferID
-    glEnableVertexPointerArray(0);
+    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), NULL);
 
-    GLuint vertexShaderProgram=0;
-    string vsPath = SHADER_PATH + "simpleVS.glsl";
-    vertexShaderProgram = loadShaderFromFile(vsPath, VERTEX_SHADER);
-    checkForCompilerErrors(vertexShaderProgram);
+   shader->installShaders("/simpleVS.glsl", "/simpleFS.glsl");
 
-    GLuint fragmentShaderProgram=0;
-    string fsPath = SHADER_PATH + "simpleFS.glsl";
-    fragmentShaderProgram = loadShaderFromFile(fsPath, FRAGMENT_SHADER);
-    checkForCompilerErrors(fragmentShaderProgram);
-
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShaderProgram);
-    glAttachShader(shaderProgram, fragmentShaderProgram);
-    glLinkProgram(shaderProgram);
-    checkForLinkErrors(shaderProgram);
-
-    //Now we ccan delete the VS & FS Programs
-    glDeleteShader(vertexShaderProgram);
-    glDeleteShader(fragmentShaderProgam);
-
-    glBindAttribLocation(shaderProgram, 0, "vertexPosition");
+    
     
 }
 
@@ -247,9 +231,12 @@ void Engine::render()
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-    glBindVertexArray(vertexArrayID);
 
-    glUseProgram(shaderProgram);
+    glBindVertexArray(vertexArrayID);
+    glUseProgram(shader->shaderProgram);
+
+    GLint MVPLocation = glGetUniformLocation(shader->shaderProgram, "MVP");
+    glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(transform->getMVPMatrix()));
 
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
@@ -261,7 +248,7 @@ void Engine::update()
 
 void Engine::cleanUp()
 {
-    glDeleteProgram(shaderProgram);
+    glDeleteProgram(shader->shaderProgram);
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementsBufferID);
     glDeleteBuffers(1, &vertexArrayID);

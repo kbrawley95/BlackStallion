@@ -6,8 +6,17 @@
 class Transform
 {
     public:
+    mat4 getMVPMatrix();
+
+    Transform();
+    ~Transform();
+
 
     private:
+    mat4 worldMatrix;
+    mat4 viewMatrix;
+    mat4 projectionMatrix;
+
 };
 
 #endif 

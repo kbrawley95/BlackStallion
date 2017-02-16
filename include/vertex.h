@@ -5,8 +5,8 @@
 
 struct Vertex
 {
-    float x,y,z;
-    float r,g,b,a;
+    vec3 position;
+    vec4 colour;
 };
 
 

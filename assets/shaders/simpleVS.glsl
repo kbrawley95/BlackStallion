@@ -1,10 +1,10 @@
-#version 450
+#version 150
 
-in layout(location=0, vec3 vertexPostion);
+in vec3 vertexPosition;
 
 uniform mat4 MVP;
 
 void main()
 {
-    glPosition=MVP * vec4(vertexPostion,1.0f);
+    gl_Position = MVP * vec4(vertexPosition,1.0);
 }

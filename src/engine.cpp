@@ -216,10 +216,6 @@ void Engine::initScene()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), NULL);
 
-   shader->installShaders("/simpleVS.glsl", "/simpleFS.glsl");
-
-    
-    
 }
 
 
@@ -231,9 +227,10 @@ void Engine::render()
 
 
     glBindVertexArray(vertexArrayID);
-    glUseProgram(shader->shaderProgram);
+    glUseProgram(shader->getShaderProgram());
 
-    GLint MVPLocation = glGetUniformLocation(shader->shaderProgram, "MVP");
+
+    GLint MVPLocation = glGetUniformLocation(shader->getShaderProgram(), "MVP");
     glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(transform->getMVPMatrix()));
 
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
@@ -246,7 +243,7 @@ void Engine::update()
 
 void Engine::cleanUp()
 {
-    glDeleteProgram(shader->shaderProgram);
+    glDeleteProgram(shader->getShaderProgram());
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementsBufferID);
     glDeleteBuffers(1, &vertexArrayID);

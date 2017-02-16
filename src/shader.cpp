@@ -1,5 +1,39 @@
 #include "../include/shader.h"
 
+Shader::Shader(const std::string vertexShader, const std::string fragmentShader)
+{
+    shaderProgram= 0;
+
+    GLuint vertexShaderProgram=0;
+    string vsPath = SHADER_PATH + vertexShader;
+    vertexShaderProgram = loadShaderFromFile(vsPath, VERTEX_SHADER);
+    checkForCompilerErrors(vertexShaderProgram);
+
+    GLuint fragmentShaderProgram=0;
+    string fsPath = SHADER_PATH + fragmentShader;
+    fragmentShaderProgram = loadShaderFromFile(fsPath, FRAGMENT_SHADER);
+    checkForCompilerErrors(fragmentShaderProgram);
+
+    shaderProgram = glCreateProgram();
+
+    glAttachShader(shaderProgram, vertexShaderProgram);
+    glAttachShader(shaderProgram, fragmentShaderProgram);
+
+    glBindAttribLocation(shaderProgram, 0, "vertexPosition");
+    
+    glLinkProgram(shaderProgram);
+    checkForLinkErrors(shaderProgram);
+
+    //Now we ccan delete the VS & FS Programs
+    glDeleteShader(vertexShaderProgram);
+    glDeleteShader(fragmentShaderProgram);
+}
+
+Shader::~Shader()
+{
+     
+}
+
 //Load shader from a memory buffer
 GLuint Shader::loadShaderFromMemory(const char* pMem, SHADER_TYPE shaderType)
 {
@@ -95,29 +129,8 @@ bool Shader::checkForLinkErrors(GLuint program)
     return false;
 }
 
-void Shader::installShaders(const std::string vertexShader, const std::string fragmentShader)
+GLuint Shader::getShaderProgram()
 {
-    GLuint vertexShaderProgram=0;
-    string vsPath = SHADER_PATH + vertexShader;
-    vertexShaderProgram = loadShaderFromFile(vsPath, VERTEX_SHADER);
-    checkForCompilerErrors(vertexShaderProgram);
-
-    GLuint fragmentShaderProgram=0;
-    string fsPath = SHADER_PATH + fragmentShader;
-    fragmentShaderProgram = loadShaderFromFile(fsPath, FRAGMENT_SHADER);
-    checkForCompilerErrors(fragmentShaderProgram);
-
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShaderProgram);
-    glAttachShader(shaderProgram, fragmentShaderProgram);
-
-    glBindAttribLocation(shaderProgram, 0, "vertexPosition");
-    
-    glLinkProgram(shaderProgram);
-    checkForLinkErrors(shaderProgram);
-
-    //Now we ccan delete the VS & FS Programs
-    glDeleteShader(vertexShaderProgram);
-    glDeleteShader(fragmentShaderProgram);
+    return shaderProgram;
 }
 

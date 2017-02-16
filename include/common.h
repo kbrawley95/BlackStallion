@@ -42,11 +42,10 @@ using namespace glm;
 using namespace std;
 
 //PATHS
-const std::string BASE_PATH="C:/Users/kiera/Documents/GitHub/BlackStallion";
-const std::string ASSET_PATH  = BASE_PATH + "/assets";
+const std::string ASSET_PATH  =  "assets";
 const std::string SHADER_PATH = ASSET_PATH + "/shaders";
 const std::string TEXTURE_PATH = ASSET_PATH + "textures/";
-const std::string FONT_PATH = ASSET_PATH + "fonts/";
+const std::string FONT_PATH = ASSET_PATH + "fonts/";    
 const std::string MODEL_PATH = ASSET_PATH + "models/";
 const std::string SOUND_PATH = ASSET_PATH + "sound/";
 

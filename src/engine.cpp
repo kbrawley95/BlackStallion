@@ -1,7 +1,5 @@
 #include "../include/engine.h"
 
-
-
 const int WIDTH=1027;
 const int HEIGHT=720;
 

@@ -8,6 +8,8 @@ class Engine
     public:
     SDL_Window* window;
     int start();
+    float getScreenWidth();
+    float getScreenHeight();
     
 
     private:

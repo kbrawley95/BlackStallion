@@ -2,7 +2,7 @@
 
 Shader::Shader(const std::string vertexShader, const std::string fragmentShader)
 {
-    shaderProgram= 0;
+    shaderProgram = 0;
 
     GLuint vertexShaderProgram=0;
     string vsPath = SHADER_PATH + vertexShader;
@@ -20,11 +20,12 @@ Shader::Shader(const std::string vertexShader, const std::string fragmentShader)
     glAttachShader(shaderProgram, fragmentShaderProgram);
 
     glBindAttribLocation(shaderProgram, 0, "vertexPosition");
+    glBindAttribLocation(shaderProgram, 1, "vertexColour");
     
     glLinkProgram(shaderProgram);
     checkForLinkErrors(shaderProgram);
 
-    //Now we ccan delete the VS & FS Programs
+    //Now we can delete the VS & FS Programs
     glDeleteShader(vertexShaderProgram);
     glDeleteShader(fragmentShaderProgram);
 }
@@ -46,35 +47,39 @@ GLuint Shader::loadShaderFromMemory(const char* pMem, SHADER_TYPE shaderType)
 GLuint Shader::loadShaderFromFile(const std::string& filename, SHADER_TYPE shaderType)
 {
     std::string fileContents;
-    ifstream file;
-    file.open(filename.c_str(), std::ios::in);
-    if(!file)
-    {
-        std::cout<<"File: " << filename.c_str() << " could not be loaded"<<std::endl;
-        return 0;
-    }
+    ifstream openfile;
+    openfile.open(filename);
 
-    //Calculate file seize
-    if(file.good())
+    if(openfile.is_open())
     {
-        file.seekg(0, std::ios::end);
-        unsigned long length=file.tellg();
-        file.seekg(std::ios::beg);
-        if(length==0)
+        while(!openfile.eof())
         {
-            std::cout<<"File: "  <<filename.c_str() <<" has no contents"<<std::endl;
-            return 0;
+            openfile.seekg(0, std::ios::end);
+            unsigned long length=openfile.tellg();
+            openfile.seekg(std::ios::beg);
+            if(length==0)
+            {
+                std::cout<<"File: "  <<filename.c_str() <<" has no contents"<<std::endl;
+                return 0;
+            }
+
+            fileContents.resize(length);
+            openfile.read(&fileContents[0], length);
+            openfile.close();
+
+            //std::cout<<"File Contents: " <<fileContents<<std::endl;
+            
+            GLuint program =loadShaderFromMemory(fileContents.c_str(),shaderType);
+            std::cout<<"Shader: "<< filename.c_str() + 15<<" loaded successfully."<<std::endl;
+            return program;
         }
 
-        fileContents.resize(length);
-        file.read(&fileContents[0], length);
-        file.close();
-        
-        GLuint program =loadShaderFromMemory(fileContents.c_str(),shaderType);
-        std::cout<<"Shader: "<< filename.c_str()<<" loaded successfully."<<std::endl;
-        return program;
     }
-
+    else
+    {
+        std::cout<<"Could not open file"<<std::endl;
+        return 0;
+    }
 
     return 0;
 }

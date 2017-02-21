@@ -36,9 +36,6 @@ Vertex verts[]={
     {vec3(0.5f, 0.5f, 0.5f),
     vec4(.0f, 0.0f,0.0f, 1.0f)}, 
 
-  
-
-
     /*BACK*/
 
     //Top Left
@@ -195,6 +192,9 @@ int Engine::start()
 void Engine::initScene()
 {
 
+    shader = new Shader("/simpleVS.glsl", "/simpleFS.glsl");
+    transform = new Transform();
+
     glGenVertexArrays(1, &vertexArrayID);
     glBindVertexArray(vertexArrayID);
 
@@ -214,7 +214,10 @@ void Engine::initScene()
 
     //Tell the shader that 0 is the position elementsBufferID
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), NULL);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void **)offsetof(Vertex, position));
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1,4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void **)offsetof(Vertex, colour));
 
 }
 
@@ -247,4 +250,14 @@ void Engine::cleanUp()
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementsBufferID);
     glDeleteBuffers(1, &vertexArrayID);
+}
+
+float Engine::getScreenWidth()
+{
+    return (float)WIDTH;
+}
+
+float Engine::getScreenHeight()
+{
+    return (float)HEIGHT;
 }

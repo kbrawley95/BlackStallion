@@ -3,18 +3,22 @@
 const int WIDTH=1027;
 const int HEIGHT=720;
 
-float xPos=0.0f;
-float zPos=0.0f;
-
 float speed=0.2f;
 
 Graphics* graphics;
 Shader* shader;
 Transform* transform;
 
+bool isMoving;
+
 GLuint vertexBufferID;
 GLuint elementsBufferID;
 GLuint vertexArrayID;
+
+float currentTime;
+float lastTime;
+float deltaTime;
+
 
 Vertex verts[]={
 
@@ -101,7 +105,9 @@ SDL_Window* Engine::createWindow(const char* windowName)
 
 int Engine::start()
 {
-     bool isRunning=true;
+
+    isMoving=false;
+    bool isRunning=true;
     //Error Checking
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         SDL_Log("Unable to initialize SDL: %s\n", SDL_GetError());
@@ -130,6 +136,7 @@ int Engine::start()
     SDL_Event event;
     while(isRunning)
     {
+        
         SDL_Event event;
         //Handle Events (Input)
         while(SDL_PollEvent(&event))
@@ -142,26 +149,48 @@ int Engine::start()
                     {
                         case SDLK_a:
                             SDL_Log("Test");
-                            xPos-=speed;
+                           
                             break;
 
                             case SDLK_d:
                             SDL_Log("Test");
-                            xPos+=speed;
+                            isMoving = true;
                             break;
 
                             case SDLK_w:
                             SDL_Log("Test");
-                            zPos-=speed;
                             break;
 
                             case SDLK_s:
                             SDL_Log("Test");
-                            zPos+=speed;
                             break;
 
                         case SDLK_ESCAPE:
                             isRunning=false;
+                            break;
+                    }
+
+                    break;
+                }
+
+                case SDL_KEYUP:
+                {
+                    switch (event.key.keysym.sym)
+                    {
+                        case SDLK_a:
+                           
+                            break;
+
+                            case SDLK_d:
+                          
+                            isMoving = false;
+                            break;
+
+                            case SDLK_w:
+                           
+                            break;
+
+                            case SDLK_s:
                             break;
                     }
 
@@ -176,11 +205,11 @@ int Engine::start()
                     break;
                 
             }
-            update();
-            render();
-            //Call swap so that GL back buffer is displayed         
-            SDL_GL_SwapWindow(window); 
         }
+        update();
+        render();
+        //Call swap so that GL back buffer is displayed         
+        SDL_GL_SwapWindow(window); 
 
     }
     cleanUp();
@@ -222,6 +251,16 @@ void Engine::initScene()
 }
 
 
+void Engine::update()
+{
+    currentTime = SDL_GetTicks() /1000.0f;
+    lastTime = currentTime/1000.0f;
+
+    deltaTime = (currentTime - lastTime);
+
+    printf("%f", currentTime);
+}
+
 void Engine::render()
 {
     //Clear the background to black
@@ -232,16 +271,27 @@ void Engine::render()
     glBindVertexArray(vertexArrayID);
     glUseProgram(shader->getShaderProgram());
 
-
+    //Model-View-Projection Matrix
     GLint MVPLocation = glGetUniformLocation(shader->getShaderProgram(), "MVP");
     glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(transform->getMVPMatrix()));
 
+    //Rotation Matrix
+    GLint uniTrans = glGetUniformLocation(shader->getShaderProgram(), "trans");
+
+    glm::mat4 trans;
+
+    if(isMoving)
+    trans = glm::rotate(
+        trans,
+        deltaTime * glm::radians(180.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f)
+    );
+
+    glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));
+    
+
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
-}
-
-void Engine::update()
-{
 }
 
 void Engine::cleanUp()

@@ -7,23 +7,15 @@ class Transform
 {
     public:
 
-    
-
-    //OpenGL Vertex Transformations
-    glm::mat4 getMVPMatrix();
-    glm::mat4 getModeltoWorldMatrix();
-    glm::mat4 getViewMatrix();
-    glm::mat4 getProjectionMatrix();
-
     //Translation Vectors
-    glm::vec3 moveForward();
-    glm::vec3 moveUp();
-    glm::vec3 moveRight();
+    glm::vec3 Forward();
+    glm::vec3 Up();
+    glm::vec3 Right();
 
     //Basic Vector Transformations
     glm::vec3 getPosition();
     glm::vec3 getScale();
-    glm::vec3 getRotation();
+    glm::vec3 getRotation(); 
 
 
     Transform();
@@ -39,10 +31,6 @@ class Transform
     
 
     private:
-    glm::mat4x4 modelMatrix;
-    glm::mat4 viewMatrix;
-    glm::mat4 projectionMatrix;
-    
     glm::vec3 position;
     glm::vec3 scale;
     glm::vec3 rotation;

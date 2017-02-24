@@ -8,6 +8,7 @@ float speed=0.2f;
 Graphics* graphics;
 Shader* shader;
 Transform* transform;
+Camera* mainCamera;
 
 bool isMoving;
 
@@ -107,6 +108,8 @@ SDL_Window* Engine::createWindow(const char* windowName)
 
 int Engine::start()
 {
+    
+
 
     isMoving=false;
     isRunning=true;
@@ -134,6 +137,9 @@ int Engine::start()
     initScene();
     graphics->setViewport(WIDTH,HEIGHT);
 
+    glm::vec3 temp = transform->Up();
+    printf("x:%f,  y:%f,  z:%f\n",  temp.x, temp.y, temp.z);
+
     //Main Game Loop
     SDL_Event event;
     while(isRunning)
@@ -155,7 +161,7 @@ int Engine::start()
 
 void Engine::initScene()
 {
-
+    mainCamera=new Camera();
     shader = new Shader("/simpleVS.glsl", "/simpleFS.glsl");
     transform = new Transform();
 
@@ -263,8 +269,9 @@ void Engine::update()
     lastTime = currentTime/1000.0f;
 
     deltaTime = (currentTime - lastTime);
+    
 
-    printf("%f", currentTime);
+
 }
 
 void Engine::render()
@@ -279,7 +286,7 @@ void Engine::render()
 
     //Model-View-Projection Matrix
     GLint MVPLocation = glGetUniformLocation(shader->getShaderProgram(), "MVP");
-    glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(transform->getMVPMatrix()));
+    glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(mainCamera->getMVPMatrix()));
 
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
 

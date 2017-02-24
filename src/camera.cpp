@@ -12,7 +12,7 @@ Camera::~Camera()
 
 glm::mat4 Camera::getMVPMatrix()
 {
-    return  projectionMatrix * viewMatrix * modelMatrix;    
+    return  projectionMatrix * viewMatrix * getModeltoWorldMatrix();    
 }
 
 glm::mat4x4 Camera::getModeltoWorldMatrix()

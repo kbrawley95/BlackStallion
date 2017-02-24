@@ -171,33 +171,36 @@ void Engine::initScene()
 
 void Engine::eventHandling(SDL_Event event)
 {
+    float newSpeed = mainCamera->attached_transform->forward().z;
     while(SDL_PollEvent(&event))
     {
         switch(event.type)
         {
+            
             case SDL_KEYDOWN:
             {
                 switch (event.key.keysym.sym)
                 {
                     case SDLK_a:
                         SDL_Log("Test");
+                        mainCamera->attached_transform->setPosition( glm::vec3(mainCamera->attached_transform->right() * deltaTime * -newSpeed));
                         
                         break;
 
                         case SDLK_d:
                         SDL_Log("Test");
-                        isMoving = true;
+                        mainCamera->attached_transform->setPosition( glm::vec3(mainCamera->attached_transform->right() * deltaTime * newSpeed));
                         break;
 
                         case SDLK_w:
                         SDL_Log("Test");
-                        mainCamera->attached_transform->setPosition(speed, deltaTime);
+                        mainCamera->attached_transform->setPosition( glm::vec3(mainCamera->attached_transform->forward() * deltaTime * -newSpeed));
                          
                         break;
 
                         case SDLK_s:
                         SDL_Log("Test");
-                        // mainCamera->attached_transform->setPosition(glm::vec3(0,0, speed * deltaTime));
+                        mainCamera->attached_transform->setPosition( glm::vec3(mainCamera->attached_transform->forward() * deltaTime * newSpeed));
                         break;
 
                     case SDLK_ESCAPE:

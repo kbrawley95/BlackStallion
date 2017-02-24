@@ -19,7 +19,7 @@ class Transform
     glm::vec3 getScale();
     glm::vec3 getRotation(); 
 
-    glm::vec3 setPosition(float speed, float deltaTime);
+    glm::vec3 setPosition(glm::vec3 newPos);
     glm::vec3 setScale(glm::vec3);
     glm::vec3 setRotation(glm::vec3); 
 

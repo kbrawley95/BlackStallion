@@ -1,6 +1,6 @@
 Transform::Transform()
 {
-    position = glm::vec3(0.0f,0.0f,-10.0f);
+    position = glm::vec3(0.0f,0.0f,0.0f);
     scale = glm::vec3(1.0f,1.0f,1.0f);
     rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     
@@ -51,9 +51,9 @@ glm::vec3 Transform::getRotation()
 
 
 //SETTERS
-glm::vec3 Transform::setPosition(float speed, float deltaTime)
+glm::vec3 Transform::setPosition(glm::vec3 newPos)
 {
-   position+=forward() * deltaTime * speed;
+   position+=newPos;
 }
 
 glm::vec3 Transform::setScale(glm::vec3 newScale)

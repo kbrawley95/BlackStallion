@@ -1,28 +1,3 @@
-#include "../include/engine.h"
-
-const int WIDTH=1027;
-const int HEIGHT=720;
-
-float speed=0.2f;
-
-Graphics* graphics;
-Shader* shader;
-Transform* transform;
-Camera* mainCamera;
-
-bool isMoving;
-
-GLuint vertexBufferID;
-GLuint elementsBufferID;
-GLuint vertexArrayID;
-
-float currentTime;
-float lastTime;
-float deltaTime;
-
-bool isRunning;
-
-
 Vertex verts[]={
 
     /*FRONT*/
@@ -61,38 +36,44 @@ Vertex verts[]={
     {glm::vec3(0.5f, 0.5f, -0.5f),
     glm::vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
 
+    };
 
+    GLuint indices[]={
+        //front 
+        0,1,2,
+        0,3,2,
+
+        //left
+        4,5,1,
+        4,1,0,
+
+        //right
+        3,7,2,
+        7,6,2,
+
+        //bottom
+        1,5,2,
+        6,2,5,
+
+        //top
+        4,0,7,
+        0,7,3,
+
+        //back
+        4,5,6,
+        4,7,6
+
+    };
+
+Engine::Engine()
+{
     
-};
+}
 
-GLuint indices[]={
-    //front 
-    0,1,2,
-    0,3,2,
+Engine::~Engine()
+{
 
-    //left
-    4,5,1,
-    4,1,0,
-
-    //right
-    3,7,2,
-    7,6,2,
-
-    //bottom
-    1,5,2,
-    6,2,5,
-
-    //top
-    4,0,7,
-    0,7,3,
-
-    //back
-    4,5,6,
-    4,7,6
-
-};
-
-
+}
 
 SDL_Window* Engine::createWindow(const char* windowName)
 {
@@ -108,8 +89,8 @@ SDL_Window* Engine::createWindow(const char* windowName)
 
 int Engine::start()
 {
-    
-
+    WIDTH=1027;
+    HEIGHT=720;
 
     isMoving=false;
     isRunning=true;
@@ -136,9 +117,6 @@ int Engine::start()
     graphics->initOpenGL();
     initScene();
     graphics->setViewport(WIDTH,HEIGHT);
-
-    glm::vec3 temp = transform->Up();
-    printf("x:%f,  y:%f,  z:%f\n",  temp.x, temp.y, temp.z);
 
     //Main Game Loop
     SDL_Event event;
@@ -213,10 +191,13 @@ void Engine::eventHandling(SDL_Event event)
 
                         case SDLK_w:
                         SDL_Log("Test");
+                        mainCamera->attached_transform->setPosition(speed, deltaTime);
+                         
                         break;
 
                         case SDLK_s:
                         SDL_Log("Test");
+                        // mainCamera->attached_transform->setPosition(glm::vec3(0,0, speed * deltaTime));
                         break;
 
                     case SDLK_ESCAPE:
@@ -233,19 +214,22 @@ void Engine::eventHandling(SDL_Event event)
                 {
                     case SDLK_a:
                         
-                        break;
+                    
 
-                        case SDLK_d:
-                        
-                        isMoving = false;
-                        break;
+                    break;
 
-                        case SDLK_w:
-                        
-                        break;
+                    case SDLK_d:
+                    
+                    isMoving = false;
+                    break;
 
-                        case SDLK_s:
-                        break;
+                    case SDLK_w:
+                    
+                    break;
+
+                    case SDLK_s:
+                   
+                    break;
                 }
 
                 break;
@@ -270,8 +254,6 @@ void Engine::update()
 
     deltaTime = (currentTime - lastTime);
     
-
-
 }
 
 void Engine::render()

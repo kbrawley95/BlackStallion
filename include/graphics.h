@@ -1,8 +1,6 @@
 #ifndef _GRAPHICS_H
 #define _GRAPHICS_H
 
-#include "Common.h"
-
 class Graphics
 {
     public:
@@ -18,5 +16,7 @@ class Graphics
     void sendDataToOpenGL();
 
 };
+
+#include "../src/graphics.cpp"
 
 #endif

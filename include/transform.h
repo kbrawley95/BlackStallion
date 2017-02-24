@@ -1,25 +1,29 @@
 #ifndef _TRANSFORM_H
 #define _TRANSFORM_H
 
-#include "Common.h"
-
 class Transform
 {
     public:
 
+    //CONSTRUCTOR/DECONSTRUCTOR
+    Transform();
+    ~Transform();
+
     //Translation Vectors
-    glm::vec3 Forward();
-    glm::vec3 Up();
-    glm::vec3 Right();
+    glm::vec3 forward();
+    glm::vec3 up();
+    glm::vec3 right();
 
     //Basic Vector Transformations
     glm::vec3 getPosition();
     glm::vec3 getScale();
     glm::vec3 getRotation(); 
 
+    glm::vec3 setPosition(float speed, float deltaTime);
+    glm::vec3 setScale(glm::vec3);
+    glm::vec3 setRotation(glm::vec3); 
 
-    Transform();
-    ~Transform();
+
 
     static float ToRadians(float d){
 		return (d / 180.0f) * glm::pi<float>();
@@ -36,5 +40,7 @@ class Transform
     glm::vec3 rotation;
 
 };
+
+#include "../src/transform.cpp"
 
 #endif 

@@ -10,6 +10,9 @@ class Engine
     int start();
     float getScreenWidth();
     float getScreenHeight();
+
+    Engine();
+    ~Engine();
     
 
     private:
@@ -19,8 +22,34 @@ class Engine
     void initScene();
     void cleanUp();
     SDL_Window* createWindow(const char* windowName);
+
+
+    float speed=20.0f;
+
+     int WIDTH;
+     int HEIGHT;
+
+    Graphics* graphics;
+    Shader* shader;
+    Transform* transform;
+    Camera* mainCamera;
+
+    bool isMoving;
+
+    GLuint vertexBufferID;
+    GLuint elementsBufferID;
+    GLuint vertexArrayID;
+
+    float currentTime;
+    float lastTime;
+    float deltaTime;
+
+    bool isRunning;
+    
+    
+};
     
 
-};
+#include "../src/engine.cpp"
 
 #endif 

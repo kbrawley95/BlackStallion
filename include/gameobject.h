@@ -1,8 +1,6 @@
 #ifndef _GAMEOBJECT
 #define _GAMEOBJECT
 
-#include "Common.h"
-
 class Gameobject
 {
     public:
@@ -18,5 +16,7 @@ class Gameobject
     Transform* transform;
 
 };
+
+#include "../src/gameobject.cpp"
 
 #endif

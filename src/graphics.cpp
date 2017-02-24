@@ -1,5 +1,3 @@
-#include "../include/graphics.h"
-
 Graphics::Graphics()
 {
 

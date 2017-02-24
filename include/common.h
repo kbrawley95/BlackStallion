@@ -40,6 +40,7 @@
 //NAMESPACES
 // using namespace glm;
 // using namespace std;
+using std::shared_ptr;
 
 //PATHS
 const std::string ASSET_PATH  =  "assets";
@@ -50,9 +51,9 @@ const std::string MODEL_PATH = ASSET_PATH + "models/";
 const std::string SOUND_PATH = ASSET_PATH + "sound/";
 
 //CLASS HEADERS
+#include "engine.h"
 #include "vertex.h"
 #include "graphics.h"
-#include "engine.h"
 #include "shader.h"
 #include "transform.h"
 #include "camera.h"

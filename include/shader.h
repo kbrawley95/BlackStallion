@@ -1,8 +1,6 @@
 #ifndef _SHADER_H
 #define _SHADER_H
 
-#include "Common.h"
-
 class Shader
 {
     public:
@@ -26,10 +24,9 @@ class Shader
 
     GLuint shaderProgram;
 
-   
-
-
 };
+
+#include "../src/shader.cpp"
 
 
 #endif 

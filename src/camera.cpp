@@ -15,7 +15,7 @@ glm::mat4 Camera::getMVPMatrix()
     return  projectionMatrix * viewMatrix * getModeltoWorldMatrix();    
 }
 
-glm::mat4x4 Camera::getModeltoWorldMatrix()
+glm:: mat4x4 Camera::getModeltoWorldMatrix()
 {
     glm::mat4x4 model_matrix = glm::mat4x4(1.0f);
     

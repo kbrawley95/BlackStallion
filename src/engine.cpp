@@ -8,33 +8,33 @@ Vertex verts[]={
 
     //Bottom Left
     {glm::vec3(-0.5f, -0.5f, 0.5f), 
-    glm::vec4(0.0f, 1.0f,0.0f, 1.0f)},
+    glm::vec4(1.0f, 0.0f,0.0f, 1.0f)},
 
     //Bottom Right
     {glm::vec3(0.5f, -0.5f, 0.5f), 
-    glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
+    glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
 
     //Top Right
     {glm::vec3(0.5f, 0.5f, 0.5f),
-    glm::vec4(.0f, 0.0f,0.0f, 1.0f)}, 
+    glm::vec4(.0f, 1.0f,0.0f, 1.0f)}, 
 
     /*BACK*/
 
     //Top Left
     {glm::vec3(-0.5f, 0.5f, -0.5f),
-    glm::vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
+    glm::vec4(0.0f, 0.0f,1.0f, 1.0f)}, 
 
     //Bottom Left
     {glm::vec3(-0.5f, -0.5f, -0.5f), 
-    glm::vec4(0.0f, 1.0f,0.0f, 1.0f)},
+    glm::vec4(0.0f, 0.0f,1.0f, 1.0f)},
 
     //Bottom Right
     {glm::vec3(0.5f, -0.5f, -0.5f), 
-    glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
+    glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)},
 
     //Top Right
     {glm::vec3(0.5f, 0.5f, -0.5f),
-    glm::vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
+    glm::vec4(0.0f, 1.0f,1.0f, 1.0f)}, 
 
     };
 
@@ -172,6 +172,8 @@ void Engine::initScene()
 void Engine::eventHandling(SDL_Event event)
 {
     float newSpeed = mainCamera->attached_transform->forward().z;
+    float newRotate = mainCamera->attached_transform->up().y;
+    
     while(SDL_PollEvent(&event))
     {
         switch(event.type)
@@ -205,6 +207,14 @@ void Engine::eventHandling(SDL_Event event)
 
                     case SDLK_ESCAPE:
                         isRunning=false;
+                        break;
+
+                    case SDLK_LEFT:
+                        mainCamera->attached_transform->setRotation(glm::vec3(mainCamera->attached_transform->up() * deltaTime * -newRotate));
+                        break;
+
+                    case SDLK_RIGHT:
+                        mainCamera->attached_transform->setRotation(glm::vec3(mainCamera->attached_transform->up() * deltaTime * newRotate));
                         break;
                 }
 

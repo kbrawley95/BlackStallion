@@ -4,13 +4,12 @@ Engine* engine;
 
 Transform::Transform()
 {
-    worldMatrix=translate(mat4(1.0f), vec3(0.0f,0.0f,0.0f));
-    viewMatrix=lookAt(vec3(0.0f, 0.0f, 10.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-    projectionMatrix=perspective(45.0f, engine->getScreenWidth()/engine->getScreenHeight(), 0.1f, 100.0f);
-
+    viewMatrix=glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    projectionMatrix=glm::perspective(45.0f, engine->getScreenWidth()/engine->getScreenHeight(), 0.1f, 100.0f);
     
-    position = vec3(0.0f,0.0f,0.0f);
-    scale = vec3(1.0f,1.0f,1.0f);
+    position = glm::vec3(0.0f,0.0f,0.0f);
+    scale = glm::vec3(1.0f,1.0f,1.0f);
+    rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     
 }
 
@@ -21,12 +20,23 @@ Transform::~Transform()
 
 glm::mat4 Transform::getMVPMatrix()
 {
-    return  projectionMatrix * viewMatrix * worldMatrix;    
+    return  projectionMatrix * viewMatrix * modelMatrix;    
 }
 
-glm::mat4 Transform::getWorldMatrix()
+glm::mat4x4 Transform::getModeltoWorldMatrix()
 {
-    return worldMatrix;
+    //Translation
+    modelMatrix = glm::translate(modelMatrix, position);
+    
+    //Scale
+    modelMatrix = glm::scale(modelMatrix, scale);
+
+    //Euler Rotations
+    modelMatrix = glm::rotate(modelMatrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    modelMatrix = glm::rotate(modelMatrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    return modelMatrix;
 }
 
 glm::mat4 Transform::getViewMatrix()
@@ -39,14 +49,19 @@ glm::mat4 Transform::getProjectionMatrix()
     return projectionMatrix;
 }
 
-glm::vec3 Transform::moveForward(float speed)
+glm::vec3 Transform::moveForward()
 {
-   return vec3(0.0f,0.0f,0.0f);
+    return glm::vec3(getModeltoWorldMatrix()[2][0],getModeltoWorldMatrix()[2][1],getModeltoWorldMatrix()[2][2]);
 }
 
-glm::vec3 Transform::moveRight(float speed)
+glm::vec3 Transform::moveUp()
 {
-    return vec3(0.0f,0.0f,0.0f);
+    return glm::vec3(getModeltoWorldMatrix()[1][0],getModeltoWorldMatrix()[1][1],getModeltoWorldMatrix()[1][2]);
+}
+
+glm::vec3 Transform::moveRight()
+{
+    return glm::vec3(getModeltoWorldMatrix()[0][0],getModeltoWorldMatrix()[0][1],getModeltoWorldMatrix()[0][2]);
 }
 
 

@@ -38,8 +38,8 @@
 #include <GLM/gtc/constants.hpp>
 
 //NAMESPACES
-using namespace glm;
-using namespace std;
+// using namespace glm;
+// using namespace std;
 
 //PATHS
 const std::string ASSET_PATH  =  "assets";

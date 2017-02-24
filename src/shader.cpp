@@ -5,12 +5,12 @@ Shader::Shader(const std::string vertexShader, const std::string fragmentShader)
     shaderProgram = 0;
 
     GLuint vertexShaderProgram=0;
-    string vsPath = SHADER_PATH + vertexShader;
+    std::string vsPath = SHADER_PATH + vertexShader;
     vertexShaderProgram = loadShaderFromFile(vsPath, VERTEX_SHADER);
     checkForCompilerErrors(vertexShaderProgram);
 
     GLuint fragmentShaderProgram=0;
-    string fsPath = SHADER_PATH + fragmentShader;
+    std::string fsPath = SHADER_PATH + fragmentShader;
     fragmentShaderProgram = loadShaderFromFile(fsPath, FRAGMENT_SHADER);
     checkForCompilerErrors(fragmentShaderProgram);
 
@@ -47,7 +47,7 @@ GLuint Shader::loadShaderFromMemory(const char* pMem, SHADER_TYPE shaderType)
 GLuint Shader::loadShaderFromFile(const std::string& filename, SHADER_TYPE shaderType)
 {
     std::string fileContents;
-    ifstream openfile;
+    std::ifstream openfile;
     openfile.open(filename);
 
     if(openfile.is_open())

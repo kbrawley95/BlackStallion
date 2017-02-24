@@ -19,44 +19,46 @@ float currentTime;
 float lastTime;
 float deltaTime;
 
+bool isRunning;
+
 
 Vertex verts[]={
 
     /*FRONT*/
 
     //Top Left
-    {vec3(-0.5f, 0.5f, 0.5f),
-    vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
+    {glm::vec3(-0.5f, 0.5f, 0.5f),
+    glm::vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
 
     //Bottom Left
-    {vec3(-0.5f, -0.5f, 0.5f), 
-    vec4(0.0f, 1.0f,0.0f, 1.0f)},
+    {glm::vec3(-0.5f, -0.5f, 0.5f), 
+    glm::vec4(0.0f, 1.0f,0.0f, 1.0f)},
 
     //Bottom Right
-    {vec3(0.5f, -0.5f, 0.5f), 
-    vec4(0.0f, 0.0f, 1.0f, 1.0f)},
+    {glm::vec3(0.5f, -0.5f, 0.5f), 
+    glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
 
     //Top Right
-    {vec3(0.5f, 0.5f, 0.5f),
-    vec4(.0f, 0.0f,0.0f, 1.0f)}, 
+    {glm::vec3(0.5f, 0.5f, 0.5f),
+    glm::vec4(.0f, 0.0f,0.0f, 1.0f)}, 
 
     /*BACK*/
 
     //Top Left
-    {vec3(-0.5f, 0.5f, -0.5f),
-    vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
+    {glm::vec3(-0.5f, 0.5f, -0.5f),
+    glm::vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
 
     //Bottom Left
-    {vec3(-0.5f, -0.5f, -0.5f), 
-    vec4(0.0f, 1.0f,0.0f, 1.0f)},
+    {glm::vec3(-0.5f, -0.5f, -0.5f), 
+    glm::vec4(0.0f, 1.0f,0.0f, 1.0f)},
 
     //Bottom Right
-    {vec3(0.5f, -0.5f, -0.5f), 
-    vec4(0.0f, 0.0f, 1.0f, 1.0f)},
+    {glm::vec3(0.5f, -0.5f, -0.5f), 
+    glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
 
     //Top Right
-    {vec3(0.5f, 0.5f, -0.5f),
-    vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
+    {glm::vec3(0.5f, 0.5f, -0.5f),
+    glm::vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
 
 
     
@@ -107,7 +109,7 @@ int Engine::start()
 {
 
     isMoving=false;
-    bool isRunning=true;
+    isRunning=true;
     //Error Checking
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         SDL_Log("Unable to initialize SDL: %s\n", SDL_GetError());
@@ -136,76 +138,9 @@ int Engine::start()
     SDL_Event event;
     while(isRunning)
     {
-        
         SDL_Event event;
         //Handle Events (Input)
-        while(SDL_PollEvent(&event))
-        {
-            switch(event.type)
-            {
-                case SDL_KEYDOWN:
-                {
-                    switch (event.key.keysym.sym)
-                    {
-                        case SDLK_a:
-                            SDL_Log("Test");
-                           
-                            break;
-
-                            case SDLK_d:
-                            SDL_Log("Test");
-                            isMoving = true;
-                            break;
-
-                            case SDLK_w:
-                            SDL_Log("Test");
-                            break;
-
-                            case SDLK_s:
-                            SDL_Log("Test");
-                            break;
-
-                        case SDLK_ESCAPE:
-                            isRunning=false;
-                            break;
-                    }
-
-                    break;
-                }
-
-                case SDL_KEYUP:
-                {
-                    switch (event.key.keysym.sym)
-                    {
-                        case SDLK_a:
-                           
-                            break;
-
-                            case SDLK_d:
-                          
-                            isMoving = false;
-                            break;
-
-                            case SDLK_w:
-                           
-                            break;
-
-                            case SDLK_s:
-                            break;
-                    }
-
-                    break;
-                }
-
-                case SDL_QUIT:
-                    isRunning=false;
-                    break;
-                case SDL_WINDOWEVENT_CLOSE:
-                    isRunning=false;
-                    break;
-                
-            }
-        }
+        eventHandling(event);
         update();
         render();
         //Call swap so that GL back buffer is displayed         
@@ -250,6 +185,77 @@ void Engine::initScene()
 
 }
 
+void Engine::eventHandling(SDL_Event event)
+{
+    while(SDL_PollEvent(&event))
+    {
+        switch(event.type)
+        {
+            case SDL_KEYDOWN:
+            {
+                switch (event.key.keysym.sym)
+                {
+                    case SDLK_a:
+                        SDL_Log("Test");
+                        
+                        break;
+
+                        case SDLK_d:
+                        SDL_Log("Test");
+                        isMoving = true;
+                        break;
+
+                        case SDLK_w:
+                        SDL_Log("Test");
+                        break;
+
+                        case SDLK_s:
+                        SDL_Log("Test");
+                        break;
+
+                    case SDLK_ESCAPE:
+                        isRunning=false;
+                        break;
+                }
+
+                break;
+            }
+
+            case SDL_KEYUP:
+            {
+                switch (event.key.keysym.sym)
+                {
+                    case SDLK_a:
+                        
+                        break;
+
+                        case SDLK_d:
+                        
+                        isMoving = false;
+                        break;
+
+                        case SDLK_w:
+                        
+                        break;
+
+                        case SDLK_s:
+                        break;
+                }
+
+                break;
+            }
+
+            case SDL_QUIT:
+                isRunning=false;
+                break;
+            case SDL_WINDOWEVENT_CLOSE:
+                isRunning=false;
+                break;
+            
+        }
+    }
+}
+
 
 void Engine::update()
 {
@@ -274,21 +280,6 @@ void Engine::render()
     //Model-View-Projection Matrix
     GLint MVPLocation = glGetUniformLocation(shader->getShaderProgram(), "MVP");
     glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(transform->getMVPMatrix()));
-
-    //Rotation Matrix
-    GLint uniTrans = glGetUniformLocation(shader->getShaderProgram(), "trans");
-
-    glm::mat4 trans;
-
-    if(isMoving)
-    trans = glm::rotate(
-        trans,
-        deltaTime * glm::radians(180.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f)
-    );
-
-    glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));
-    
 
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
 

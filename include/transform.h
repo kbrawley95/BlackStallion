@@ -7,15 +7,18 @@ class Transform
 {
     public:
 
+    
+
     //OpenGL Vertex Transformations
     glm::mat4 getMVPMatrix();
-    glm::mat4 getWorldMatrix();
+    glm::mat4 getModeltoWorldMatrix();
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();
 
     //Translation Vectors
-    glm::vec3 moveForward(float speed);
-    glm::vec3 moveRight(float speed);
+    glm::vec3 moveForward();
+    glm::vec3 moveUp();
+    glm::vec3 moveRight();
 
     //Basic Vector Transformations
     glm::vec3 getPosition();
@@ -25,10 +28,18 @@ class Transform
 
     Transform();
     ~Transform();
+
+    static float ToRadians(float d){
+		return (d / 180.0f) * glm::pi<float>();
+	}
+
+	static float ToDegrees(float r){
+		return (r / glm::pi<float>()) * 180.0f;
+	}
     
 
     private:
-    glm::mat4 worldMatrix;
+    glm::mat4x4 modelMatrix;
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
     

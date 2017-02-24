@@ -13,7 +13,7 @@ class Engine
     
 
     private:
-    bool eventHandling();
+    void eventHandling(SDL_Event event);
     void update();
     void render();
     void initScene();

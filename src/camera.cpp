@@ -1,7 +1,7 @@
 Camera::Camera()   
 {  // engine = std::shared_ptr<Engine>(new Engine());
     attached_transform = std::shared_ptr<Transform>(new Transform());
-    viewMatrix=glm::lookAt(attached_transform->getPosition(), attached_transform->getPosition() + attached_transform->forward() ,attached_transform->up());
+    viewMatrix=glm::lookAt(attached_transform->getRotation(), attached_transform->getPosition() ,attached_transform->up());
     projectionMatrix=glm::perspective(45.0f, 640.0f/480.0f, 0.1f, 100.0f);
 }
 

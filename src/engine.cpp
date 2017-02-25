@@ -209,13 +209,6 @@ void Engine::eventHandling(SDL_Event event)
                         isRunning=false;
                         break;
 
-                    case SDLK_LEFT:
-                        mainCamera->attached_transform->setRotation(glm::vec3(mainCamera->attached_transform->up() * deltaTime * -newRotate));
-                        break;
-
-                    case SDLK_RIGHT:
-                        mainCamera->attached_transform->setRotation(glm::vec3(mainCamera->attached_transform->up() * deltaTime * newRotate));
-                        break;
                 }
 
                 break;
@@ -240,6 +233,16 @@ void Engine::eventHandling(SDL_Event event)
                     break;
                 }
 
+                break;
+            }
+
+            case SDL_MOUSEMOTION:
+            {
+                
+                if(event.button.x < WIDTH/2)    
+                    mainCamera->attached_transform->setRotation(glm::vec3(mainCamera->attached_transform->up() * deltaTime * -newRotate));
+                else if(event.button.x < WIDTH)
+                     mainCamera->attached_transform->setRotation(glm::vec3(mainCamera->attached_transform->up() * deltaTime * newRotate));
                 break;
             }
 

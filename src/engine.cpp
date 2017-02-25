@@ -173,7 +173,7 @@ void Engine::eventHandling(SDL_Event event)
 {
     float newSpeed = mainCamera->attached_transform->forward().z;
     float newRotate = mainCamera->attached_transform->up().y;
-    
+
     while(SDL_PollEvent(&event))
     {
         switch(event.type)
@@ -226,22 +226,17 @@ void Engine::eventHandling(SDL_Event event)
                 switch (event.key.keysym.sym)
                 {
                     case SDLK_a:
-                        
-                    
 
                     break;
 
                     case SDLK_d:
-                    
                     isMoving = false;
                     break;
 
                     case SDLK_w:
-                    
                     break;
 
                     case SDLK_s:
-                   
                     break;
                 }
 

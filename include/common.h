@@ -45,10 +45,10 @@ using std::shared_ptr;
 //PATHS
 const std::string ASSET_PATH  =  "assets";
 const std::string SHADER_PATH = ASSET_PATH + "/shaders";
-const std::string TEXTURE_PATH = ASSET_PATH + "textures/";
-const std::string FONT_PATH = ASSET_PATH + "fonts/";    
-const std::string MODEL_PATH = ASSET_PATH + "models/";
-const std::string SOUND_PATH = ASSET_PATH + "sound/";
+const std::string TEXTURE_PATH = ASSET_PATH + "/textures";
+const std::string FONT_PATH = ASSET_PATH + "/fonts";    
+const std::string MODEL_PATH = ASSET_PATH + "/models";
+const std::string SOUND_PATH = ASSET_PATH + "/sound";
 
 //CLASS HEADERS
 #include "engine.h"

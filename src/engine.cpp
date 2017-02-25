@@ -91,9 +91,7 @@ SDL_Window* Engine::createWindow(const char* windowName)
 
 int Engine::start()
 {
-    WIDTH=1027;
-    HEIGHT=720;
-
+   
     isMoving=false;
     isRunning=true;
     //Error Checking
@@ -118,7 +116,7 @@ int Engine::start()
     // //OpenGL Initialisation
     graphics->initOpenGL();
     initScene();
-    graphics->setViewport(WIDTH,HEIGHT);
+    graphics->setViewport(Engine::WIDTH,Engine::HEIGHT);
 
     //Main Game Loop
     SDL_Event event;
@@ -142,6 +140,7 @@ int Engine::start()
 void Engine::initScene()
 {
     mainCamera=new Camera();
+    mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,5.0f));
     shader = new Shader("/simpleVS.glsl", "/simpleFS.glsl");
     transform = new Transform();
 
@@ -173,6 +172,8 @@ void Engine::initScene()
 
 void Engine::eventHandling(SDL_Event event)
 {
+    float camera_rotation = 0.0f;
+     glm::vec3 offset =  glm::vec3(mainCamera->attached_transform->up() * 0.5f);
     while(SDL_PollEvent(&event))
     {
         switch(event.type)
@@ -183,6 +184,19 @@ void Engine::eventHandling(SDL_Event event)
 
             case SDL_KEYUP:
                 Input::keys[event.key.keysym.sym]=false;
+                break;
+            
+            case SDL_MOUSEMOTION:
+
+                xpos = event.button.x;
+                ypos = event.button.y;
+
+                if(event.button.x < (Engine::WIDTH))
+                    // mainCamera->attached_transform->lookHorizontal(60.0f);
+                if(event.button.y < (Engine::HEIGHT))
+                    mainCamera->attached_transform->lookHorizontal(60.0f);    
+
+                std::cout << "Mouse = (" << xpos << ", " << ypos << ")" << std::endl;
                 break;
             
             case SDL_QUIT:
@@ -206,24 +220,34 @@ void Engine::update()
 
     if(Input::keys[SDLK_a])
     {
-        SDL_Log("Test");
+        //SDL_Log("Left");
         mainCamera->attached_transform->setPosition(-(mainCamera->attached_transform->right() * deltaTime * newSpeed));
     }
     if(Input::keys[SDLK_d])
     {
-        SDL_Log("Test");
+        //SDL_Log("Right");
         mainCamera->attached_transform->setPosition(mainCamera->attached_transform->right() * deltaTime * newSpeed);
     }
     if(Input::keys[SDLK_w])
     {
-        SDL_Log("Test");
+        //SDL_Log("Up");
         mainCamera->attached_transform->setPosition(-(mainCamera->attached_transform->forward()* deltaTime * newSpeed));
+        printf("x: %f, y: %f, z: %f\n", mainCamera->attached_transform->getPosition().x, mainCamera->attached_transform->getPosition().y, mainCamera->attached_transform->getPosition().z);
+        
     }
     if(Input::keys[SDLK_s])
     {
-        SDL_Log("Test");
+        //SDL_Log("Down");
         mainCamera->attached_transform->setPosition(mainCamera->attached_transform->forward() * deltaTime *newSpeed);
+        printf("x: %f, y: %f, z: %f\n", mainCamera->attached_transform->getPosition().x, mainCamera->attached_transform->getPosition().y, mainCamera->attached_transform->getPosition().z);
+        
     }
+
+    if(Input::keys[SDLK_ESCAPE])
+    {
+        SDL_Quit();
+    }
+
     
 }
 

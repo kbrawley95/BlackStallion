@@ -10,6 +10,8 @@ class Engine
     int start();
     float getScreenWidth();
     float getScreenHeight();
+    static const int WIDTH = 1024;
+    static const int HEIGHT = 720;
 
     Engine();
     ~Engine();
@@ -23,8 +25,6 @@ class Engine
     void cleanUp();
     SDL_Window* createWindow(const char* windowName);
 
-     int WIDTH;
-     int HEIGHT;
 
     Graphics* graphics;
     Shader* shader;
@@ -42,10 +42,12 @@ class Engine
     float deltaTime;
 
     bool isRunning;
+
+    
+    int xpos, ypos;
     
     
 };
-    
 
 #include "../src/engine.cpp"
 

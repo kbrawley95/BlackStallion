@@ -21,25 +21,22 @@ class Transform
     glm::vec3 getScale();
     glm::vec3 getRotation(); 
 
-    glm::vec3 setPosition(glm::vec3 newPos);
-    glm::vec3 setScale(glm::vec3);
-    glm::vec3 setRotation(glm::vec3); 
+    void setPosition(glm::vec3 newPos);
+    void lookHorizontal(float yaw);
+    void lookVertical(float pitch);
 
-
-
-    static float ToRadians(float d){
-		return (d / 180.0f) * glm::pi<float>();
-	}
-
-	static float ToDegrees(float r){
-		return (r / glm::pi<float>()) * 180.0f;
-	}
-    
+    void setPitch(float angle);
+    void setYaw(float angle);
 
     private:
     glm::vec3 position;
     glm::vec3 scale;
     glm::vec3 rotation;
+    glm::vec3 front;
+
+    float pitch;
+    float yaw;
+    float roll;
 
 };
 

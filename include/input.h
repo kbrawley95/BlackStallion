@@ -4,9 +4,13 @@
 class Input
 {
     public:
+    //Keyboard Input Map
     static std::map<int, bool>keys;
-};
-std::map<int, bool> Input::keys;
+    static std::map<int, bool>mouse;
 
+};
+//Instantiate to avoid reference error
+std::map<int, bool> Input::keys;
+std::map<int, bool> Input::mouse;
 
 #endif

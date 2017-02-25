@@ -12,7 +12,6 @@ class Camera
 
      //OpenGL Vertex Transformations
     glm::mat4 getMVPMatrix();
-    glm::mat4 getModeltoWorldMatrix();
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();
 

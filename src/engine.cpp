@@ -1,5 +1,7 @@
 Vertex verts[]={
 
+
+
     /*FRONT*/
 
     //Top Left
@@ -171,99 +173,57 @@ void Engine::initScene()
 
 void Engine::eventHandling(SDL_Event event)
 {
-    float newSpeed = mainCamera->attached_transform->forward().z;
-    float newRotate = mainCamera->attached_transform->up().y;
-
     while(SDL_PollEvent(&event))
     {
         switch(event.type)
         {
-            
             case SDL_KEYDOWN:
-            {
-                switch (event.key.keysym.sym)
-                {
-                    case SDLK_a:
-                        SDL_Log("Test");
-                        mainCamera->attached_transform->setPosition( glm::vec3(mainCamera->attached_transform->right() * deltaTime * -newSpeed));
-                        
-                        break;
-
-                        case SDLK_d:
-                        SDL_Log("Test");
-                        mainCamera->attached_transform->setPosition( glm::vec3(mainCamera->attached_transform->right() * deltaTime * newSpeed));
-                        break;
-
-                        case SDLK_w:
-                        SDL_Log("Test");
-                        mainCamera->attached_transform->setPosition( glm::vec3(mainCamera->attached_transform->forward() * deltaTime * -newSpeed));
-                         
-                        break;
-
-                        case SDLK_s:
-                        SDL_Log("Test");
-                        mainCamera->attached_transform->setPosition( glm::vec3(mainCamera->attached_transform->forward() * deltaTime * newSpeed));
-                        break;
-
-                    case SDLK_ESCAPE:
-                        isRunning=false;
-                        break;
-
-                }
-
+                Input::keys[event.key.keysym.sym]=true;
                 break;
-            }
 
             case SDL_KEYUP:
-            {
-                switch (event.key.keysym.sym)
-                {
-                    case SDLK_a:
-
-                    break;
-
-                    case SDLK_d:
-                    isMoving = false;
-                    break;
-
-                    case SDLK_w:
-                    break;
-
-                    case SDLK_s:
-                    break;
-                }
-
+                Input::keys[event.key.keysym.sym]=false;
                 break;
-            }
-
-            case SDL_MOUSEMOTION:
-            {
-                
-                if(event.button.x < WIDTH/2)    
-                    mainCamera->attached_transform->setRotation(glm::vec3(mainCamera->attached_transform->up() * deltaTime * -newRotate));
-                else if(event.button.x < WIDTH)
-                     mainCamera->attached_transform->setRotation(glm::vec3(mainCamera->attached_transform->up() * deltaTime * newRotate));
-                break;
-            }
-
+            
             case SDL_QUIT:
                 isRunning=false;
                 break;
             case SDL_WINDOWEVENT_CLOSE:
                 isRunning=false;
                 break;
-            
         }
     }
 }
 
-
 void Engine::update()
 {
-    currentTime = SDL_GetTicks() /1000.0f;
-    lastTime = currentTime/1000.0f;
+    currentTime = SDL_GetTicks();
+    deltaTime = (currentTime - lastTime)/1000.0f;
+    lastTime = currentTime;
 
-    deltaTime = (currentTime - lastTime);
+
+    float newSpeed = 1.0f; 
+
+    if(Input::keys[SDLK_a])
+    {
+        SDL_Log("Test");
+        mainCamera->attached_transform->setPosition(-(mainCamera->attached_transform->right() * deltaTime * newSpeed));
+    }
+    if(Input::keys[SDLK_d])
+    {
+        SDL_Log("Test");
+        mainCamera->attached_transform->setPosition(mainCamera->attached_transform->right() * deltaTime * newSpeed);
+    }
+    if(Input::keys[SDLK_w])
+    {
+        SDL_Log("Test");
+        mainCamera->attached_transform->setPosition(-(mainCamera->attached_transform->forward()* deltaTime * newSpeed));
+    }
+    if(Input::keys[SDLK_s])
+    {
+        SDL_Log("Test");
+        mainCamera->attached_transform->setPosition(mainCamera->attached_transform->forward() * deltaTime *newSpeed);
+    }
     
 }
 

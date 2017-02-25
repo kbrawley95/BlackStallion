@@ -23,9 +23,6 @@ class Engine
     void cleanUp();
     SDL_Window* createWindow(const char* windowName);
 
-
-    float speed=20.0f;
-
      int WIDTH;
      int HEIGHT;
 

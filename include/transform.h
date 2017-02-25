@@ -9,6 +9,8 @@ class Transform
     Transform();
     ~Transform();
 
+    glm::mat4 getModeltoWorldMatrix();
+
     //Translation Vectors
     glm::vec3 forward();
     glm::vec3 up();

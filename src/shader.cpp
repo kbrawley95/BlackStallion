@@ -19,6 +19,7 @@ Shader::Shader(const std::string vertexShader, const std::string fragmentShader)
 
     glBindAttribLocation(shaderProgram, 0, "vertexPosition");
     glBindAttribLocation(shaderProgram, 1, "vertexColour");
+    glBindAttribLocation(shaderProgram, 2, "vertexTexCoords");
     
     glLinkProgram(shaderProgram);
     checkForLinkErrors(shaderProgram);

@@ -28,10 +28,13 @@ class Engine
 
     Graphics* graphics;
     Shader* shader;
+    Texture* texture;
     Transform* transform;
     Camera* mainCamera;
 
     bool isMoving;
+
+    GLuint textureMap;
 
     GLuint vertexBufferID;
     GLuint elementsBufferID;

@@ -6,37 +6,45 @@ Vertex verts[]={
 
     //Top Left
     {glm::vec3(-0.5f, 0.5f, 0.5f),
-    glm::vec4(1.0f, 0.0f,0.0f, 1.0f)}, 
+    glm::vec4(1.0f, 0.0f,0.0f, 1.0f),
+    glm::vec2(0.0f, 1.0f)}, 
 
     //Bottom Left
     {glm::vec3(-0.5f, -0.5f, 0.5f), 
-    glm::vec4(1.0f, 0.0f,0.0f, 1.0f)},
+    glm::vec4(1.0f, 0.0f,0.0f, 1.0f),
+    glm::vec2(0.0f, 0.0f)},
 
     //Bottom Right
     {glm::vec3(0.5f, -0.5f, 0.5f), 
-    glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
+    glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f)},
 
     //Top Right
     {glm::vec3(0.5f, 0.5f, 0.5f),
-    glm::vec4(.0f, 1.0f,0.0f, 1.0f)}, 
+    glm::vec4(.0f, 1.0f,0.0f, 1.0f),
+    glm::vec2(1.0f, 1.0f)}, 
 
     /*BACK*/
 
     //Top Left
     {glm::vec3(-0.5f, 0.5f, -0.5f),
-    glm::vec4(0.0f, 0.0f,1.0f, 1.0f)}, 
+    glm::vec4(0.0f, 0.0f,1.0f, 1.0f),
+    glm::vec2(0.0f, 1.0f)}, 
 
     //Bottom Left
     {glm::vec3(-0.5f, -0.5f, -0.5f), 
-    glm::vec4(0.0f, 0.0f,1.0f, 1.0f)},
+    glm::vec4(0.0f, 0.0f,1.0f, 1.0f),
+    glm::vec2(0.0f, 0.0f)},
 
     //Bottom Right
     {glm::vec3(0.5f, -0.5f, -0.5f), 
-    glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)},
+    glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f)},
 
     //Top Right
     {glm::vec3(0.5f, 0.5f, -0.5f),
-    glm::vec4(0.0f, 1.0f,1.0f, 1.0f)}, 
+    glm::vec4(0.0f, 1.0f,1.0f, 1.0f),
+    glm::vec2(1.0f, 1.0f)}, 
 
     };
 
@@ -94,7 +102,9 @@ int Engine::start()
    
     isMoving=false;
     isRunning=true;
-    //Error Checking
+
+
+    /*SDL ERROR CHECKING*/
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         SDL_Log("Unable to initialize SDL: %s\n", SDL_GetError());
         return -1;
@@ -102,6 +112,14 @@ int Engine::start()
     else{
         SDL_Log("SDL initialized");
     }
+    /*SDL_IMAGE ERROR CHECKING*/
+    int	imageInitFlags = IMG_INIT_JPG | IMG_INIT_PNG;
+	int	returnInitFlags = IMG_Init(imageInitFlags);
+	if (((returnInitFlags) & (imageInitFlags)) != imageInitFlags)	{
+
+		std::cout << "ERROR SDL_Image Init “ << IMG_GetError() << endl";
+	}
+
 
     //Specify OpenGL Version (4.2)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -134,15 +152,30 @@ int Engine::start()
     cleanUp();
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
+    IMG_Quit();
     SDL_Quit();
 }
 
 void Engine::initScene()
 {
+
     mainCamera=new Camera();
     mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,5.0f));
-    shader = new Shader("/simpleVS.glsl", "/simpleFS.glsl");
+    shader = new Shader("/textureVS.glsl", "/textureFS.glsl");
     transform = new Transform();
+
+     //Load Texture & Bind it
+    std::string texturePath = TEXTURE_PATH + "/metal.jpg";
+    textureMap = texture->loadTextureFromFile(texturePath);
+
+    
+    glBindTexture(GL_TEXTURE_2D, textureMap); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
 
     glGenVertexArrays(1, &vertexArrayID);
     glBindVertexArray(vertexArrayID);
@@ -167,6 +200,9 @@ void Engine::initScene()
 
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1,4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void **)offsetof(Vertex, colour));
+
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(1,2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void **)offsetof(Vertex, uvTextCoords));
 
 }
 
@@ -245,7 +281,7 @@ void Engine::update()
 
     if(Input::keys[SDLK_ESCAPE])
     {
-        SDL_Quit();
+        isRunning = false;
     }
 
     
@@ -263,7 +299,14 @@ void Engine::render()
 
     //Model-View-Projection Matrix
     GLint MVPLocation = glGetUniformLocation(shader->getShaderProgram(), "MVP");
+    GLint texture0Location = glGetUniformLocation(shader->getShaderProgram(), "texture0");
+
+    glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureMap);
+
     glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(mainCamera->getMVPMatrix()));
+	glUniform1i(texture0Location, 0);
+
 
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
@@ -271,6 +314,7 @@ void Engine::render()
 
 void Engine::cleanUp()
 {
+    glDeleteTextures(1, &textureMap);
     glDeleteProgram(shader->getShaderProgram());
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementsBufferID);

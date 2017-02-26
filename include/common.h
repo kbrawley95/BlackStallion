@@ -55,6 +55,7 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "vertex.h"
 #include "graphics.h"
 #include "shader.h"
+#include "texture.h"
 #include "transform.h"
 #include "camera.h"
 #include "input.h"

@@ -120,6 +120,17 @@ int Engine::start()
 		std::cout << "ERROR SDL_Image Init “ << IMG_GetError() << endl";
 	}
 
+    /*TTF (Fonts) ERROR CHECKING*/
+    if (((returnInitFlags) & (imageInitFlags)) != imageInitFlags)	{
+
+		std::cout << "ERROR SDL_Image Init" << IMG_GetError() << std::endl;
+	}
+
+	if (TTF_Init() == -1)	{
+		std::cout << "ERROR	TTF_Init: " << TTF_GetError();
+	}
+
+
 
     //Specify OpenGL Version (4.2)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -165,8 +176,12 @@ void Engine::initScene()
     transform = new Transform();
 
      //Load Texture & Bind it
-    std::string texturePath = TEXTURE_PATH + "/metal.jpg";
-    textureMap = texture->loadTextureFromFile(texturePath);
+    // std::string texturePath = TEXTURE_PATH + "/metal.jpg";
+    // textureMap = texture->loadTextureFromFile(texturePath);
+
+     std::string textPath = FONT_PATH + "/OratorStd.otf";
+    textureMap = texture->loadTextureFromFont(textPath, 24, "Hello World");
+
 
     
     glBindTexture(GL_TEXTURE_2D, textureMap); 
@@ -174,7 +189,9 @@ void Engine::initScene()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    // glGenerateMipmap(GL_TEXTURE_2D);
+
+    
 
 
     glGenVertexArrays(1, &vertexArrayID);
@@ -297,10 +314,16 @@ void Engine::render()
     glBindVertexArray(vertexArrayID);
     glUseProgram(shader->getShaderProgram());
 
+    //Switch on Alpha Blending
+    glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
     //Model-View-Projection Matrix
     GLint MVPLocation = glGetUniformLocation(shader->getShaderProgram(), "MVP");
     GLint texture0Location = glGetUniformLocation(shader->getShaderProgram(), "texture0");
 
+    
     glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureMap);
 

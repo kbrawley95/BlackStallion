@@ -13,6 +13,26 @@ GLuint Texture::loadTextureFromFile(const std::string& filename)
     return textureID;
 }
 
+GLuint Texture::loadTextureFromFont(const std::string& fontFilename, int pointSize, const std::string& text)
+{
+    TTF_Font * font = TTF_OpenFont(fontFilename.c_str(), pointSize);
+    if(!font)
+    {
+        std::cout<<"Unable to load font " <<fontFilename << " " <<TTF_GetError()<<std::endl;
+        return 0;
+    }
+    SDL_Surface* textSurface = TTF_RenderText_Blended(font, text.c_str(),
+        {255,255,255});
+
+    GLuint textureID = convertSDLSurfaceToTexture(textSurface);
+    SDL_FreeSurface(textSurface);
+
+    TTF_CloseFont(font);
+
+        
+    return textureID;
+}
+
 GLuint Texture::convertSDLSurfaceToTexture(SDL_Surface* surface)
 {
     GLuint textureID = 0;

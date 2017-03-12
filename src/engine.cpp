@@ -75,6 +75,14 @@ Vertex verts[]={
 
     };
 
+
+std::vector< glm::vec3 > vertices;
+std::vector< glm::vec2 > uvs;
+std::vector< glm::vec3 > normals; // Won't be used at the moment.
+
+OBJLoader* objLoader;
+bool res = objLoader->loadObjModel("cube.obj", vertices, uvs, normals);
+
 Engine::Engine()
 {
     
@@ -175,12 +183,12 @@ void Engine::initScene()
     shader = new Shader("/textureVS.glsl", "/textureFS.glsl");
     transform = new Transform();
 
-     //Load Texture & Bind it
-    // std::string texturePath = TEXTURE_PATH + "/metal.jpg";
-    // textureMap = texture->loadTextureFromFile(texturePath);
+    //Load Texture & Bind it
+    std::string texturePath = TEXTURE_PATH + "/metal.jpg";
+    textureMap = texture->loadTextureFromFile(texturePath);
 
-     std::string textPath = FONT_PATH + "/OratorStd.otf";
-    textureMap = texture->loadTextureFromFont(textPath, 24, "Hello World");
+    //  std::string textPath = FONT_PATH + "/OratorStd.otf";
+    // textureMap = texture->loadTextureFromFont(textPath, 24, "Hello World");
 
 
     
@@ -189,7 +197,7 @@ void Engine::initScene()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    // glGenerateMipmap(GL_TEXTURE_2D);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     
 
@@ -210,6 +218,7 @@ void Engine::initScene()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferID);
     //Copy Index data to the EBO
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
     //Tell the shader that 0 is the position elementsBufferID
     glEnableVertexAttribArray(0);
@@ -332,6 +341,7 @@ void Engine::render()
 
 
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
+    // glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices.size()));
 
 }
 

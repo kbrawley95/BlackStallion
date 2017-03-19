@@ -98,7 +98,7 @@ void Engine::initScene()
     mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,5.0f));
 
     //Shaders 
-    shader = new Shader("/textureVS.glsl", "/textureFS.glsl");
+    cubeShader = new Shader("/textureVS.glsl", "/textureFS.glsl");
 
     //Transform
     transform = new Transform();
@@ -228,7 +228,7 @@ void Engine::render()
     glBindVertexArray(vertexArrayID);
 
     //Use the specified shader program
-    glUseProgram(shader->getShaderProgram());
+    glUseProgram(cubeShader->getShaderProgram());
 
     //Switch on Alpha Blending
     glEnable(GL_BLEND);
@@ -236,11 +236,11 @@ void Engine::render()
 
 
     //Model-View-Projection Matrix
-    GLint MVPLocation = glGetUniformLocation(shader->getShaderProgram(), "MVP");
+    GLint MVPLocation = glGetUniformLocation(cubeShader->getShaderProgram(), "MVP");
     glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(mainCamera->getMVPMatrix()));
 
     //Cube Texture
-    GLint texture0Location = glGetUniformLocation(shader->getShaderProgram(), "texture0");
+    GLint texture0Location = glGetUniformLocation(cubeShader->getShaderProgram(), "texture0");
 	glUniform1i(texture0Location, 0);
 
     //Draw vertices data based on index selection values
@@ -252,7 +252,7 @@ void Engine::render()
 void Engine::cleanUp()
 {
     glDeleteTextures(1, &textureMap);
-    glDeleteProgram(shader->getShaderProgram());
+    glDeleteProgram(cubeShader->getShaderProgram());
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementsBufferID);
     glDeleteBuffers(1, &vertexArrayID);

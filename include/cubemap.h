@@ -4,25 +4,26 @@
 class Cubemap
 {
     public:
-        Cubemap(const string& directory,const std::string& posX,const std::string& negX,const std::string& posY, const std::string& negY,const std::string& posZ,const std::string& negZ);
-        bool loadCubemap();
-        void bindCubemapToPipeline(GLenum textureUnit);
-
+        Cubemap(std::string texturePaths[], GLuint textureTargets[]);
+        bool loadCubeMap(std::string texturePaths[], GLuint textureTargets[]);
+        void bindToCubemapToPipeline();
+    
     private:
-        std::string m_fileNames[6];
-        GLuint m_textureID;
+       std::string texturePaths[6];
 
-        GLenum m_cubeMapFaceTypes[6]=
-        {
-            GL_TEXTURE_CUBE_MAP_POSITIVE_X, 
-            GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-            GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-            GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 
-            GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 
-            GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-        };
- 
+       GLenum textureTargets[6]=
+       {    /*===TEXTURE TARGET====*/           /*====ORIENTATION===*/
+           GL_TEXTURE_CUBE_MAP_POSITIVE_X,       //Right
+           GL_TEXTURE_CUBE_MAP_NEGATIVE_X,       //Left
+           GL_TEXTURE_CUBE_MAP_POSITIVE_Y,       //Top
+           GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,       //Bottom
+           GL_TEXTURE_CUBE_MAP_POSITIVE_Z,       //Back
+           GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,       //Front
+       };
+
+       GLuint textureID;
 };
+
 
 #include "../src/cubemap.h"
 

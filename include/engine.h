@@ -26,8 +26,7 @@ class Engine
         SDL_Window* createWindow(const char* windowName);
 
         Graphics* graphics;
-        Shader* shader;
-        Shader* skyboxShader;
+        Shader* cubeShader;
         Texture* texture;
         Transform* transform;
         Camera* mainCamera;
@@ -47,7 +46,7 @@ class Engine
         bool isRunning;
 
         
-    int xpos, ypos;
+        int xpos, ypos;
     
     
 };

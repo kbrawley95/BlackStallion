@@ -2,14 +2,14 @@
 
 in vec3 vertexPosition;
 
-uniform mat4 WVP;
+uniform mat4 MVP;
 
 out vec3 vertexTexCoords;
 
 
 void main()
 {
-	vec4 WVP_Pos = WVP * vec4(vertexPosition, 1.0f);
-	gl_Position = WVP_Pos.xyww;
+	vec4 MVP_Pos = MVP * vec4(vertexPosition, 1.0f);
+	gl_Position = MVP_Pos.xyww;
 	vertexTexCoords = vertexPosition;
 }

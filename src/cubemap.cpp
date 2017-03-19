@@ -1,31 +1,41 @@
-Cubemap::Cubemap(std::string texturePaths[], GLuint textureTargets[])
+Cubemap::Cubemap(std::vector<std::string>texturePaths, std::vector<GLenum>textureTargets)
 {
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-    loadCubeMap(texturePaths, textureTargets);
+    textureID = loadCubeMap(texturePaths, textureTargets);
     bindCubemapToPipeline(textureID);
-
 }
-bool Cubemap::loadCubeMap(std::string texturePaths[], GLuint textureTargets[])
+
+GLuint Cubemap::getTextureID()
 {
+    return textureID;
+}
+
+GLuint Cubemap::loadCubeMap(std::vector<std::string>texturePaths, std::vector<GLenum>textureTargets)
+{
+    std::cout<<std::endl;
+
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+    
     for(int i=0; i<texturePaths.size(); i++)
     {
         SDL_Surface* surfaceImage = IMG_Load(texturePaths[i].c_str());
-        if(!imageSurface)
+        
+        if(!surfaceImage)
         {
             std::cout<<"Couldn't load specified texture: " <<texturePaths[i].c_str() <<std::endl;
-            return false;
+            return 0;
         }
 
-        GLint noOfColours = surface->format->BytesPerPixel;
+        GLint noOfColours = surfaceImage->format->BytesPerPixel;
 
         GLenum textureFormat = GL_RGB;
         GLenum internalFormat = GL_RGB8;
 
         if(noOfColours == 4) //Contains an alpha channel
         {
-            if(surface->format->Rmask == 0x000000ff)
+            if(surfaceImage->format->Rmask == 0x000000ff)
             {
                 textureFormat = GL_RGBA;
                 internalFormat = GL_RGBA8;
@@ -38,7 +48,7 @@ bool Cubemap::loadCubeMap(std::string texturePaths[], GLuint textureTargets[])
         }
         else if (noOfColours == 3) //no alpha channel
         {
-            if(surface->format->Rmask == 0x000000ff)
+            if(surfaceImage->format->Rmask == 0x000000ff)
             {
                 textureFormat = GL_RGB;
                 internalFormat = GL_RGB8;
@@ -55,14 +65,15 @@ bool Cubemap::loadCubeMap(std::string texturePaths[], GLuint textureTargets[])
             return 0;
         }
 
-        glTexImage2D(textureTargets[0] + i,  0, internalFormat, imageSurface->w, imageSurface->h, 0, textureFormat, GL_UNSIGNED_BYTE, imageSurface->pixels);
+        glTexImage2D(textureTargets[0] + i,  0, internalFormat, surfaceImage->w, surfaceImage->h, 0, textureFormat, GL_UNSIGNED_BYTE, surfaceImage->pixels);
 
-        SDL_FreeSurface(imageSurface);
+        SDL_FreeSurface(surfaceImage);
+        std::cout<<"Texture: " <<texturePaths[i].c_str() <<" successfully loaded." <<std::endl;
+        
+        
     }
 
-    return true;
-  
-    
+    return textureID;
 }   
 
 void Cubemap::bindCubemapToPipeline(GLuint textureID)

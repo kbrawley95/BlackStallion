@@ -27,9 +27,12 @@ class Engine
 
         Graphics* graphics;
         Shader* cubeShader;
+        Shader* skyboxShader;
         Texture* texture;
         Transform* transform;
         Camera* mainCamera;
+
+        Cubemap* cubemap;
 
         bool isMoving;
 

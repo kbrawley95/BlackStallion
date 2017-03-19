@@ -95,17 +95,36 @@ void Engine::initScene()
     //Instance of Main Camera
     mainCamera=new Camera();
     //Main Camera initial start position
-    mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,5.0f));
+    mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,1.0f));
 
     //Shaders 
-    cubeShader = new Shader("/textureVS.glsl", "/textureFS.glsl");
+    // cubeShader = new Shader("/textureVS.glsl", "/textureFS.glsl");
+    skyboxShader = new Shader("/skyboxVS.glsl", "/skyboxFS.glsl");
 
     //Transform
     transform = new Transform();
 
-    //Load Cube Texture & Bind it
-    std::string texturePath = TEXTURE_PATH + "/metal.jpg";
-    textureMap = texture->loadTextureFromFile(texturePath);
+    //Load Cubemap Texture & Bind it to pipeline
+    std::vector<std::string>texturePaths;
+   
+    texturePaths.push_back("assets/textures/right.png");
+    texturePaths.push_back("assets/textures/left.png");
+    texturePaths.push_back("assets/textures/up.png");
+    texturePaths.push_back("assets/textures/down.png");
+    texturePaths.push_back("assets/textures/bk.png");
+    texturePaths.push_back("assets/textures/front.png");
+
+    std::vector<GLenum>textureTargets;
+                            /*===TEXTURE TARGET====*/         /*====ORIENTATION===*/
+    textureTargets.push_back(GL_TEXTURE_CUBE_MAP_POSITIVE_X       /*Right*/);
+    textureTargets.push_back(GL_TEXTURE_CUBE_MAP_NEGATIVE_X       /*Left*/);
+    textureTargets.push_back(GL_TEXTURE_CUBE_MAP_POSITIVE_Y       /*Top*/);
+    textureTargets.push_back(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y       /*Bottom*/);
+    textureTargets.push_back(GL_TEXTURE_CUBE_MAP_POSITIVE_Z       /*Back*/);
+    textureTargets.push_back(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z       /*Front*/);
+   
+    cubemap = new Cubemap(texturePaths, textureTargets);
+    textureMap = cubemap->getTextureID();
 
     glGenVertexArrays(1, &vertexArrayID);
     glBindVertexArray(vertexArrayID);
@@ -224,35 +243,43 @@ void Engine::render()
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+    glDepthMask(GL_FALSE);
+
     //Bind Vertex Array Object to pipeline (Sanity Check)
     glBindVertexArray(vertexArrayID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureMap);
 
     //Use the specified shader program
-    glUseProgram(cubeShader->getShaderProgram());
+    glUseProgram(skyboxShader->getShaderProgram());
 
     //Switch on Alpha Blending
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
     //Model-View-Projection Matrix
-    GLint MVPLocation = glGetUniformLocation(cubeShader->getShaderProgram(), "MVP");
+    GLint MVPLocation = glGetUniformLocation(skyboxShader->getShaderProgram(), "MVP");
     glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(mainCamera->getMVPMatrix()));
 
-    //Cube Texture
-    GLint texture0Location = glGetUniformLocation(cubeShader->getShaderProgram(), "texture0");
+    //CubeMap Texture
+    GLint texture0Location = glGetUniformLocation(skyboxShader->getShaderProgram(), "cubeTexture");
 	glUniform1i(texture0Location, 0);
 
     //Draw vertices data based on index selection values
     glDrawElements(GL_TRIANGLES, Cube::m_indices.size(), GL_UNSIGNED_INT, 0);
-   
+
+    glDepthMask(GL_TRUE);
+    glBindVertexArray(0);
+
+    
+
+    //...Draw rest of scene
 
 }
 
 void Engine::cleanUp()
 {
     glDeleteTextures(1, &textureMap);
-    glDeleteProgram(cubeShader->getShaderProgram());
+    glDeleteProgram(skyboxShader->getShaderProgram());
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementsBufferID);
     glDeleteBuffers(1, &vertexArrayID);

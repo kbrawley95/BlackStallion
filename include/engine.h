@@ -6,47 +6,47 @@
 class Engine
 {
     public:
-    SDL_Window* window;
-    int start();
-    float getScreenWidth();
-    float getScreenHeight();
-    static const int WIDTH = 1024;
-    static const int HEIGHT = 720;
+        SDL_Window* window;
+        int start();
+        float getScreenWidth();
+        float getScreenHeight();
+        static const int WIDTH = 1024;
+        static const int HEIGHT = 720;
 
-    Engine();
-    ~Engine();
+        Engine();
+        ~Engine();
     
 
     private:
-    void eventHandling(SDL_Event event);
-    void update();
-    void render();
-    void initScene();
-    void cleanUp();
-    SDL_Window* createWindow(const char* windowName);
+        void eventHandling(SDL_Event event);
+        void update();
+        void render();
+        void initScene();
+        void cleanUp();
+        SDL_Window* createWindow(const char* windowName);
 
+        Graphics* graphics;
+        Shader* shader;
+        Shader* skyboxShader;
+        Texture* texture;
+        Transform* transform;
+        Camera* mainCamera;
 
-    Graphics* graphics;
-    Shader* shader;
-    Texture* texture;
-    Transform* transform;
-    Camera* mainCamera;
+        bool isMoving;
 
-    bool isMoving;
+        GLuint textureMap;
 
-    GLuint textureMap;
+        GLuint vertexBufferID;
+        GLuint elementsBufferID;
+        GLuint vertexArrayID;
 
-    GLuint vertexBufferID;
-    GLuint elementsBufferID;
-    GLuint vertexArrayID;
+        float currentTime;
+        float lastTime;
+        float deltaTime;
 
-    float currentTime;
-    float lastTime;
-    float deltaTime;
+        bool isRunning;
 
-    bool isRunning;
-
-    
+        
     int xpos, ypos;
     
     

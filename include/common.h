@@ -59,6 +59,7 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "transform.h"
 #include "camera.h"
 #include "input.h"
+#include "cube.h"
 #include "objloader.h"
 
 #endif

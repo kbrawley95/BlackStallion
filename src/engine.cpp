@@ -1,88 +1,3 @@
-Vertex verts[]={
-
-
-
-    /*FRONT*/
-
-    //Top Left
-    {glm::vec3(-0.5f, 0.5f, 0.5f),
-    glm::vec4(1.0f, 0.0f,0.0f, 1.0f),
-    glm::vec2(0.0f, 1.0f)}, 
-
-    //Bottom Left
-    {glm::vec3(-0.5f, -0.5f, 0.5f), 
-    glm::vec4(1.0f, 0.0f,0.0f, 1.0f),
-    glm::vec2(0.0f, 0.0f)},
-
-    //Bottom Right
-    {glm::vec3(0.5f, -0.5f, 0.5f), 
-    glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-    glm::vec2(1.0f, 0.0f)},
-
-    //Top Right
-    {glm::vec3(0.5f, 0.5f, 0.5f),
-    glm::vec4(.0f, 1.0f,0.0f, 1.0f),
-    glm::vec2(1.0f, 1.0f)}, 
-
-    /*BACK*/
-
-    //Top Left
-    {glm::vec3(-0.5f, 0.5f, -0.5f),
-    glm::vec4(0.0f, 0.0f,1.0f, 1.0f),
-    glm::vec2(0.0f, 1.0f)}, 
-
-    //Bottom Left
-    {glm::vec3(-0.5f, -0.5f, -0.5f), 
-    glm::vec4(0.0f, 0.0f,1.0f, 1.0f),
-    glm::vec2(0.0f, 0.0f)},
-
-    //Bottom Right
-    {glm::vec3(0.5f, -0.5f, -0.5f), 
-    glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
-    glm::vec2(1.0f, 0.0f)},
-
-    //Top Right
-    {glm::vec3(0.5f, 0.5f, -0.5f),
-    glm::vec4(0.0f, 1.0f,1.0f, 1.0f),
-    glm::vec2(1.0f, 1.0f)}, 
-
-    };
-
-    GLuint indices[]={
-        //front 
-        0,1,2,
-        0,3,2,
-
-        //left
-        4,5,1,
-        4,1,0,
-
-        //right
-        3,7,2,
-        7,6,2,
-
-        //bottom
-        1,5,2,
-        6,2,5,
-
-        //top
-        4,0,7,
-        0,7,3,
-
-        //back
-        4,5,6,
-        4,7,6
-
-    };
-
-
-std::vector< glm::vec3 > vertices;
-std::vector< glm::vec2 > uvs;
-std::vector< glm::vec3 > normals; // Won't be used at the moment.
-
-OBJLoader* objLoader;
-bool res = objLoader->loadObjModel("cube.obj", vertices, uvs, normals);
-
 Engine::Engine()
 {
     
@@ -177,30 +92,20 @@ int Engine::start()
 
 void Engine::initScene()
 {
-
+    //Instance of Main Camera
     mainCamera=new Camera();
+    //Main Camera initial start position
     mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,5.0f));
+
+    //Shaders 
     shader = new Shader("/textureVS.glsl", "/textureFS.glsl");
+
+    //Transform
     transform = new Transform();
 
-    //Load Texture & Bind it
+    //Load Cube Texture & Bind it
     std::string texturePath = TEXTURE_PATH + "/metal.jpg";
     textureMap = texture->loadTextureFromFile(texturePath);
-
-    //  std::string textPath = FONT_PATH + "/OratorStd.otf";
-    // textureMap = texture->loadTextureFromFont(textPath, 24, "Hello World");
-
-
-    
-    glBindTexture(GL_TEXTURE_2D, textureMap); 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    
-
 
     glGenVertexArrays(1, &vertexArrayID);
     glBindVertexArray(vertexArrayID);
@@ -210,26 +115,26 @@ void Engine::initScene()
     //Make the new VBO active (Bind it to pipeline)
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
     //Copy Vertex Data to VBO
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Cube::m_vertices.size() * sizeof(Vertex), &Cube::m_vertices[0], GL_STATIC_DRAW);
 
-    //Creat Elements (Index)Buffer
+    //Create Elements (Index)Buffer
     glGenBuffers(1, &elementsBufferID);
     //Make the EBO active
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferID);
     //Copy Index data to the EBO
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, Cube::m_indices.size() * sizeof(GLuint), &Cube::m_indices[0], GL_STATIC_DRAW);
 
-    //Tell the shader that 0 is the position elementsBufferID
+    //Tell the shader that 0 is the position 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void **)offsetof(Vertex, position));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
 
+    //Tell the shader that 1 is the colour 
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1,4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void **)offsetof(Vertex, colour));
+    glVertexAttribPointer(1,4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, colour));
 
+    //Tell the shader that 2 is the texture coordinates 
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2,2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void **)offsetof(Vertex, uvTextCoords));
-
+    glVertexAttribPointer(2,2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, uvTextCoords));
 }
 
 void Engine::eventHandling(SDL_Event event)
@@ -319,8 +224,10 @@ void Engine::render()
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-
+    //Bind Vertex Array Object to pipeline (Sanity Check)
     glBindVertexArray(vertexArrayID);
+
+    //Use the specified shader program
     glUseProgram(shader->getShaderProgram());
 
     //Switch on Alpha Blending
@@ -330,18 +237,15 @@ void Engine::render()
 
     //Model-View-Projection Matrix
     GLint MVPLocation = glGetUniformLocation(shader->getShaderProgram(), "MVP");
-    GLint texture0Location = glGetUniformLocation(shader->getShaderProgram(), "texture0");
-
-    
-    glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureMap);
-
     glUniformMatrix4fv(MVPLocation, 1, GL_FALSE, glm::value_ptr(mainCamera->getMVPMatrix()));
+
+    //Cube Texture
+    GLint texture0Location = glGetUniformLocation(shader->getShaderProgram(), "texture0");
 	glUniform1i(texture0Location, 0);
 
-
-    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
-    // glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices.size()));
+    //Draw vertices data based on index selection values
+    glDrawElements(GL_TRIANGLES, Cube::m_indices.size(), GL_UNSIGNED_INT, 0);
+   
 
 }
 

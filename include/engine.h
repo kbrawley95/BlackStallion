@@ -18,6 +18,26 @@ class Engine
     
 
     private:
+        //External Class Instances
+        Skybox* skybox;
+        Graphics* graphics;
+        Shader* cubeShader;
+        Camera* mainCamera;
+        Cubemap* cubemap;
+
+        //Booleans
+        bool isMoving;
+        bool isRunning;
+
+        //Update Floats
+        float currentTime;
+        float lastTime;
+        float deltaTime;
+        
+        //Mouse Coordinates
+        int xpos, ypos;
+
+        //Main Loop Method
         void eventHandling(SDL_Event event);
         void update();
         void render();
@@ -25,32 +45,6 @@ class Engine
         void cleanUp();
         SDL_Window* createWindow(const char* windowName);
 
-        Skybox* skybox;
-
-        Graphics* graphics;
-        Shader* cubeShader;
-    
-        Texture* texture;
-        Camera* mainCamera;
-
-        Cubemap* cubemap;
-
-        bool isMoving;
-
-        GLuint textureMap;
-
-        GLuint vertexBufferID;
-        GLuint elementsBufferID;
-        GLuint vertexArrayID;
-
-        float currentTime;
-        float lastTime;
-        float deltaTime;
-
-        bool isRunning;
-
-        
-        int xpos, ypos;
     
     
 };

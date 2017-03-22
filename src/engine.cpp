@@ -187,15 +187,15 @@ void Engine::render()
     //Clear the background to black
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+ 
+    //Render Skybox 
     glDepthMask(GL_FALSE);
 
     //Switch on Alpha Blending
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //Render Skybox 
     skybox->render(mainCamera);
-   
     glDepthMask(GL_TRUE);
     glBindVertexArray(0);
 

@@ -58,7 +58,7 @@ bool OBJLoader::loadObjModel(const char* path, std::vector<glm::vec3> &out_verti
 
             if(matches !=9)
             {
-                printf("FIle can't be read by parser");
+                printf("File can't be read by parser");
                 return false;
             }
 
@@ -99,6 +99,9 @@ bool OBJLoader::loadObjModel(const char* path, std::vector<glm::vec3> &out_verti
             glm::vec3 normal = temp_normals[normalIndex-1];
             out_vertices.push_back(normal);
         }
+
+        return false;
     }
 
+    return true;
 }

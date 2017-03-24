@@ -1,4 +1,4 @@
-Skybox::Skybox()
+Skybox::Skybox(std::string name) : GameObject(name)
 {
     skyboxShader = new Shader("/skyboxVS.glsl", "/skyboxFS.glsl");
     cubemapTextureID = generateCubeMap();
@@ -68,6 +68,10 @@ void Skybox::render(Camera* mainCamera)
     //Use the specified shader program
     glUseProgram(skyboxShader->getShaderProgram());
 
+    //Model Matrix 
+    GLint modelMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(),"model");
+    glUniformMatrix4fv(modelMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->attached_transform->getModeltoWorldMatrix()));
+
     //View Matrix
     GLint viewMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(), "view");
     glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(glm::mat3(mainCamera->getViewMatrix()))));
@@ -82,6 +86,7 @@ void Skybox::render(Camera* mainCamera)
 
     //Draw vertices data based on index selection values
     glDrawElements(GL_TRIANGLES, Cube::m_indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }
 
 void Skybox::cleanUp()

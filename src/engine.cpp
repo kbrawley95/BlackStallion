@@ -13,8 +13,8 @@ SDL_Window* Engine::createWindow(const char* windowName)
     SDL_Window* window = SDL_CreateWindow(windowName, //Window Title 
                         SDL_WINDOWPOS_CENTERED, //x
                         SDL_WINDOWPOS_CENTERED, //y
-                        WIDTH, //Width
-                        HEIGHT, //Height
+                        Window::WIDTH,  //Width
+                        Window::HEIGHT, //Height
                         SDL_WINDOW_OPENGL); //Flags
 
     return window;
@@ -68,7 +68,7 @@ int Engine::start()
     // //OpenGL Initialisation
     graphics->initOpenGL();
     initScene();
-    graphics->setViewport(Engine::WIDTH,Engine::HEIGHT);
+    graphics->setViewport(Window::WIDTH, Window::HEIGHT);
 
     //Main Game Loop
     SDL_Event event;
@@ -95,10 +95,21 @@ void Engine::initScene()
     //Instance of Main Camera
     mainCamera=new Camera();
     //Main Camera initial start position
-    mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,1.0f));
+    mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,0.0f));
 
     //Skybox Instance
-    skybox = new Skybox();
+    skybox = new Skybox("Mountains");
+    skybox->getTransform()->setPosition(glm::vec3(0.0f,0.0f,0.0f));
+    skybox->getTransform()->setScale(5);
+    glm::vec3 newScale = skybox->getTransform()->getScale();
+    
+    std::cout<<"Name of Object: " << skybox->getName()<<std::endl;
+    printf("Object Scale: x: %f, y: %f, z: %f", newScale.x, newScale.y, newScale.z);
+    // std::cout<<""<<std::endl;
+
+    // stall = new ObjModel("assets/models/stall.obj");
+    
+
 }
 
 void Engine::eventHandling(SDL_Event event)
@@ -122,10 +133,10 @@ void Engine::eventHandling(SDL_Event event)
                 xpos = event.button.x;
                 ypos = event.button.y;
 
-                if(event.button.x < (Engine::WIDTH))
-                    // mainCamera->attached_transform->lookHorizontal(60.0f);
-                if(event.button.y < (Engine::HEIGHT))
-                    mainCamera->attached_transform->lookHorizontal(60.0f);    
+                if(event.button.x < (Window::WIDTH))
+                    mainCamera->attached_transform->setRotation(glm::vec3(0.0f, 1.0f, 0.0f));
+                if(event.button.y < (Window::HEIGHT))
+                     mainCamera->attached_transform->setRotation(glm::vec3(0.0f, 1.0f, 0.0f));
 
                 std::cout << "Mouse = (" << xpos << ", " << ypos << ")" << std::endl;
                 break;
@@ -183,7 +194,7 @@ void Engine::update()
 }
 
 void Engine::render()
-{
+{ 
     //Clear the background to black
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -197,23 +208,13 @@ void Engine::render()
 
     skybox->render(mainCamera);
     glDepthMask(GL_TRUE);
-    glBindVertexArray(0);
-
+    
     //...Draw rest of scene 
+    // stall->render(mainCamera);
 
 }
 
 void Engine::cleanUp()
 {
     skybox->cleanUp();
-}
-
-float Engine::getScreenWidth()
-{
-    return (float)WIDTH;
-}
-
-float Engine::getScreenHeight()
-{
-    return (float)HEIGHT;
 }

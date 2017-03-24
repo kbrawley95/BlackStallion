@@ -6,16 +6,11 @@
 class Engine
 {
     public:
-        SDL_Window* window;
-        int start();
-        float getScreenWidth();
-        float getScreenHeight();
-        static const int WIDTH = 1024;
-        static const int HEIGHT = 720;
-
         Engine();
         ~Engine();
-    
+
+        SDL_Window* window;
+        int start();
 
     private:
         //External Class Instances
@@ -24,6 +19,11 @@ class Engine
         Shader* cubeShader;
         Camera* mainCamera;
         Cubemap* cubemap;
+
+        ObjModel* stall;
+
+        //Scene Objects
+        std::vector<GameObject>sceneObjects; 
 
         //Booleans
         bool isMoving;

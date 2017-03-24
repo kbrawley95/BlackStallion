@@ -1,22 +1,40 @@
 #ifndef _GAMEOBJECT
 #define _GAMEOBJECT
 
-class Gameobject
+class GameObject
 {
     public:
+        GameObject(std::string givenName)
+        {
+            name = givenName;
+            attached_transform = new Transform();
+        }
 
-    Gameobject(std::string assignedName);
-    ~Gameobject();
-    
-    std::string getName();
-    Transform getTransform();
-    
+        std::string getName()
+        {
+            return name;
+        }
+        void setName(std::string value)
+        {
+            name = value;
+        }
+
+        Transform* getTransform()
+        {
+            return attached_transform;
+        }
+
+        virtual void render(Camera* mainCamera)
+        {
+            
+        }
+        virtual void cleanUp()
+        {
+
+        }    
     private:
-    private std::string name;
-    Transform* transform;
-
+        std::string name;
+        Transform* attached_transform;
 };
-
-#include "../src/gameobject.cpp"
 
 #endif

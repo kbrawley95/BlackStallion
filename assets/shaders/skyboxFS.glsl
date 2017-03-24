@@ -1,4 +1,4 @@
-#version 150
+#version 330
 
 in vec3 vertexTexCoords;
 
@@ -8,6 +8,6 @@ uniform samplerCube cubeTexture;
 
 void main()
 {
-	FragColor = texture(cubeTexture, vertexTexCoords);
-	//FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);
+	vec4 cubeMapColor =  texture(cubeTexture, vertexTexCoords);
+	FragColor = cubeMapColor;
 }

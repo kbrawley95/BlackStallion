@@ -22,11 +22,8 @@ class Transform
     glm::vec3 getRotation(); 
 
     void setPosition(glm::vec3 newPos);
-    void lookHorizontal(float yaw);
-    void lookVertical(float pitch);
-
-    void setPitch(float angle);
-    void setYaw(float angle);
+    void setScale(float scalar);
+    void setRotation(glm::vec3 newRot);
 
     private:
     glm::vec3 position;

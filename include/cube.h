@@ -1,7 +1,7 @@
 #ifndef _CUBE_H
 #define _CUBE_H
 
-class Cube
+class Cube 
 {
     public:
         static std::vector<Vertex> m_vertices;

@@ -5,7 +5,6 @@ class Camera
 {
     public:
     std::shared_ptr<Transform> attached_transform;
-   // std::shared_ptr<Engine> engine;
     
     Camera();
     ~Camera();
@@ -20,7 +19,11 @@ class Camera
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
-
+    float fov = 45;
+    float width = Window::WIDTH; 
+    float height = Window::HEIGHT;
+    float nearPlane =0.1f;
+    float farPlane = 100.0f;
 };
 
 #include "../src/camera.cpp"

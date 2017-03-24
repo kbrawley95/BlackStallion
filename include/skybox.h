@@ -1,19 +1,16 @@
 #ifndef _SKYBOX_H
 #define _SKYBOX_H
 
-class Skybox
+class Skybox : public GameObject
 {
     public:
-
-        Skybox();
-
+        Skybox(std::string name);
         void initSkybox();
         GLuint generateCubeMap();
         void render(Camera* mainCamera);
         void cleanUp();
 
     private:
-
         //Buffer objects
         GLuint vertexArrayID;
         GLuint vertexBufferID;

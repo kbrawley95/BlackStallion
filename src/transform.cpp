@@ -33,7 +33,6 @@ glm::mat4x4 Transform::getModeltoWorldMatrix()
 }
 
 
-
 glm::vec3 Transform::forward()
 {
     glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -78,27 +77,14 @@ void Transform::setPosition(glm::vec3 newPos)
    position+=newPos;
 }
 
-void Transform::lookHorizontal(float yaw)
+void Transform::setRotation(glm::vec3 newRot)
 {
-   rotation.y += sin(glm::radians(yaw));
-   
+   rotation.x+=newRot.x;
+   rotation.y+=newRot.y;
+   rotation.z+=newRot.z;
 }
 
-void Transform::lookVertical(float pitch)
+void Transform::setScale(float scalar)
 {
-   rotation.x += cos(glm::radians(pitch));
-   rotation.z += sin(glm::radians(pitch));
-   
+   scale*=scalar;
 }
-
-
-void Transform::setPitch(float angle)
-{
-    pitch = glm::radians(angle);
-}
-
-void Transform::setYaw(float angle)
-{
-    yaw = glm::radians(angle);
-}
-

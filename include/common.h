@@ -52,6 +52,7 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 
 //CLASS HEADERS
 #include "engine.h"
+#include "window.h"
 #include "vertex.h"
 #include "graphics.h"
 #include "shader.h"
@@ -61,7 +62,9 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "input.h"
 #include "cube.h"
 #include "cubemap.h"
+#include "gameobject.h"
 #include "skybox.h"
 #include "objloader.h"
+#include "objmodel.h"
 
 #endif

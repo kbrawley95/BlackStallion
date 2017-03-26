@@ -35,7 +35,9 @@ class Engine
         float deltaTime;
         
         //Mouse Coordinates
-        int xpos, ypos;
+        int xPos, yPos;
+        bool inbounds;
+        bool positive;
 
         //Main Loop Method
         void eventHandling(SDL_Event event);

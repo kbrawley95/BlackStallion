@@ -9,7 +9,8 @@ class Transform
     Transform();
     ~Transform();
 
-    glm::mat4 getModeltoWorldMatrix();
+    void createModelToWorldMatrix();
+    glm::mat4 getModelToWorldMatrix();
 
     //Translation Vectors
     glm::vec3 forward();
@@ -30,6 +31,8 @@ class Transform
     glm::vec3 scale;
     glm::vec3 rotation;
     glm::vec3 front;
+
+    glm::mat4x4 model_matrix;
 
     float pitch;
     float yaw;

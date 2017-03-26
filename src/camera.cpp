@@ -10,10 +10,6 @@ Camera::~Camera()
 
 }
 
-glm::mat4 Camera::getMVPMatrix()
-{
-    return  projectionMatrix * viewMatrix * attached_transform->getModeltoWorldMatrix();    
-}
 
 glm::mat4 Camera::getViewMatrix()
 {

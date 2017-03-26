@@ -9,8 +9,8 @@ class Input
     static std::map<int, bool>mouse;
 
 };
+
 //Instantiate to avoid reference error
 std::map<int, bool> Input::keys;
-std::map<int, bool> Input::mouse;
 
 #endif

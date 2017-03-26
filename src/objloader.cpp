@@ -1,6 +1,6 @@
-OBJLoader::OBJLoader()
+OBJLoader::OBJLoader(const char* path)
 {
-
+    loadObjModel(path, temp_vertices,temp_uvs,temp_normals);
 }
 
 OBJLoader::~OBJLoader()
@@ -8,14 +8,30 @@ OBJLoader::~OBJLoader()
 
 }
 
-bool OBJLoader::loadObjModel(const char* path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, std::vector<glm::vec3> &out_normals)
+std::vector<glm::vec3>OBJLoader::getVertices()
+{
+    return temp_vertices;
+}
+
+std::vector<glm::vec2>OBJLoader::getUVs()
+{
+   return temp_uvs;
+}
+
+std::vector<glm::vec3>OBJLoader::getNormals()
+{
+   return temp_normals;
+}
+
+ 
+void OBJLoader::loadObjModel(const char* path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, std::vector<glm::vec3> &out_normals)
 {
     FILE* file = fopen(path, "r");
 
     if(file == NULL)
     {
         printf("Couldn't open the specified file");
-        return false;
+        return;
     }
 
     while(true)
@@ -59,7 +75,7 @@ bool OBJLoader::loadObjModel(const char* path, std::vector<glm::vec3> &out_verti
             if(matches !=9)
             {
                 printf("File can't be read by parser");
-                return false;
+                return;
             }
 
             vertexIndices.push_back(vertexIndex[0]);
@@ -75,33 +91,6 @@ bool OBJLoader::loadObjModel(const char* path, std::vector<glm::vec3> &out_verti
             normalIndices.push_back(normalIndex[2]);
 
         }
-
-        //For each vertex of each triangle
-        for(unsigned int i=0; i<vertexIndices.size(); i++)
-        {
-            unsigned int vertexIndex = vertexIndices[i];
-            glm::vec3 vertex = temp_vertices[vertexIndex-1];
-            out_vertices.push_back(vertex);
-        }
-
-        //For each uvcoord of each triangle
-        for(unsigned int i=0; i<uvIndices.size(); i++)
-        {
-            unsigned int uvcoords = uvIndices[i];
-            glm::vec2 uv = temp_uvs[uvcoords-1];
-            out_uvs.push_back(uv);
-        }
-
-        //For each normal of each triangle
-        for(unsigned int i=0; i<normalIndices.size(); i++)
-        {
-            unsigned int normalIndex = normalIndices[i];
-            glm::vec3 normal = temp_normals[normalIndex-1];
-            out_vertices.push_back(normal);
-        }
-
-        return false;
+        
     }
-
-    return true;
 }

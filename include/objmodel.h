@@ -1,10 +1,10 @@
 #ifndef _OBJMODEL_H
 #define _OBJMODEL_H
 
-class ObjModel
+class ObjModel : public GameObject
 {
     public:
-        ObjModel(const char* path);
+        ObjModel(std::string name, const char* path);
         ~ObjModel();
 
         std::vector<glm::vec3> getVertices();

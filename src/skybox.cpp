@@ -68,9 +68,9 @@ void Skybox::render(Camera* mainCamera)
     //Use the specified shader program
     glUseProgram(skyboxShader->getShaderProgram());
 
-    //Model Matrix 
-    GLint modelMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(),"model");
-    glUniformMatrix4fv(modelMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->attached_transform->getModeltoWorldMatrix()));
+    //View Matrix
+    GLint modelMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(), "model");
+    glUniformMatrix4fv(modelMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->attached_transform->getModelToWorldMatrix()));
 
     //View Matrix
     GLint viewMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(), "view");

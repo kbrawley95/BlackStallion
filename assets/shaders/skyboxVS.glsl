@@ -14,6 +14,6 @@ void main()
 {
 	vertexTexCoords = vertexPosition;
 
-	vec4 MVP = projection * view * vec4(vertexPosition, 1.0);
+	vec4 MVP = projection * view * model * vec4(vertexPosition, 1.0f);
 	gl_Position = MVP.xyww;
 }

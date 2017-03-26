@@ -92,23 +92,22 @@ int Engine::start()
 
 void Engine::initScene()
 {
-    //Instance of Main Camera
-    mainCamera=new Camera();
-    //Main Camera initial start position
-    mainCamera->attached_transform->setPosition(glm::vec3(0.0f,0.0f,0.0f));
 
     //Skybox Instance
     skybox = new Skybox("Mountains");
-    skybox->getTransform()->setPosition(glm::vec3(0.0f,0.0f,0.0f));
-    skybox->getTransform()->setScale(5);
+    skybox->getTransform()->setScale(20);
     glm::vec3 newScale = skybox->getTransform()->getScale();
     
     std::cout<<"Name of Object: " << skybox->getName()<<std::endl;
     printf("Object Scale: x: %f, y: %f, z: %f", newScale.x, newScale.y, newScale.z);
     // std::cout<<""<<std::endl;
 
-    // stall = new ObjModel("assets/models/stall.obj");
-    
+    //Instance of Main Camera
+    mainCamera=new Camera();
+    //Main Camera initial start position
+
+
+    stall = new ObjModel("Stall", "assets/models/stall.obj");
 
 }
 
@@ -129,18 +128,29 @@ void Engine::eventHandling(SDL_Event event)
                 break;
             
             case SDL_MOUSEMOTION:
+                
+                 xPos=event.button.x;
+                 yPos=event.button.y;
 
-                xpos = event.button.x;
-                ypos = event.button.y;
+                if(xPos > 0 && xPos < (Window::WIDTH - 1))
+                {
+                    inbounds = true;
+                    std::cout << "Mouse = (" << xPos << ", " << yPos << ")" << std::endl;
+                }
+                else
+                    inbounds = false;
 
-                if(event.button.x < (Window::WIDTH))
-                    mainCamera->attached_transform->setRotation(glm::vec3(0.0f, 1.0f, 0.0f));
-                if(event.button.y < (Window::HEIGHT))
-                     mainCamera->attached_transform->setRotation(glm::vec3(0.0f, 1.0f, 0.0f));
+                if(xPos < (Window::WIDTH/2) < Window::WIDTH)
+                {
+                    positive = false;
+                }
+                else if(xPos > 1 > Window::WIDTH)
+                {
+                    positive = true;
+                }
 
-                std::cout << "Mouse = (" << xpos << ", " << ypos << ")" << std::endl;
-                break;
-            
+                    break;
+
             case SDL_QUIT:
                 isRunning=false;
                 break;
@@ -158,7 +168,8 @@ void Engine::update()
     lastTime = currentTime;
 
 
-    float newSpeed = 1.0f; 
+    float newSpeed = 0.02f; 
+    float newRot = 0.5f; 
 
     if(Input::keys[SDLK_a])
     {
@@ -190,6 +201,23 @@ void Engine::update()
         isRunning = false;
     }
 
+    if(inbounds && (xPos < (Window::WIDTH/2)))
+    {
+        mainCamera->attached_transform->setRotation(-(mainCamera->attached_transform->up() * deltaTime * newRot));
+    }
+    else if(inbounds && (xPos > (Window::WIDTH/2)))
+    {
+        mainCamera->attached_transform->setRotation(mainCamera->attached_transform->up() * deltaTime * newRot);
+    }
+    else if(inbounds && (yPos < (Window::WIDTH/2)))
+    {
+        mainCamera->attached_transform->setRotation(-(mainCamera->attached_transform->right() * deltaTime * newRot));
+    }
+    else if(inbounds && (yPos > (Window::WIDTH/2)))
+    {
+        mainCamera->attached_transform->setRotation(mainCamera->attached_transform->right() * deltaTime * newRot);
+    }
+
     
 }
 
@@ -201,7 +229,7 @@ void Engine::render()
  
     //Render Skybox 
     glDepthMask(GL_FALSE);
-
+ 
     //Switch on Alpha Blending
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -209,7 +237,7 @@ void Engine::render()
     skybox->render(mainCamera);
     glDepthMask(GL_TRUE);
     
-    //...Draw rest of scene 
+    // //...Draw rest of scene 
     // stall->render(mainCamera);
 
 }

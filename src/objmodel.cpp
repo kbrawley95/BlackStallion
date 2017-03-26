@@ -1,7 +1,10 @@
-ObjModel::ObjModel(const char* path)
+ObjModel::ObjModel(std::string name, const char* path) : GameObject(name)
 {
-    objectLoader = new OBJLoader();
-    objectLoader->loadObjModel(path, vertices, uvs, normals);
+    objectLoader = new OBJLoader(path);
+    vertices = objectLoader->getVertices();
+    uvs = objectLoader->getUVs();
+    normals = objectLoader->getNormals();
+    
     textureShader = new Shader("/textureVS.glsl", "/textureFS.glsl");
     initModel();
 }
@@ -36,7 +39,7 @@ void ObjModel::initModel()
     //Copy Vertex Data to VBO
     std::vector<glm::vec3>vertices;
     vertices = getVertices();
-    std::cout<<"Number of Vertices: " <<vertices.size() << std::endl;
+   
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices, GL_STATIC_DRAW);
 
     // //Create Elements (Index)Buffer
@@ -62,14 +65,13 @@ void ObjModel::render(Camera* mainCamera)
 {
     //Bind Vertex Array Object to pipeline (Sanity Check)
     glBindVertexArray(vertexArrayID);
-    // glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureID);
 
     //Use the specified shader program
     glUseProgram(textureShader->getShaderProgram());
 
     //Model Matrix 
     GLint modelMatrix = glGetUniformLocation(textureShader->getShaderProgram(),"model");
-    glUniformMatrix4fv(modelMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->attached_transform->getModeltoWorldMatrix()));
+    glUniformMatrix4fv(modelMatrix, 1, GL_FALSE, glm::value_ptr(getTransform()->getModelToWorldMatrix()));
 
     //View Matrix
     GLint viewMatrix = glGetUniformLocation(textureShader->getShaderProgram(), "view");
@@ -84,5 +86,5 @@ void ObjModel::render(Camera* mainCamera)
 	// glUniform1i(texture0Location, 0);
 
     //Draw vertices data based on index selection values
-    glDrawArrays(GL_TRIANGLES, getVertices().size(), GL_UNSIGNED_INT);
+    glDrawArrays(GL_TRIANGLES, sizeof(vertices), vertices.size());
 }

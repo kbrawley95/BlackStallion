@@ -7,7 +7,7 @@ class Mesh : public GameObject
         Mesh(std::string name, std::string filepath, std::string texturepath);
 
         void loadModel(std::string filepath);
-        void assignMeshData(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+        void assignMeshData(std::vector<Vertex>&vertices, std::vector<unsigned int> &indices);
 
         void init();
         void render(Camera* mainCamera);

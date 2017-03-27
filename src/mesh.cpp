@@ -3,6 +3,7 @@ Mesh::Mesh(std::string name, std::string filepath, std::string texturepath) : Ga
     loadModel(filepath);
     textureShader = new Shader("/textureVS.glsl", "/textureFS.glsl");
     textureID = texture->loadTextureFromFile(texturepath);
+    assignMeshData(vertices, indices);
     init();
 }
 
@@ -11,7 +12,7 @@ void Mesh::loadModel(std::string filepath)
     model = new Model(filepath);
 }
 
-void Mesh::assignMeshData(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+void Mesh::assignMeshData(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
 {
     if (model->getPositions().size() == model->getTextureCoords().size() && model->getTextureCoords().size() == model->getNormals().size())
     {

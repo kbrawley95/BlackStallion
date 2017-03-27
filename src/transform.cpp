@@ -20,16 +20,19 @@ Transform::~Transform()
 
 void Transform::createModelToWorldMatrix()
 {
-    //Translation
-    model_matrix = glm::translate(model_matrix, position);
+   //Translation
+    glm::mat4 model_pos = glm::translate(glm::mat4(1.0f), position);
 
     //Euler Rotations
-    model_matrix = glm::rotate(model_matrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-    model_matrix = glm::rotate(model_matrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    model_matrix = glm::rotate(model_matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 model_rot = glm::mat4(1.0f);
+    model_rot = glm::rotate(model_rot, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    model_rot = glm::rotate(model_rot, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    model_rot = glm::rotate(model_rot, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
     //Scale
-    model_matrix = glm::scale(model_matrix, scale);
+    glm::mat4 model_size = glm::scale(glm::mat4(1.0f), scale);
+    model_matrix = model_size * model_rot * model_pos;
+
 }
 
 glm::mat4x4 Transform::getModelToWorldMatrix()

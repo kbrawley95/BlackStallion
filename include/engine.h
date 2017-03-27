@@ -20,10 +20,11 @@ class Engine
         Camera* mainCamera;
         Cubemap* cubemap;
 
-        ObjModel* stall;
-
         //Scene Objects
         std::vector<GameObject>sceneObjects; 
+
+        //Mesh Test
+        Mesh* mesh;
 
         //Booleans
         bool isMoving;
@@ -47,7 +48,6 @@ class Engine
         void cleanUp();
         SDL_Window* createWindow(const char* windowName);
 
-    
     
 };
 

@@ -15,6 +15,7 @@ GLuint Skybox::generateCubeMap()
     texturePaths.push_back("assets/textures/down.png");
     texturePaths.push_back("assets/textures/bk.png");
     texturePaths.push_back("assets/textures/front.png");
+    
                             /*===TEXTURE TARGET====*/         /*====ORIENTATION===*/
     textureTargets.push_back(GL_TEXTURE_CUBE_MAP_POSITIVE_X       /*Right*/);
     textureTargets.push_back(GL_TEXTURE_CUBE_MAP_NEGATIVE_X       /*Left*/);
@@ -29,17 +30,18 @@ GLuint Skybox::generateCubeMap()
 
 void Skybox::initSkybox()
 {
+    //Create & Bind Vertex Array Object (VAO)
     glGenVertexArrays(1, &vertexArrayID);
     glBindVertexArray(vertexArrayID);
 
-    //Create Vertex vertexBuffer
+    //Create  Vertex Buffer Object (VBO)
     glGenBuffers(1, &vertexBufferID);
     //Make the new VBO active (Bind it to pipeline)
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
     //Copy Vertex Data to VBO
     glBufferData(GL_ARRAY_BUFFER, Cube::m_vertices.size() * sizeof(Vertex), &Cube::m_vertices[0], GL_STATIC_DRAW);
 
-    //Create Elements (Index)Buffer
+    //Create Element Buffer Object (EBO)
     glGenBuffers(1, &elementsBufferID);
     //Make the EBO active
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferID);
@@ -61,6 +63,13 @@ void Skybox::initSkybox()
 
 void Skybox::render(Camera* mainCamera)
 {
+    //Disable Depth Mask
+    glDepthMask(GL_FALSE);
+ 
+    //Switch on Alpha Blending
+    glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     //Bind Vertex Array Object to pipeline (Sanity Check)
     glBindVertexArray(vertexArrayID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureID);
@@ -87,6 +96,9 @@ void Skybox::render(Camera* mainCamera)
     //Draw vertices data based on index selection values
     glDrawElements(GL_TRIANGLES, Cube::m_indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+    //Enable Depth Mask
+    glDepthMask(GL_TRUE);
 }
 
 void Skybox::cleanUp()

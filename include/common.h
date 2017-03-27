@@ -8,12 +8,14 @@
 //GENERAL
 #include <iostream>
 #include <string>
+#include <cstdlib> 
 #include <sstream>
 #include <fstream>
 #include <vector>
 #include <memory>
 #include <list>
 #include <map>
+#include <algorithm>
 
 //OPENGL
 #define GLEW_STATIC
@@ -65,6 +67,7 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "gameobject.h"
 #include "skybox.h"
 #include "objloader.h"
-#include "objmodel.h"
+#include "model.h"
+#include "mesh.h"
 
 #endif

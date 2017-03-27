@@ -1,96 +1,145 @@
-OBJLoader::OBJLoader(const char* path)
+OBJLoader::OBJLoader(std::string filepath, std::vector<glm::vec3>&vertexPositions, std::vector<glm::vec2>&textCoords, std::vector<glm::vec3>&normalVectors)
 {
-    loadObjModel(path, temp_vertices,temp_uvs,temp_normals);
+    loadModelDataFromFile(filepath, vertexPositions, textCoords, normalVectors);
 }
 
-OBJLoader::~OBJLoader()
+void OBJLoader::loadModelDataFromFile(std::string filepath, std::vector<glm::vec3>&vertexPositions, std::vector<glm::vec2>&textCoords, std::vector<glm::vec3>&normalVectors)
 {
+    char positionReg[] = "v";
+    char uvReg[] = "vt";
+    char normalReg[] = "vn";
+    char faceReg[] = "f";
 
+    std::ifstream file;
+	file.open(filepath);
+
+	std::string line;
+	if (file.is_open())
+	{
+		while (!file.eof())
+		{
+			getline(file, line);
+
+			unsigned int lineLength = line.length();
+
+			if (lineLength < 2)
+				continue;
+			
+			const char* charBuffer = line.c_str();
+
+			switch (charBuffer[0])
+			{
+				case 'v':
+					if (charBuffer[1] == 't')
+					{
+						parseDataToArray(charBuffer, uvs, uvReg);
+						parseVector2(uvs, textCoords);
+					}
+					else if (charBuffer[1] == 'n')
+					{
+						parseDataToArray(charBuffer, normals, normalReg);
+						parseVector3(normals, normalVectors);
+					}
+					else
+					{
+						parseDataToArray(charBuffer, positions, positionReg);
+						parseVector3(positions, vertexPositions);
+					}
+					break;
+
+				case 'f':
+					parseDataToArray(charBuffer, faces, faceReg);
+			}
+
+		}
+
+		file.close();
+	}
+	else
+	{
+		std::cerr << "Unable to load obj data file: " << filepath << std::endl;
+	}
 }
 
-std::vector<glm::vec3>OBJLoader::getVertices()
+
+
+void OBJLoader::parseDataToArray(const char* &charBuffer, std::vector<std::string> &array, char regs[])
 {
-    return temp_vertices;
+	std::string temp = (std::string)charBuffer;
+	std::string formated;
+
+	for (unsigned int i = 0; i < temp.size(); i++)
+	{
+		temp.erase(std::remove(temp.begin(), temp.end(), regs[i]), temp.end());
+	}
+
+	array.push_back(temp);
 }
 
-std::vector<glm::vec2>OBJLoader::getUVs()
+void OBJLoader::parseVector2(std::vector<std::string> array, std::vector<glm::vec2> &output)
 {
-   return temp_uvs;
+	float vOne;
+	float vTwo;
+	
+	std::string sub;
+	std::string sub2;
+
+	for (unsigned int i = 0; i < array.size(); i++)
+	{
+		std::istringstream iss(array[i]);
+		iss >> sub >> sub2;
+		vOne = std::stof(sub);
+		vTwo = std::stof(sub2);
+		
+	}
+	output.push_back(glm::vec2(vOne, vTwo));
 }
 
-std::vector<glm::vec3>OBJLoader::getNormals()
+void OBJLoader::parseVector3(std::vector<std::string>array, std::vector<glm::vec3> &output)
 {
-   return temp_normals;
+	float vOne;
+	float vTwo;
+	float vThree;
+
+	std::string sub;
+	std::string sub2;
+	std::string sub3;
+
+	for (unsigned int i = 0; i < array.size(); i++)
+	{
+		std::istringstream iss(array[i]);
+		iss >> sub >> sub2 >>sub3;
+		vOne = std::stof(sub);
+		vTwo = std::stof(sub2);
+		vThree = std::stof(sub2);
+
+	}
+	output.push_back(glm::vec3(vOne, vTwo, vThree));
 }
 
- 
-void OBJLoader::loadObjModel(const char* path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, std::vector<glm::vec3> &out_normals)
+void OBJLoader::printArrayContents(std::string arrayName, std::vector<std::string> array)
 {
-    FILE* file = fopen(path, "r");
+	std::cout << arrayName << ": " << std::endl;
+	for (int i = 0; i <array.size(); i++)
+	{
+		std::cout << i + 1 << ": " << array[i] << std::endl;
+	}
+}
 
-    if(file == NULL)
-    {
-        printf("Couldn't open the specified file");
-        return;
-    }
+void OBJLoader::printArrayContents(std::string arrayName, std::vector<glm::vec2>&array)
+{
+	std::cout << arrayName << ": " << std::endl;
+	for (int i = 0; i <array.size(); i++)
+	{
+		std::cout << i + 1 << ": x: " << array[i].x << " y: " << array[i].y  <<std::endl;
+	}
+}
 
-    while(true)
-    {
-        char charBuffer[128];
-        
-        //Read the first word of the line
-        int firstWord = fscanf(file, "%s", charBuffer);
-        if(firstWord == EOF)
-        {
-            break;  //if end of file, quit loop
-        }
-
-        //Parse obj file data for each of the following properties
-        if(strcmp(charBuffer, "v")==0){ //Vertices
-            glm::vec3 vertex;
-            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-            temp_vertices.push_back(vertex);
-        }
-        else if(strcmp(charBuffer, "vt")==0) //UV Textures
-        {
-            glm::vec2 textCoords;
-            fscanf(file, "%f %f\n", &textCoords.x, &textCoords.y);
-            temp_uvs.push_back(textCoords);
-        }
-        else if(strcmp(charBuffer, "vn")==0)   //Normals
-        {
-            glm::vec3 normals;
-            fscanf(file, "%f %f %f\n", &normals.x, &normals.y, &normals.z);
-            temp_normals.push_back(normals);
-        }
-        else if(strcmp(charBuffer, "first")==0)  //Faces
-        {
-            std::string vertex1, vertex2, vertex3;
-            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", 
-            &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-            &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-            &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-
-            if(matches !=9)
-            {
-                printf("File can't be read by parser");
-                return;
-            }
-
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
-
-            uvIndices.push_back(uvIndex[0]);
-            uvIndices.push_back(uvIndex[1]);
-            uvIndices.push_back(uvIndex[2]);
-
-            normalIndices.push_back(normalIndex[0]);
-            normalIndices.push_back(normalIndex[1]);
-            normalIndices.push_back(normalIndex[2]);
-
-        }
-        
-    }
+void printArrayContents(std::string arrayName, std::vector<glm::vec3>&array)
+{
+	std::cout << arrayName << ": " << std::endl;
+	for (int i = 0; i <array.size(); i++)
+	{
+		std::cout << i + 1 << ": x: " << array[i].x << " y: " << array[i].y << " z: " << array[i].z <<std::endl;
+	}
 }

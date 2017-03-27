@@ -28,7 +28,7 @@ int Engine::start()
 
 
     /*SDL ERROR CHECKING*/
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    if (SDL_Init(SDL_INIT_NOPARACHUTE & SDL_INIT_EVERYTHING) != 0) {
         SDL_Log("Unable to initialize SDL: %s\n", SDL_GetError());
         return -1;
     }
@@ -52,8 +52,6 @@ int Engine::start()
 	if (TTF_Init() == -1)	{
 		std::cout << "ERROR	TTF_Init: " << TTF_GetError();
 	}
-
-
 
     //Specify OpenGL Version (4.2)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -104,10 +102,9 @@ void Engine::initScene()
 
     //Instance of Main Camera
     mainCamera=new Camera();
-    //Main Camera initial start position
 
-
-    stall = new ObjModel("Stall", "assets/models/stall.obj");
+    //Mesh Test
+    mesh = new Mesh("cube", "assets/models/cube.obj", "assets/textures/texture.png");
 
 }
 
@@ -128,7 +125,6 @@ void Engine::eventHandling(SDL_Event event)
                 break;
             
             case SDL_MOUSEMOTION:
-                
                  xPos=event.button.x;
                  yPos=event.button.y;
 
@@ -228,21 +224,16 @@ void Engine::render()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
  
     //Render Skybox 
-    glDepthMask(GL_FALSE);
- 
-    //Switch on Alpha Blending
-    glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     skybox->render(mainCamera);
-    glDepthMask(GL_TRUE);
     
-    // //...Draw rest of scene 
-    // stall->render(mainCamera);
+    //Draw rest of scene 
+    mesh->render(mainCamera);
 
 }
 
 void Engine::cleanUp()
 {
     skybox->cleanUp();
+    mesh->cleanUp();
+    
 }

@@ -7,7 +7,8 @@ Transform::Transform()
     model_matrix = glm::mat4x4(1.0f);
 
     createModelToWorldMatrix();
-    
+
+    front = glm::vec3(model_matrix[2][0], model_matrix[2][1], model_matrix[2][2]);
 
     pitch = 0.0f;
     yaw = 0.0f;
@@ -43,7 +44,7 @@ glm::mat4x4 Transform::getModelToWorldMatrix()
 
 glm::vec3 Transform::forward()
 {
-    glm::vec3 front = glm::vec3(model_matrix[2][0], model_matrix[2][1], model_matrix[2][2]);
+    //front = glm::vec3(model_matrix[2][0], model_matrix[2][1], model_matrix[2][2]);
     return front;
 }
 
@@ -57,6 +58,11 @@ glm::vec3 Transform::right()
 {
     glm::vec3 right = glm::vec3(model_matrix[0][0], model_matrix[0][1], model_matrix[0][2]);
     return right;
+}
+
+void Transform::setForward(glm::vec3 newDirection)
+{
+    front = newDirection;
 }
 
 //GETTERS
@@ -79,15 +85,13 @@ glm::vec3 Transform::getRotation()
 //SETTERS
 void Transform::setPosition(glm::vec3 newPos)
 {
-   position=newPos;
+   position+=newPos;
    createModelToWorldMatrix();
 }
 
 void Transform::setRotation(glm::vec3 newRot)
 {
-   rotation.x=newRot.x;
-   rotation.y=newRot.y;
-   rotation.z=newRot.z;
+   rotation+=newRot;
 
    createModelToWorldMatrix();
 }

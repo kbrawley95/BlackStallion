@@ -6,9 +6,6 @@
 class Engine
 {
     public:
-        Engine();
-        ~Engine();
-
         SDL_Window* window;
         int start();
 
@@ -23,9 +20,6 @@ class Engine
         //Scene Objects
         std::vector<GameObject>sceneObjects; 
 
-        //Mesh Test
-        Mesh* mesh;
-
         //Booleans
         bool isMoving;
         bool isRunning;
@@ -34,11 +28,9 @@ class Engine
         float currentTime;
         float lastTime;
         float deltaTime;
-        
-        //Mouse Coordinates
-        int xPos, yPos;
-        bool inbounds;
-        bool positive;
+
+        float yaw;
+        float pitch;
 
         //Main Loop Method
         void eventHandling(SDL_Event event);
@@ -48,7 +40,6 @@ class Engine
         void cleanUp();
         SDL_Window* createWindow(const char* windowName);
 
-    
 };
 
 #include "../src/engine.cpp"

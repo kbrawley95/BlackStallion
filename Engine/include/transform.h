@@ -26,6 +26,8 @@ class Transform
     void setScale(float scalar);
     void setRotation(glm::vec3 newRot);
 
+    void setForward(glm::vec3 newDirection);
+
     private:
     glm::vec3 position;
     glm::vec3 scale;

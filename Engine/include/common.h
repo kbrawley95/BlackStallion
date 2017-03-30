@@ -66,8 +66,8 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "cubemap.h"
 #include "gameobject.h"
 #include "skybox.h"
-#include "objloader.h"
-#include "model.h"
-#include "mesh.h"
+// #include "objloader.h"
+// #include "model.h"
+// #include "mesh.h"
 
 #endif

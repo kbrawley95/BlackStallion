@@ -1,13 +1,3 @@
-Engine::Engine()
-{
-    
-}
-
-Engine::~Engine()
-{
-
-}
-
 SDL_Window* Engine::createWindow(const char* windowName)
 {
     SDL_Window* window = SDL_CreateWindow(windowName, //Window Title 
@@ -25,7 +15,6 @@ int Engine::start()
    
     isMoving=false;
     isRunning=true;
-
 
     /*SDL ERROR CHECKING*/
     if (SDL_Init(SDL_INIT_NOPARACHUTE & SDL_INIT_EVERYTHING) != 0) {
@@ -93,7 +82,7 @@ void Engine::initScene()
 
     //Skybox Instance
     skybox = new Skybox("Mountains");
-    skybox->getTransform()->setScale(20);
+    skybox->getTransform()->setScale(200);
     glm::vec3 newScale = skybox->getTransform()->getScale();
     
     std::cout<<"Name of Object: " << skybox->getName()<<std::endl;
@@ -103,58 +92,11 @@ void Engine::initScene()
     //Instance of Main Camera
     mainCamera=new Camera();
 
-    //Mesh Test
-    mesh = new Mesh("cube", "assets/models/cube.obj", "assets/textures/texture.png");
-
 }
 
 void Engine::eventHandling(SDL_Event event)
 {
-    float camera_rotation = 0.0f;
-     glm::vec3 offset =  glm::vec3(mainCamera->attached_transform->up() * 0.5f);
-    while(SDL_PollEvent(&event))
-    {
-        switch(event.type)
-        {
-            case SDL_KEYDOWN:
-                Input::keys[event.key.keysym.sym]=true;
-                break;
-
-            case SDL_KEYUP:
-                Input::keys[event.key.keysym.sym]=false;
-                break;
-            
-            case SDL_MOUSEMOTION:
-                 xPos=event.button.x;
-                 yPos=event.button.y;
-
-                if(xPos > 0 && xPos < (Window::WIDTH - 1))
-                {
-                    inbounds = true;
-                    std::cout << "Mouse = (" << xPos << ", " << yPos << ")" << std::endl;
-                }
-                else
-                    inbounds = false;
-
-                if(xPos < (Window::WIDTH/2) < Window::WIDTH)
-                {
-                    positive = false;
-                }
-                else if(xPos > 1 > Window::WIDTH)
-                {
-                    positive = true;
-                }
-
-                    break;
-
-            case SDL_QUIT:
-                isRunning=false;
-                break;
-            case SDL_WINDOWEVENT_CLOSE:
-                isRunning=false;
-                break;
-        }
-    }
+    Input::update(event);
 }
 
 void Engine::update()
@@ -163,59 +105,48 @@ void Engine::update()
     deltaTime = (currentTime - lastTime)/1000.0f;
     lastTime = currentTime;
 
-
-    float newSpeed = 0.02f; 
+    float newSpeed = 0.2f; 
     float newRot = 0.5f; 
+
+    //Keyboard Input
 
     if(Input::keys[SDLK_a])
     {
         //SDL_Log("Left");
-        mainCamera->attached_transform->setPosition(-(mainCamera->attached_transform->right() * deltaTime * newSpeed));
+        glm::vec3 position = -(mainCamera->attached_transform->right() * deltaTime * newSpeed);
+        mainCamera->attached_transform->setPosition(position);
     }
     if(Input::keys[SDLK_d])
     {
         //SDL_Log("Right");
-        mainCamera->attached_transform->setPosition(mainCamera->attached_transform->right() * deltaTime * newSpeed);
+        glm::vec3 position = (mainCamera->attached_transform->right() * deltaTime * newSpeed);
+        mainCamera->attached_transform->setPosition(position);
     }
     if(Input::keys[SDLK_w])
     {
         //SDL_Log("Up");
-        mainCamera->attached_transform->setPosition(-(mainCamera->attached_transform->forward()* deltaTime * newSpeed));
-        printf("x: %f, y: %f, z: %f\n", mainCamera->attached_transform->getPosition().x, mainCamera->attached_transform->getPosition().y, mainCamera->attached_transform->getPosition().z);
+        glm::vec3 position = -(mainCamera->attached_transform->forward() * deltaTime * newSpeed);
+        mainCamera->attached_transform->setPosition(position);
         
     }
     if(Input::keys[SDLK_s])
     {
         //SDL_Log("Down");
-        mainCamera->attached_transform->setPosition(mainCamera->attached_transform->forward() * deltaTime *newSpeed);
-        printf("x: %f, y: %f, z: %f\n", mainCamera->attached_transform->getPosition().x, mainCamera->attached_transform->getPosition().y, mainCamera->attached_transform->getPosition().z);
+        glm::vec3 position = (mainCamera->attached_transform->forward() * deltaTime * newSpeed);
+        mainCamera->attached_transform->setPosition(position);
         
     }
+    
 
     if(Input::keys[SDLK_ESCAPE])
     {
         isRunning = false;
     }
 
-    if(inbounds && (xPos < (Window::WIDTH/2)))
-    {
-        mainCamera->attached_transform->setRotation(-(mainCamera->attached_transform->up() * deltaTime * newRot));
-    }
-    else if(inbounds && (xPos > (Window::WIDTH/2)))
-    {
-        mainCamera->attached_transform->setRotation(mainCamera->attached_transform->up() * deltaTime * newRot);
-    }
-    else if(inbounds && (yPos < (Window::WIDTH/2)))
-    {
-        mainCamera->attached_transform->setRotation(-(mainCamera->attached_transform->right() * deltaTime * newRot));
-    }
-    else if(inbounds && (yPos > (Window::WIDTH/2)))
-    {
-        mainCamera->attached_transform->setRotation(mainCamera->attached_transform->right() * deltaTime * newRot);
-    }
-
+    //MOUSE INPUT
     
 }
+
 
 void Engine::render()
 { 
@@ -227,13 +158,10 @@ void Engine::render()
     skybox->render(mainCamera);
     
     //Draw rest of scene 
-    mesh->render(mainCamera);
 
 }
 
 void Engine::cleanUp()
 {
     skybox->cleanUp();
-    mesh->cleanUp();
-    
 }

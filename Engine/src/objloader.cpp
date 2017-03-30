@@ -81,18 +81,18 @@ void OBJLoader::parseVector2(std::vector<std::string> array, std::vector<glm::ve
 	float vOne;
 	float vTwo;
 	
-	std::string sub;
-	std::string sub2;
+	char sub[255];
+	char sub2[255];
 
 	for (unsigned int i = 0; i < array.size(); i++)
 	{
 		std::istringstream iss(array[i]);
 		iss >> sub >> sub2;
-		vOne = std::stof(sub);
-		vTwo = std::stof(sub2);
+		vOne = std::atof(sub);
+		vTwo = std::atof(sub2);
 		
 	}
-	output.push_back(glm::vec2(vOne, vTwo));
+	output.push_back(glm::vec2((float)vOne, (float)vTwo));
 }
 
 void OBJLoader::parseVector3(std::vector<std::string>array, std::vector<glm::vec3> &output)
@@ -101,20 +101,20 @@ void OBJLoader::parseVector3(std::vector<std::string>array, std::vector<glm::vec
 	float vTwo;
 	float vThree;
 
-	std::string sub;
-	std::string sub2;
-	std::string sub3;
+	char sub[255];
+	char sub2[255];
+	char sub3[255];
 
 	for (unsigned int i = 0; i < array.size(); i++)
 	{
 		std::istringstream iss(array[i]);
 		iss >> sub >> sub2 >>sub3;
-		vOne = std::stof(sub);
-		vTwo = std::stof(sub2);
-		vThree = std::stof(sub2);
+		vOne = std::atof(sub);
+		vTwo = std::atof(sub2);
+		vThree = std::atof(sub2);
 
 	}
-	output.push_back(glm::vec3(vOne, vTwo, vThree));
+	output.push_back(glm::vec3((float)vOne, (float)vTwo, (float)vThree));
 }
 
 void OBJLoader::printArrayContents(std::string arrayName, std::vector<std::string> array)

@@ -20,3 +20,40 @@ glm::mat4 Camera::getProjectionMatrix()
 {
     return projectionMatrix;
 }
+
+void Camera::move(float &speed, float &rotate, float &deltaTime)
+{
+    //Keyboard Input
+
+    if(Input::keys[SDLK_a])
+    {
+        //SDL_Log("Left");
+        glm::vec3 position = -(attached_transform->right() * deltaTime * speed);
+        attached_transform->setPosition(position);
+    }
+    if(Input::keys[SDLK_d])
+    {
+        //SDL_Log("Right");
+        glm::vec3 position = (attached_transform->right() * deltaTime * speed);
+        attached_transform->setPosition(position);
+    }
+    if(Input::keys[SDLK_w])
+    {
+        //SDL_Log("Up");
+        glm::vec3 position = -(attached_transform->forward() * deltaTime * speed);
+        attached_transform->setPosition(position);
+        
+    }
+    if(Input::keys[SDLK_s])
+    {
+        //SDL_Log("Down");
+        glm::vec3 position = (attached_transform->forward() * deltaTime * speed);
+        attached_transform->setPosition(position);
+        
+    }
+}
+
+void Camera::look()
+{
+    
+}

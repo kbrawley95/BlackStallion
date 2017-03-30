@@ -12,10 +12,41 @@ SDL_Window* Engine::createWindow(const char* windowName)
 
 int Engine::start()
 {
-   
-    isMoving=false;
-    isRunning=true;
+    //SDL Initialisation Error Checking
+    initSDL();
 
+    //Generate Application Window
+    window=createWindow("Black Stallion");
+
+    //Map OpenGL context to window
+    SDL_GLContext glContext = SDL_GL_CreateContext(window);
+
+    //OpenGL Initialisation
+    graphics->initOpenGL();
+    //Environment Scene Initialisation
+    initScene();
+    //Configure Viewport
+    graphics->setViewport(Window::WIDTH, Window::HEIGHT);
+
+    //Main Game Loop
+    SDL_Event event;
+    while(isRunning)
+    {
+        //Handle Events (Input)
+        eventHandling(event);
+        update();
+        render();
+        //Call swap so that GL back buffer is displayed         
+        SDL_GL_SwapWindow(window); 
+
+    }
+
+    //Free Resources
+    cleanUp(window, glContext);
+}
+
+bool Engine::initSDL()
+{
     /*SDL ERROR CHECKING*/
     if (SDL_Init(SDL_INIT_NOPARACHUTE & SDL_INIT_EVERYTHING) != 0) {
         SDL_Log("Unable to initialize SDL: %s\n", SDL_GetError());
@@ -47,34 +78,9 @@ int Engine::start()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    //Generate Application Window
-     window=createWindow("Black Stallion");
-    //Map OpenGL context to window
-    SDL_GLContext glContext = SDL_GL_CreateContext(window);
+    isRunning = true;
 
-    // //OpenGL Initialisation
-    graphics->initOpenGL();
-    initScene();
-    graphics->setViewport(Window::WIDTH, Window::HEIGHT);
-
-    //Main Game Loop
-    SDL_Event event;
-    while(isRunning)
-    {
-        SDL_Event event;
-        //Handle Events (Input)
-        eventHandling(event);
-        update();
-        render();
-        //Call swap so that GL back buffer is displayed         
-        SDL_GL_SwapWindow(window); 
-
-    }
-    cleanUp();
-    SDL_GL_DeleteContext(glContext);
-    SDL_DestroyWindow(window);
-    IMG_Quit();
-    SDL_Quit();
+    return true;
 }
 
 void Engine::initScene()
@@ -108,34 +114,7 @@ void Engine::update()
     float newSpeed = 0.2f; 
     float newRot = 0.5f; 
 
-    //Keyboard Input
-
-    if(Input::keys[SDLK_a])
-    {
-        //SDL_Log("Left");
-        glm::vec3 position = -(mainCamera->attached_transform->right() * deltaTime * newSpeed);
-        mainCamera->attached_transform->setPosition(position);
-    }
-    if(Input::keys[SDLK_d])
-    {
-        //SDL_Log("Right");
-        glm::vec3 position = (mainCamera->attached_transform->right() * deltaTime * newSpeed);
-        mainCamera->attached_transform->setPosition(position);
-    }
-    if(Input::keys[SDLK_w])
-    {
-        //SDL_Log("Up");
-        glm::vec3 position = -(mainCamera->attached_transform->forward() * deltaTime * newSpeed);
-        mainCamera->attached_transform->setPosition(position);
-        
-    }
-    if(Input::keys[SDLK_s])
-    {
-        //SDL_Log("Down");
-        glm::vec3 position = (mainCamera->attached_transform->forward() * deltaTime * newSpeed);
-        mainCamera->attached_transform->setPosition(position);
-        
-    }
+    mainCamera->move(newSpeed, newRot, deltaTime);
     
 
     if(Input::keys[SDLK_ESCAPE])
@@ -144,6 +123,7 @@ void Engine::update()
     }
 
     //MOUSE INPUT
+    
     
 }
 
@@ -161,7 +141,12 @@ void Engine::render()
 
 }
 
-void Engine::cleanUp()
+void Engine::cleanUp(SDL_Window* window, SDL_GLContext &glContext) 
 {
     skybox->cleanUp();
+
+    SDL_GL_DeleteContext(glContext);
+    SDL_DestroyWindow(window);
+    IMG_Quit();
+    SDL_Quit();
 }

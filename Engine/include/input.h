@@ -18,7 +18,6 @@ class Input
         //Mouse Coordinates
         static int xPos, yPos;
         static bool inbounds;
-        static bool positive;
         static bool isRunning;
 
 };
@@ -30,7 +29,6 @@ glm::vec2 Input::mouseDelta;
 glm::vec2 Input::mousePosition;
 int Input::xPos,Input:: yPos;
 bool Input::inbounds;
-bool Input::positive;
 bool Input::isRunning;
 
 #include "../src/input.cpp"

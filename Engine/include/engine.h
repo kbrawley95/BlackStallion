@@ -33,12 +33,13 @@ class Engine
         float pitch;
 
         //Main Loop Method
+        SDL_Window* createWindow(const char* windowName);
+        bool initSDL();
+        void initScene();
         void eventHandling(SDL_Event event);
         void update();
         void render();
-        void initScene();
-        void cleanUp();
-        SDL_Window* createWindow(const char* windowName);
+        void cleanUp(SDL_Window* window, SDL_GLContext &glContext); 
 
 };
 

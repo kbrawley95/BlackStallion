@@ -23,17 +23,7 @@ bool Input::update(SDL_Event event)
                 }
                 else
                     inbounds = false;
-
-                if(xPos < (Window::WIDTH/2) < Window::WIDTH)
-                {
-                    positive = false;
-                }
-                else if(xPos > 1 > Window::WIDTH)
-                {
-                    positive = true;
-                }
-
-                    break;
+                break;
 
             case SDL_QUIT:
                 isRunning=false;

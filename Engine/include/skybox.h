@@ -21,6 +21,8 @@ class Skybox : public GameObject
         Cubemap* cubemap;
         GLuint cubemapTextureID;
 
+        std::vector<glm::vec3> vertices;
+
   
     std::vector<std::string>texturePaths;
     std::vector<GLenum>textureTargets;

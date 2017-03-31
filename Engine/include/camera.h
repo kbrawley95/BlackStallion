@@ -14,8 +14,8 @@ class Camera
     glm::mat4 getProjectionMatrix();
 
     //Camera Movement
-    void move (float &speed, float &rotate, float &deltaTime);
-    void look ();
+    void move (float &speed, float &deltaTime);
+    void look (float &deltaTime, float sensitivity);
 
     private:
         glm::mat4x4 modelMatrix;
@@ -27,6 +27,8 @@ class Camera
         float height = Window::HEIGHT;
         float nearPlane =0.1f;
         float farPlane = 100.0f;
+
+        glm::vec2 rotation = glm::vec2(0.0f, 0.0f);
 };
 
 #include "../src/camera.cpp"

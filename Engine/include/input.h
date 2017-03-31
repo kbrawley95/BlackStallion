@@ -10,13 +10,14 @@ class Input
 
         //Mouse Input
         static std::map<int, bool>mouse;
-
-    private:
+        
         static glm::vec2 mouseDelta;
         static glm::vec2 mousePosition;
+        static int xPos, yPos;
+
+    private:
 
         //Mouse Coordinates
-        static int xPos, yPos;
         static bool inbounds;
         static bool isRunning;
 

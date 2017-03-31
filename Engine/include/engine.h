@@ -20,6 +20,8 @@ class Engine
         //Scene Objects
         std::vector<GameObject>sceneObjects; 
 
+        OBJModel* model;
+
         //Booleans
         bool isMoving;
         bool isRunning;

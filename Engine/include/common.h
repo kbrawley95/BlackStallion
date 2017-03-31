@@ -8,7 +8,7 @@
 //GENERAL
 #include <iostream>
 #include <string>
-#include <cstdlib> 
+#include <cstdlib>
 #include <sstream>
 #include <fstream>
 #include <vector>
@@ -66,8 +66,7 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "cubemap.h"
 #include "gameobject.h"
 #include "skybox.h"
-// #include "objloader.h"
-// #include "model.h"
-// #include "mesh.h"
+#include "objloader.h"
+#include "objmodel.h"
 
 #endif

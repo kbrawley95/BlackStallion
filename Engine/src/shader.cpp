@@ -20,7 +20,6 @@ Shader::Shader(const std::string vertexShader, const std::string fragmentShader)
     glBindAttribLocation(shaderProgram, 0, "vertexPosition");
     glBindAttribLocation(shaderProgram, 1, "vertexColour");
     glBindAttribLocation(shaderProgram, 2, "vertexTexCoords");
-    glBindAttribLocation(shaderProgram, 3, "normals");
     
     glLinkProgram(shaderProgram);
     checkForLinkErrors(shaderProgram);
@@ -98,7 +97,7 @@ bool Shader::checkForCompilerErrors(GLuint shaderProgram)
         infoLog.resize(maxLength);
         glGetShaderInfoLog(shaderProgram, maxLength, &maxLength, &infoLog[0]);
 
-        std::cout<<"Shader not compiled"<<infoLog<<std::endl;
+        std::cout<<"Shader not compiled: "<<infoLog<<std::endl;
 
         //We don't need the shader anymore
         glDeleteShader(shaderProgram);
@@ -123,7 +122,7 @@ bool Shader::checkForLinkErrors(GLuint program)
         infoLog.resize(maxLength);
         glGetShaderInfoLog(program, maxLength, &maxLength, &infoLog[0]);
 
-        std::cout<<"Shader not linked"<<infoLog<<std::endl;
+        std::cout<<"Shader not linked: "<<infoLog<<std::endl;
 
         //We don't need the shader anymore
         glDeleteProgram(program);

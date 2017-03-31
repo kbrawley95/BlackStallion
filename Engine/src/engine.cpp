@@ -86,14 +86,16 @@ bool Engine::initSDL()
 void Engine::initScene()
 {
 
-    //Skybox Instance
+    // //Skybox Instance
     skybox = new Skybox("Mountains");
-    skybox->getTransform()->setScale(200);
+    skybox->getTransform()->setScale(glm::vec3(200,200,200));
     glm::vec3 newScale = skybox->getTransform()->getScale();
     
-    std::cout<<"Name of Object: " << skybox->getName()<<std::endl;
-    printf("Object Scale: x: %f, y: %f, z: %f", newScale.x, newScale.y, newScale.z);
-    // std::cout<<""<<std::endl;
+    // std::cout<<"Name of Object: " << skybox->getName()<<std::endl;
+    // printf("Object Scale: x: %f, y: %f, z: %f", newScale.x, newScale.y, newScale.z);
+    // // std::cout<<""<<std::endl;
+
+    model = new OBJModel("Cube", "assets/models/cube.obj", "assets/textures/texture.png");
 
     //Instance of Main Camera
     mainCamera=new Camera();
@@ -111,10 +113,14 @@ void Engine::update()
     deltaTime = (currentTime - lastTime)/1000.0f;
     lastTime = currentTime;
 
-    float newSpeed = 0.2f; 
-    float newRot = 0.5f; 
+    float newSpeed = 3.0f; 
+    float sensitivity = 15.0f; 
 
-    mainCamera->move(newSpeed, newRot, deltaTime);
+    mainCamera->move(newSpeed, deltaTime);
+    mainCamera->look(deltaTime, sensitivity);
+
+    glm::quat rotation = mainCamera->attached_transform->getRotation();
+    // std::cout<<"Rotation: " <<rotation.x << ", "<<rotation.y<<", "<<rotation.z<<std::endl;
     
 
     if(Input::keys[SDLK_ESCAPE])
@@ -136,6 +142,7 @@ void Engine::render()
  
     //Render Skybox 
     skybox->render(mainCamera);
+    model->render(mainCamera);
     
     //Draw rest of scene 
 

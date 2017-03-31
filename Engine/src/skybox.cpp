@@ -9,12 +9,12 @@ GLuint Skybox::generateCubeMap()
 {
     GLuint textureMap = 0;
     //Load Cubemap Textures
-    texturePaths.push_back("assets/textures/right.png");
-    texturePaths.push_back("assets/textures/left.png");
-    texturePaths.push_back("assets/textures/up.png");
-    texturePaths.push_back("assets/textures/down.png");
-    texturePaths.push_back("assets/textures/bk.png");
-    texturePaths.push_back("assets/textures/front.png");
+    texturePaths.push_back("assets/textures/CloudyLightRays/right.png");
+    texturePaths.push_back("assets/textures/CloudyLightRays/left.png");
+    texturePaths.push_back("assets/textures/CloudyLightRays/up.png");
+    texturePaths.push_back("assets/textures/CloudyLightRays/down.png");
+    texturePaths.push_back("assets/textures/CloudyLightRays/back.png");
+    texturePaths.push_back("assets/textures/CloudyLightRays/front.png");
     
                             /*===TEXTURE TARGET====*/         /*====ORIENTATION===*/
     textureTargets.push_back(GL_TEXTURE_CUBE_MAP_POSITIVE_X       /*Right*/);
@@ -51,14 +51,6 @@ void Skybox::initSkybox()
     //Tell the shader that 0 is the position 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
-
-    //Tell the shader that 1 is the colour 
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1,4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, colour));
-
-    //Tell the shader that 2 is the texture coordinates 
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2,2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, uvTextCoords));
 }
 
 void Skybox::render(Camera* mainCamera)

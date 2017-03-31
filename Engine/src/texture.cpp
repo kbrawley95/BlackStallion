@@ -11,6 +11,8 @@ GLuint Texture::loadTextureFromFile(const std::string& filename)
     SDL_FreeSurface(imageSurface);
     bindTextureToPipeLine(textureID);
 
+    std::cout<<"Image: " << filename <<" loaded successfully." << std::endl;
+
     return textureID;
 
 }

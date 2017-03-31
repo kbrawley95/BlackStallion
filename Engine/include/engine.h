@@ -17,10 +17,15 @@ class Engine
         Camera* mainCamera;
         Cubemap* cubemap;
 
+        GLuint textureID;
+        Texture* texture;
+
         //Scene Objects
         std::vector<GameObject>sceneObjects; 
 
         OBJModel* model;
+
+        UI* ui;
 
         //Booleans
         bool isMoving;

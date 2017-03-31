@@ -4,8 +4,6 @@ Transform::Transform()
     position = glm::vec3(0.0f,0.0f, 0.0f);
     rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
     scale = glm::vec3(1.0f,1.0f,1.0f);
-    model_matrix = glm::mat4x4(1.0f);
-
     createModelToWorldMatrix();
 }
 
@@ -26,7 +24,6 @@ void Transform::createModelToWorldMatrix()
     glm::mat4 model_scale = glm::scale(glm::mat4(1.0f), scale);
 
     model_matrix = model_scale * model_rot * model_pos;
-
 }
 
 glm::mat4x4 Transform::getModelToWorldMatrix()
@@ -73,30 +70,30 @@ glm::vec3 Transform::getScale()
 //SETTERS
 void Transform::setPosition(glm::vec3 newPos)
 {
-   position+=newPos;
+   position = newPos;
    createModelToWorldMatrix();
 }
 
 void Transform::setRotation(glm::quat newRot)
 {
-   rotation+=newRot;
+   rotation = newRot;
    createModelToWorldMatrix();
 }
 
 void Transform::setScale(glm::vec3 newScale)
 {
-    scale +=newScale;
+    scale = newScale;
    
    createModelToWorldMatrix();
 }
 
 void Transform::rotate(glm::vec3 newRot)
 {
-    glm::quat pitch = glm::angleAxis(newRot.x, glm::vec3(1, 0, 0));
-    glm::quat yaw = glm::angleAxis(newRot.y, glm::vec3(0, 1, 0));
-    glm::quat roll = glm::angleAxis(newRot.z, glm::vec3(0, 0, 1));
+    glm::quat pitch     = glm::angleAxis(newRot.x, glm::vec3(1, 0, 0));
+    glm::quat yaw       = glm::angleAxis(newRot.y, glm::vec3(0, 1, 0));
+    glm::quat roll      = glm::angleAxis(newRot.z, glm::vec3(0, 0, 1));
     
-    rotation = pitch * yaw * roll;
+    rotation            = yaw * pitch * roll;
     createModelToWorldMatrix();
 }
 

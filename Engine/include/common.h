@@ -68,5 +68,6 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "skybox.h"
 #include "objloader.h"
 #include "objmodel.h"
+#include "ui.h"
 
 #endif

@@ -1,7 +1,6 @@
 Camera::Camera() 
 {  // engine = std::shared_ptr<Engine>(new Engine());
     attached_transform = std::shared_ptr<Transform>(new Transform());
-    viewMatrix=glm::lookAt(attached_transform->getPosition(), attached_transform->getPosition() + attached_transform->forward() ,attached_transform->up());
     projectionMatrix=glm::perspective(fov, width/height, nearPlane, farPlane);
 }
 
@@ -13,7 +12,7 @@ Camera::~Camera()
 
 glm::mat4 Camera::getViewMatrix()
 {
-    return viewMatrix;
+    return glm::lookAt(attached_transform->getPosition(), attached_transform->getPosition() + attached_transform->forward() ,attached_transform->up());
 }
 
 glm::mat4 Camera::getProjectionMatrix()
@@ -24,7 +23,7 @@ glm::mat4 Camera::getProjectionMatrix()
 void Camera::move(float &speed, float &deltaTime)
 {
     //Keyboard Input
-    glm::vec3 position;
+    glm::vec3 position = attached_transform->getPosition();
 
     //SDL_Log("Left");
     if(Input::keys[SDLK_a])
@@ -46,16 +45,18 @@ void Camera::move(float &speed, float &deltaTime)
     {
         position += (attached_transform->forward() * deltaTime * speed);
     }
+
+    std::cout << glm::to_string(position) << std::endl;
     
     attached_transform->setPosition(position);
 }
 
 void Camera::look(float &deltaTime, float sensitivity)
 {
-    Input::mouseDelta = Input::mousePosition - glm::vec2(Input::xPos, Input::yPos) ; 
+    Input::mouseDelta = Input::mousePosition - glm::vec2(Input::xPos, Input::yPos); 
 
     rotation.x -= Input::mouseDelta.y * deltaTime * sensitivity;
-    rotation.y -= Input::mouseDelta.x * deltaTime * sensitivity; 
+    rotation.y += Input::mouseDelta.x * deltaTime * sensitivity; 
 
     // std::cout<<"Rotation : "<<rotation.x<< ","<<rotation.y<<std::endl;
 

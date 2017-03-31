@@ -84,8 +84,7 @@ bool Engine::initSDL()
 }
 
 void Engine::initScene()
-{
-
+{   
     // //Skybox Instance
     skybox = new Skybox("Mountains");
     skybox->getTransform()->setScale(glm::vec3(200,200,200));
@@ -95,11 +94,12 @@ void Engine::initScene()
     // printf("Object Scale: x: %f, y: %f, z: %f", newScale.x, newScale.y, newScale.z);
     // // std::cout<<""<<std::endl;
 
-    model = new OBJModel("Cube", "assets/models/cube.obj", "assets/textures/texture.png");
+    ui = new UI("HUD", "assets/fonts/OratorStd.otf", 14, "Health: 100%");
 
     //Instance of Main Camera
     mainCamera=new Camera();
 
+    model = new OBJModel("Model", "assets/models/teapot.obj", "assets/textures/texture.png");
 }
 
 void Engine::eventHandling(SDL_Event event)
@@ -142,8 +142,11 @@ void Engine::render()
  
     //Render Skybox 
     skybox->render(mainCamera);
+
     model->render(mainCamera);
+
     
+    ui->render(mainCamera);
     //Draw rest of scene 
 
 }
@@ -151,6 +154,8 @@ void Engine::render()
 void Engine::cleanUp(SDL_Window* window, SDL_GLContext &glContext) 
 {
     skybox->cleanUp();
+    model->cleanUp();
+    ui->cleanUp();
 
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);

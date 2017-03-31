@@ -19,7 +19,7 @@ bool Input::update(SDL_Event event)
                 if(xPos > 0 && xPos < (Window::WIDTH - 1))
                 {
                     inbounds = true;
-                    std::cout << "Mouse = (" << xPos << ", " << yPos << ")" << std::endl;
+                    //std::cout << "Mouse = (" << xPos << ", " << yPos << ")" << std::endl;
                 }
                 else
                     inbounds = false;

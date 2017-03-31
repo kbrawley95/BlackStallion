@@ -19,7 +19,6 @@ class Camera
 
     private:
         glm::mat4x4 modelMatrix;
-        glm::mat4 viewMatrix;
         glm::mat4 projectionMatrix;
 
         float fov = 45;

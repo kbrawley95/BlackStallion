@@ -69,17 +69,18 @@ void Skybox::render(Camera* mainCamera)
     //Use the specified shader program
     glUseProgram(skyboxShader->getShaderProgram());
 
-    //View Matrix
-    GLint modelMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(), "model");
-    glUniformMatrix4fv(modelMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->attached_transform->getModelToWorldMatrix()));
-
-    //View Matrix
-    GLint viewMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(), "view");
-    glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(glm::mat3(mainCamera->getViewMatrix()))));
-
     //Projection Matrix
     GLint projectionMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(), "projection");
     glUniformMatrix4fv(projectionMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->getProjectionMatrix()));
+
+    glm::mat4 converted_view_matrix = mainCamera->getViewMatrix();
+    converted_view_matrix[3][0] = 0;
+    converted_view_matrix[3][1] = 0;
+    converted_view_matrix[3][2] = 0;
+
+    //View Matrix
+    GLint viewMatrix = glGetUniformLocation(skyboxShader->getShaderProgram(), "view");
+    glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(converted_view_matrix));
 
     //CubeMap Texture
     GLint texture0Location = glGetUniformLocation(skyboxShader->getShaderProgram(), "cubeTexture");

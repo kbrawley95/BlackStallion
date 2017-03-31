@@ -11,7 +11,7 @@ class Window
 
 };
 
-const int Window::WIDTH = 1027;
-const int Window::HEIGHT = 720;
+const int Window::WIDTH = 1920;
+const int Window::HEIGHT = 1080;
 
 #endif

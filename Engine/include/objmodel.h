@@ -1,28 +1,27 @@
 #ifndef _OBJMODEL_H
 #define _OBJMODEL_H
 
-class OBJModel : GameObject
+class OBJModel : public GameObject
 {
     public:
         OBJModel(std::string name, const char* path, std::string texturepath);
 
         void init();
         void render(Camera* mainCamera);
+        void cleanUp();
+
         
     private:
-        // Read our .obj file
-        std::vector<glm::vec3> vertices;
-        std::vector<glm::vec2> uvs;
-        std::vector<glm::vec3> normals; // Won't be used at the moment.
+        Shader*                     modelShader     = NULL;
+        GLuint                      textureID       = 0;
+        Texture*                    texture         = NULL;
 
-        OBJLoader* objLoader;
-        GLuint vertexArrayID, vertexBufferID;
+        std::vector<Vertex>         vertices;
+        std::vector<uint32_t>       indices;
 
-        Shader* modelShader;
-        GLuint textureID;
-        Texture* texture;
-
-        std::vector<Vertex> m_vertices;
+        GLuint                      VBO             = 0;
+        GLuint                      EBO             = 0;
+        GLuint                      VAO             = 0;
 };
 
 #include "../src/objmodel.cpp"

@@ -21,12 +21,15 @@ Shader::Shader(const std::string vertexShader, const std::string fragmentShader)
     glBindAttribLocation(shaderProgram, 1, "vertexColour");
     glBindAttribLocation(shaderProgram, 2, "vertexTexCoords");
     
+    std::cout << "Linking both shaders"<< std::endl;
     glLinkProgram(shaderProgram);
     checkForLinkErrors(shaderProgram);
 
     //Now we can delete the VS & FS Programs
     glDeleteShader(vertexShaderProgram);
     glDeleteShader(fragmentShaderProgram);
+
+    std::cout << "Done with shaders"<< std::endl;
 }
 
 Shader::~Shader()
@@ -97,7 +100,7 @@ bool Shader::checkForCompilerErrors(GLuint shaderProgram)
         infoLog.resize(maxLength);
         glGetShaderInfoLog(shaderProgram, maxLength, &maxLength, &infoLog[0]);
 
-        std::cout<<"Shader not compiled: "<<infoLog<<std::endl;
+        std::cout <<"Shader not compiled: "<<infoLog<<std::endl;
 
         //We don't need the shader anymore
         glDeleteShader(shaderProgram);

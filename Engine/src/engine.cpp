@@ -98,6 +98,10 @@ void Engine::initScene()
 
     //Instance of Main Camera
     mainCamera=new Camera();
+    
+    //Collision Management
+    collisionManager = new CollisionManager();
+    collisionManager->world->addRigidBody(planeCollider->rigidbody);
 
     model = new OBJModel("Model", "assets/models/teapot.obj", "assets/textures/texture.png");
 }
@@ -129,6 +133,8 @@ void Engine::update()
     }
 
     //MOUSE INPUT
+
+    collisionManager->world->stepSimulation(deltaTime);
     
     
 }
@@ -153,9 +159,11 @@ void Engine::render()
 
 void Engine::cleanUp(SDL_Window* window, SDL_GLContext &glContext) 
 {
+
     skybox->cleanUp();
     model->cleanUp();
     ui->cleanUp();
+    collision->cleanUp();
 
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);

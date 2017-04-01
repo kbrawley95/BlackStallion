@@ -24,6 +24,8 @@ class Engine
         std::vector<GameObject>sceneObjects; 
 
         OBJModel* model;
+        CollisionManager* collisionManager;
+        PlaneCollider* planeCollider;
 
         UI* ui;
 

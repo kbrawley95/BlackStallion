@@ -30,7 +30,9 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_opengl.h>
 
-//
+//BULLET
+#include <btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
 
 //MATHS
 #include <GLM/glm.hpp>
@@ -69,5 +71,10 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "objloader.h"
 #include "objmodel.h"
 #include "ui.h"
+
+#include "../Collision/include/collision_manager.h"
+#include "../Collision/include/collider.h"
+#include "../Collision/include/plane_collider.h"
+#include "../Collision/include/box_collider.h"
 
 #endif

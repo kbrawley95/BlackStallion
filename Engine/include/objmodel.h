@@ -9,19 +9,18 @@ class OBJModel : public GameObject
         void init();
         void render(Camera* mainCamera);
         void cleanUp();
-
         
     private:
-        Shader*                     modelShader     = NULL;
-        GLuint                      textureID       = 0;
-        Texture*                    texture         = NULL;
+        Shader* modelShader = NULL;
+        GLuint textureID = 0;
+        Texture* texture = NULL;
 
-        std::vector<Vertex>         vertices;
-        std::vector<uint32_t>       indices;
+        std::vector<Vertex> vertices;
+        std::vector<uint32_t> indices;
 
-        GLuint                      VBO             = 0;
-        GLuint                      EBO             = 0;
-        GLuint                      VAO             = 0;
+        GLuint VBO = 0;
+        GLuint EBO = 0;
+        GLuint VAO = 0;
 };
 
 #include "../src/objmodel.cpp"

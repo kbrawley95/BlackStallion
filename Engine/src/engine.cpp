@@ -95,13 +95,16 @@ void Engine::initScene()
 
     //Instance of Main Camera
     mainCamera=new Camera();
+    mainCamera->attached_transform->setPosition(glm::vec3(-50,70,-145));
     
-    //Collision Management
-    collisionManager = new CollisionManager();
-    collisionManager->world->addRigidBody(planeCollider->getRigidbody());
+    // //Collision Management
+    // collisionManager = new CollisionManager();
+    // collisionManager->addRigidBodyToWorld(planeCollider->getRigidbody());
 
     //Model Instance
-    model = new OBJModel("Model", "assets/models/teapot.obj", "assets/textures/texture.png");
+    terrain = new OBJModel("Model", "assets/models/rock.obj", "assets/textures/dirt.jpg");
+    terrain->getTransform()->setPosition(glm::vec3(0,0,-200));
+    // model = new OBJModel("Model", "assets/models/teapot.obj", "assets/textures/texture.png");
 }
 
 void Engine::eventHandling(SDL_Event event)
@@ -117,12 +120,17 @@ void Engine::update()
     lastTime = currentTime;
 
     //MOUSE INPUT
-    float newSpeed = 3.0f; 
+    float newSpeed = 8.0f; 
     float sensitivity = 15.0f; 
     mainCamera->update(deltaTime, newSpeed, sensitivity);
 
+    skyboxRotation.y = deltaTime * newSpeed;
+    glm::vec3 newRotation = glm::vec3(0.0f, skyboxRotation.y, 0.0f);
+
+    skybox->getTransform()->rotate(newRotation);
+
     //COLLISION MANAGEMENT
-    collisionManager->update(deltaTime);
+    // collisionManager->update(deltaTime);
     
     //INPUT MANAGEMENT
     if(Input::keys[SDLK_ESCAPE])
@@ -143,7 +151,8 @@ void Engine::render()
     skybox->render(mainCamera);
 
     //Draw rest of scene 
-    model->render(mainCamera);
+    terrain->render(mainCamera);
+    // model->render(mainCamera);
     ui->render(mainCamera);
 
 }
@@ -152,9 +161,10 @@ void Engine::cleanUp(SDL_Window* window, SDL_GLContext &glContext)
 {
 
     skybox->cleanUp();
-    model->cleanUp();
+    terrain->cleanUp();
+    // model->cleanUp();
     ui->cleanUp();
-    collisionManager->cleanUp();
+    // collisionManager->cleanUp();
 
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);

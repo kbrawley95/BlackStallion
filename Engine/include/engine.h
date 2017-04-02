@@ -24,14 +24,17 @@ class Engine
         std::vector<GameObject>sceneObjects; 
 
         OBJModel* model;
-        CollisionManager* collisionManager;
-        PlaneCollider* planeCollider;
+        OBJModel* terrain;
+        // CollisionManager* collisionManager;
+        // PlaneCollider* planeCollider;
 
         UI* ui;
 
         //Booleans
         bool isMoving;
         bool isRunning;
+
+        glm::vec2 skyboxRotation = glm::vec2(0.0f, 0.0f);
 
         //Update Floats
         float currentTime;

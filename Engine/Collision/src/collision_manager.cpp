@@ -26,4 +26,10 @@ void CollisionManager::cleanUp()
     delete broadphase;
     delete world;
 }
+
+void CollisionManager::addRigidBodyToWorld(btRigidBody* body)
+{
+    world->addRigidBody(body);
+    rigidBodies.push_back(body);
+}
    

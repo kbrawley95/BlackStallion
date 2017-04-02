@@ -1,12 +1,12 @@
 Camera::Camera() 
-{  // engine = std::shared_ptr<Engine>(new Engine());
+{  
     attached_transform = std::shared_ptr<Transform>(new Transform());
     projectionMatrix=glm::perspective(fov, width/height, nearPlane, farPlane);
 }
 
 Camera::~Camera()
 {
-
+   
 }
 
 void Camera::update(float &deltaTime, float translationSpeed, float mouseSensitivity)
@@ -34,22 +34,22 @@ void Camera::move(float &speed, float &deltaTime)
     //SDL_Log("Left");
     if(Input::keys[SDLK_a])
     {
-        position += -(attached_transform->right() * deltaTime * speed);
+        position += (attached_transform->right() * deltaTime * speed);
     }
     //SDL_Log("Right");
     if(Input::keys[SDLK_d])
     {
-        position += (attached_transform->right() * deltaTime * speed);
+        position -= (attached_transform->right() * deltaTime * speed);
     }
     //SDL_Log("Up");
     if(Input::keys[SDLK_w])
     {
-        position += -(attached_transform->forward() * deltaTime * speed);
+        position += (attached_transform->forward() * deltaTime * speed);
     }
     //SDL_Log("Down");
     if(Input::keys[SDLK_s])
     {
-        position += (attached_transform->forward() * deltaTime * speed);
+        position -= (attached_transform->forward() * deltaTime * speed);
     }
 
     std::cout << glm::to_string(position) << std::endl;
@@ -59,6 +59,7 @@ void Camera::move(float &speed, float &deltaTime)
 
 void Camera::look(float &deltaTime, float sensitivity)
 {
+   
     Input::mouseDelta = Input::mousePosition - glm::vec2(Input::xPos, Input::yPos); 
 
     rotation.x -= Input::mouseDelta.y * deltaTime * sensitivity;

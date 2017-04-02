@@ -9,7 +9,9 @@ class CollisionManager
         void init();
         void update(float &delaTime);
         void cleanUp();
-        
+
+        void addRigidBodyToWorld(btRigidBody* body);
+
       
         btDynamicsWorld* world;
         btDispatcher* dispatcher;
@@ -18,6 +20,7 @@ class CollisionManager
         btConstraintSolver* solver;
 
     private:
+        std::vector<btRigidBody*>rigidBodies;
 };
 
 #include "../src/collision_manager.cpp"

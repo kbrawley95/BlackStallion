@@ -20,16 +20,15 @@ class Camera
     void look (float &deltaTime, float sensitivity);
 
     private:
-        glm::mat4x4 modelMatrix;
         glm::mat4 projectionMatrix;
+        glm::vec2 rotation = glm::vec2(0,0);
 
         float fov = 45;
         float width = Window::WIDTH; 
         float height = Window::HEIGHT;
         float nearPlane =0.1f;
         float farPlane = 100.0f;
-
-        glm::vec2 rotation = glm::vec2(0.0f, 0.0f);
+       
 };
 
 #include "../src/camera.cpp"

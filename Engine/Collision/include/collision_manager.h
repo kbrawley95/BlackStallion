@@ -11,7 +11,7 @@ class CollisionManager
         void cleanUp();
 
         void addRigidBodyToWorld(btRigidBody* body);
-
+        btDynamicsWorld* getWorld();
       
         btDynamicsWorld* world;
         btDispatcher* dispatcher;

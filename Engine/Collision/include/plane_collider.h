@@ -4,14 +4,18 @@
 class PlaneCollider : public Collider
 {
     public:
-        PlaneCollider();
-        void init();
+        PlaneCollider(glm::vec3 position, float scale)
+        {
+            plane = new btStaticPlaneShape(btVector3(position.x, position.y, position.z), btScalar(scale));
+        }
+
+        ~PlaneCollider()
+        {   
+            delete plane;
+        }
 
     private:
         btStaticPlaneShape* plane;
-        btRigidBody::btRigidBodyConstructionInfo info;
 };
-
-#include "../src/plane_collider.cpp"
 
 #endif 

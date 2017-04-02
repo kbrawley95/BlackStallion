@@ -5,6 +5,7 @@ CollisionManager::CollisionManager()
 
 void CollisionManager::init()
 {
+    std::cout<<"\nInitialising Collision Manager..."<<std::endl;
     collisionConfig = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfig);
     broadphase = new btDbvtBroadphase();
@@ -12,6 +13,7 @@ void CollisionManager::init()
 
     world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
     world->setGravity(btVector3(0, -9.82f, 0));
+    std::cout<<"\nInitialisation Succesful\n"<<std::endl;
 }
 
 void CollisionManager::update(float &deltaTime)
@@ -31,5 +33,10 @@ void CollisionManager::addRigidBodyToWorld(btRigidBody* body)
 {
     world->addRigidBody(body);
     rigidBodies.push_back(body);
+}
+
+btDynamicsWorld* CollisionManager::getWorld()
+{
+    return world;
 }
    

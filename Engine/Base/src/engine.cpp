@@ -85,10 +85,9 @@ bool Engine::initSDL()
 
 void Engine::initScene()
 {   
-    // //Skybox Instance
+    //Skybox Instance
     skybox = new Skybox("Mountains");
     skybox->getTransform()->setScale(glm::vec3(200,200,200));
-    glm::vec3 newScale = skybox->getTransform()->getScale();
     
     //UI Instance
     ui = new UI("HUD", "assets/fonts/OratorStd.otf", 14, "Health: 100%");
@@ -104,7 +103,6 @@ void Engine::initScene()
     //Model Instance
     terrain = new OBJModel("Model", "assets/models/rock.obj", "assets/textures/dirt.jpg");
     terrain->getTransform()->setPosition(glm::vec3(0,0,-200));
-    // model = new OBJModel("Model", "assets/models/teapot.obj", "assets/textures/texture.png");
 }
 
 void Engine::eventHandling(SDL_Event event)

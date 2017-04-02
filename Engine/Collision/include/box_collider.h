@@ -4,14 +4,20 @@
 class BoxCollider : public Collider
 {
     public:
-        BoxCollider();
-        void init();
+        BoxCollider(glm::vec3 position) 
+        {
+            box = new btBoxShape(btVector3(position.x, position.y, position.z));
+        }
+
+        ~BoxCollider()
+        {
+            delete box;
+        }
+
 
     private:
         btBoxShape* box;
-
 };
 
-#include "../src/box_collider.cpp"
 
 #endif

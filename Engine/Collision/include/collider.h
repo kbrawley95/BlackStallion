@@ -4,23 +4,23 @@
 class Collider
 {
     public:
-        Collider();
-        void init();
+        Collider()
+        {
 
-        btTransform* getTransform();
-        btMotionState* getMotion();
-        btRigidBody* getRigidbody();
-        btRigidBody::btRigidBodyConstructionInfo* getInfo();
-        btVector3* getInertia();
+        }
+        
+        ~Collider()
+        {
+            delete shape;
+        }
+
+        btCollisionShape* getShape()
+        {
+            return shape;
+        }
 
     protected:
-        btTransform* transform;
-        btMotionState* motion;
-        btRigidBody* rigidbody;
-        btRigidBody::btRigidBodyConstructionInfo* info;
-        btVector3* inertia;
+        btCollisionShape* shape;
 };
-
-#include "../src/collider.cpp"
 
 #endif

@@ -7,6 +7,12 @@ class Collider
         Collider();
         void init();
 
+        btTransform* getTransform();
+        btMotionState* getMotion();
+        btRigidBody* getRigidbody();
+        btRigidBody::btRigidBodyConstructionInfo* getInfo();
+        btVector3* getInertia();
+
     protected:
         btTransform* transform;
         btMotionState* motion;

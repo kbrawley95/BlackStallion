@@ -90,10 +90,7 @@ void Engine::initScene()
     skybox->getTransform()->setScale(glm::vec3(200,200,200));
     glm::vec3 newScale = skybox->getTransform()->getScale();
     
-    // std::cout<<"Name of Object: " << skybox->getName()<<std::endl;
-    // printf("Object Scale: x: %f, y: %f, z: %f", newScale.x, newScale.y, newScale.z);
-    // // std::cout<<""<<std::endl;
-
+    //UI Instance
     ui = new UI("HUD", "assets/fonts/OratorStd.otf", 14, "Health: 100%");
 
     //Instance of Main Camera
@@ -101,8 +98,9 @@ void Engine::initScene()
     
     //Collision Management
     collisionManager = new CollisionManager();
-    collisionManager->world->addRigidBody(planeCollider->rigidbody);
+    collisionManager->world->addRigidBody(planeCollider->getRigidbody());
 
+    //Model Instance
     model = new OBJModel("Model", "assets/models/teapot.obj", "assets/textures/texture.png");
 }
 
@@ -113,30 +111,25 @@ void Engine::eventHandling(SDL_Event event)
 
 void Engine::update()
 {
+    //Calculate time (in seconds) that has passed
     currentTime = SDL_GetTicks();
     deltaTime = (currentTime - lastTime)/1000.0f;
     lastTime = currentTime;
 
+    //MOUSE INPUT
     float newSpeed = 3.0f; 
     float sensitivity = 15.0f; 
+    mainCamera->update(deltaTime, newSpeed, sensitivity);
 
-    mainCamera->move(newSpeed, deltaTime);
-    mainCamera->look(deltaTime, sensitivity);
-
-    glm::quat rotation = mainCamera->attached_transform->getRotation();
-    // std::cout<<"Rotation: " <<rotation.x << ", "<<rotation.y<<", "<<rotation.z<<std::endl;
+    //COLLISION MANAGEMENT
+    collisionManager->update(deltaTime);
     
-
+    //INPUT MANAGEMENT
     if(Input::keys[SDLK_ESCAPE])
     {
         isRunning = false;
     }
 
-    //MOUSE INPUT
-
-    collisionManager->world->stepSimulation(deltaTime);
-    
-    
 }
 
 
@@ -149,11 +142,9 @@ void Engine::render()
     //Render Skybox 
     skybox->render(mainCamera);
 
-    model->render(mainCamera);
-
-    
-    ui->render(mainCamera);
     //Draw rest of scene 
+    model->render(mainCamera);
+    ui->render(mainCamera);
 
 }
 
@@ -163,7 +154,7 @@ void Engine::cleanUp(SDL_Window* window, SDL_GLContext &glContext)
     skybox->cleanUp();
     model->cleanUp();
     ui->cleanUp();
-    collision->cleanUp();
+    collisionManager->cleanUp();
 
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);

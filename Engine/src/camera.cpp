@@ -9,6 +9,12 @@ Camera::~Camera()
 
 }
 
+void Camera::update(float &deltaTime, float translationSpeed, float mouseSensitivity)
+{
+    look(deltaTime, mouseSensitivity);
+    move(translationSpeed, deltaTime);
+}
+
 
 glm::mat4 Camera::getViewMatrix()
 {

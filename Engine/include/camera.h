@@ -9,6 +9,8 @@ class Camera
     Camera();
     ~Camera();
 
+    void update(float &deltaTime, float translationSpeed, float mouseSensitivity);
+
      //OpenGL Vertex Transformations
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();

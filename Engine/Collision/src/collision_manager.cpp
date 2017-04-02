@@ -14,6 +14,11 @@ void CollisionManager::init()
     world->setGravity(btVector3(0, -9.82f, 0));
 }
 
+void CollisionManager::update(float &deltaTime)
+{
+     world->stepSimulation(deltaTime);
+}
+
 void CollisionManager::cleanUp()
 {
     delete collisionConfig;

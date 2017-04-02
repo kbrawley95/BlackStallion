@@ -9,6 +9,7 @@ class PlaneCollider : public Collider
 
     private:
         btStaticPlaneShape* plane;
+        btRigidBody::btRigidBodyConstructionInfo info;
 };
 
 #include "../src/plane_collider.cpp"

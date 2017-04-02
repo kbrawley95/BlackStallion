@@ -7,8 +7,10 @@ class CollisionManager
         CollisionManager();
 
         void init();
+        void update(float &delaTime);
         void cleanUp();
         
+      
         btDynamicsWorld* world;
         btDispatcher* dispatcher;
         btCollisionConfiguration* collisionConfig;

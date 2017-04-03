@@ -1,23 +1,35 @@
-#ifndef _CUBEMAP_H
-#define _CUBEMAP_H
+#ifndef _SKYBOX_H
+#define _SKYBOX_H
 
-class Cubemap
+class Cubemap : public Component
 {
     public:
-        Cubemap(std::vector<std::string>texturePaths, std::vector<GLenum>textureTargets);
-        GLuint loadCubeMap(std::vector<std::string>texturePaths, std::vector<GLenum>textureTargets);
-        void bindCubemapToPipeline(GLuint textureID);
-        GLuint getTextureID();
-    
+        Cubemap();
+        GLuint generateCubeMap();
+
+        void init();
+        void render(Camera* mainCamera);
+        void cleanUp();
+        
+        Skybox* cubemap;
+       
     private:
-        std::vector<std::string>texturePaths;
-        std::vector<GLenum>textureTargets;
+        //Buffer objects
+        GLuint vertexArrayID;
+        GLuint vertexBufferID;
+        GLuint elementsBufferID;
 
-        GLuint textureID;
+        Shader* skyboxShader;
+
+        GLuint cubemapTextureID;
+
+        std::vector<glm::vec3> vertices;
+
+  
+    std::vector<std::string>texturePaths;
+    std::vector<GLenum>textureTargets;
+    
 };
-
-
-
 
 #include "../src/cubemap.cpp"
 

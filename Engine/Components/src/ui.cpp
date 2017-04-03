@@ -59,18 +59,17 @@ void UI::render(Camera* mainCamera)
 
     //View Matrix
     GLint viewMatrix = glGetUniformLocation(uiShader->getShaderProgram(), "view");
-    glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->getViewMatrix()));
+    glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(renderer->getViewMatrix()));
 
     //Projection Matrix
     GLint projectionMatrix = glGetUniformLocation(uiShader->getShaderProgram(), "projection");
-    glUniformMatrix4fv(projectionMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->getProjectionMatrix()));
+    glUniformMatrix4fv(projectionMatrix, 1, GL_FALSE, glm::value_ptr(renderer->getProjectionMatrix()));
 
     //CubeMap Texture
     GLint texture0Location = glGetUniformLocation(uiShader->getShaderProgram(), "texture0");
 	glUniform1i(texture0Location, 0);
 
     glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-
 
 }
 

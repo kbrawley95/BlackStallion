@@ -1,7 +1,7 @@
 #ifndef _INPUT_H
 #define _INPUT_H
 
-class Input
+class Input 
 {
     public:
         static void init();

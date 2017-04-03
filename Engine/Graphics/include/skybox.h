@@ -1,33 +1,27 @@
-#ifndef _SKYBOX_H
-#define _SKYBOX_H
+#ifndef _CUBEMAP_H
+#define _CUBEMAP_H
 
 class Skybox : public GameObject
 {
     public:
-        Skybox(std::string name);
-        void initSkybox();
+        Skybox(std::string name, std::vector<std::string>texturePaths, std::vector<GLenum>textureTargets);
+        GLuint loadCubeMap(std::vector<std::string>texturePaths, std::vector<GLenum>textureTargets);
+        void bindCubemapToPipeline(GLuint textureID);
+        GLuint getTextureID();
+
         GLuint generateCubeMap();
-        void render(Camera* mainCamera);
-        void cleanUp();
 
-    private:
-        //Buffer objects
-        GLuint vertexArrayID;
-        GLuint vertexBufferID;
-        GLuint elementsBufferID;
-
-        Shader* skyboxShader;
-
-        Cubemap* cubemap;
-        GLuint cubemapTextureID;
-
-        std::vector<glm::vec3> vertices;
-
-  
-    std::vector<std::string>texturePaths;
-    std::vector<GLenum>textureTargets;
+       
     
+    private:
+        std::vector<std::string>texturePaths;
+        std::vector<GLenum>textureTargets;
+
+        GLuint textureID;
 };
+
+
+
 
 #include "../src/skybox.cpp"
 

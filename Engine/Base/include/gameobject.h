@@ -4,37 +4,22 @@
 class GameObject
 {
     public:
-        GameObject(std::string givenName)
-        {
-            name = givenName;
-            transform = new Transform();
-        }
+        GameObject(std::string givenName);
+        ~GameObject();
 
-        std::string getName()
-        {
-            return name;
-        }
-        void setName(std::string value)
-        {
-            name = value;
-        }
-
-        Transform* getTransform()
-        {
-            return transform;
-        }
-
-        virtual void render()
-        {
-            
-        }
-        virtual void cleanUp()
-        {
-
-        }    
-    private:
+        std::string getName();
+        void setName(std::string value);
+      
+        Transform* getTransform();
+        void addComponent(Component* component);
+        std::vector<Component*> getAttachedComponents();
+        
+    protected:
         std::string name;
         Transform* transform;
+        std::vector<Component*> attached_components;
 };
+
+#include "../src/gameobject.cpp"
 
 #endif

@@ -44,7 +44,7 @@ btMotionState* Rigidbody::getMotion()
     return motion;
 }
 
-void Rigidbody::update(GameObject* gameObject)
+void Rigidbody::update()
 {
     if(mass != 0.0f)
     {

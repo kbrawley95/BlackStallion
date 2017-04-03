@@ -1,7 +1,7 @@
 #ifndef _RIGIDBODY_H
 #define _RIGIDBODY_H
 
-class Rigidbody
+class Rigidbody : public Component
 {
     public:
         Rigidbody(Collider* newCollider, glm::vec3 relativePosition, glm::quat relativeRotation, glm::vec3 relativeScale);
@@ -10,7 +10,7 @@ class Rigidbody
         btRigidBody* getRigidbody();
         btMotionState* getMotion();
 
-        void update(GameObject* gameObject);
+        void update();
         
     private:
         //Collider Type
@@ -31,6 +31,6 @@ class Rigidbody
         
 };
 
-#include "../src/rigidbody.cpp"
+#include "../../Components/src/rigidbody.cpp"
 
 #endif

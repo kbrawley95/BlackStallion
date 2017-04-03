@@ -1,4 +1,4 @@
-OBJModel::OBJModel(std::string name, const char* path, std::string texturepath) : GameObject(name)
+OBJModel::OBJModel(std::string name, const char* path, std::string texturepath)
 {
     texture = new Texture();
     modelShader = new Shader("/textureVS.glsl", "/textureFS.glsl");
@@ -50,21 +50,21 @@ void OBJModel::init()
     Vertex::AttributeInfo();
 }
 
-void OBJModel::render(Camera* mainCamera)
+void OBJModel::render(Camera* renderer)
 {
     glUseProgram(modelShader->getShaderProgram());
 
     //View Matrix
     GLint modelMatrix = glGetUniformLocation(modelShader->getShaderProgram(), "model");
-    glUniformMatrix4fv(modelMatrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(getTransform()->getModelToWorldMatrix())));
+    glUniformMatrix4fv(modelMatrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(gameObject->getTransform()->getModelToWorldMatrix())));
 
     //View Matrix
     GLint viewMatrix = glGetUniformLocation(modelShader->getShaderProgram(), "view");
-    glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->getViewMatrix()));
+    glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(renderer->getViewMatrix()));
 
     //Projection Matrix
     GLint projectionMatrix = glGetUniformLocation(modelShader->getShaderProgram(), "projection");
-    glUniformMatrix4fv(projectionMatrix, 1, GL_FALSE, glm::value_ptr(mainCamera->getProjectionMatrix()));
+    glUniformMatrix4fv(projectionMatrix, 1, GL_FALSE, glm::value_ptr(renderer->getProjectionMatrix()));
 
     //Bind Vertex Array Object to pipeline (Sanity Check)
     glBindTexture(GL_TEXTURE, textureID);

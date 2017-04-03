@@ -10,27 +10,10 @@ class Engine
         int start();
 
     private:
-        //External Class Instances
-        Skybox* skybox;
+        
         Graphics* graphics;
-        Shader* cubeShader;
-        Cubemap* cubemap;
-
         Camera* mainCamera;
         CollisionManager* collisionManager;
-        BoxCollider* boxCollider;
-        Rigidbody* rigidbody;
-
-        GLuint textureID;
-        Texture* texture;
-
-        //Scene Objects
-        std::vector<GameObject>sceneObjects; 
-
-        OBJModel* stall;
-        BoxCollider* stallBoxCollider;
-        Rigidbody* stallRigidbody;
-
 
         //Booleans
         bool isRunning;

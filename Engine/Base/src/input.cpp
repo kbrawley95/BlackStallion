@@ -17,7 +17,7 @@ void Input::checkForControllers()
 
 }
 
-bool Input::update(SDL_Event event)
+bool Input::update(SDL_Event &event)
 {   
     while(SDL_PollEvent(&event))
     {

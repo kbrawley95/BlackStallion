@@ -10,21 +10,22 @@ class CollisionManager
         void update(float &delaTime);
         void cleanUp();
 
-        static void addRigidBodyToWorld(btRigidBody* newRigidbody);
-        btDynamicsWorld* getWorld();
+        static btDynamicsWorld* getWorld();
+        static void addRigidbodyToList(btRigidBody* newBody);
       
+
+    private:
         static btDynamicsWorld* world;
+        static std::vector<btRigidBody*>rigidBodies;
+
         btDispatcher* dispatcher;
         btCollisionConfiguration* collisionConfig;
         btBroadphaseInterface* broadphase;
         btConstraintSolver* solver;
-
-    private:
-        static std::vector<btRigidBody*>rigidBodies;
 };
 
 btDynamicsWorld* CollisionManager::world;
-std::vector<btRigidBody*>CollisionManager::rigidBodies;
+std::vector<btRigidBody*> CollisionManager::rigidBodies;
 
 #include "../src/collision_manager.cpp"
 

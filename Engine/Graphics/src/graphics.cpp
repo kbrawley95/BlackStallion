@@ -10,9 +10,6 @@ Graphics::~Graphics()
 
 void Graphics::initOpenGL()
 {
-    //Enable Backface Culling
-    glCullFace(GL_BACK);
-  
     //Smooth shading
     glShadeModel(GL_SMOOTH);
 
@@ -25,6 +22,8 @@ void Graphics::initOpenGL()
     //Enable depth testing
     glEnable(GL_DEPTH_TEST);
     
+    // //Enable Backface Culling
+    // glCullFace(GL_BACK);
 
     //Specify the depth test to use
     glDepthFunc(GL_LEQUAL);

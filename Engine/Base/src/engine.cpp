@@ -85,39 +85,27 @@ bool Engine::initSDL()
 
 void Engine::initScene()
 {   
-     
-
-    /*======CLASS INSTANTIATION======*/
-    //Skybox Instance
-    skybox = new Skybox("Mountains");
-    skybox->getTransform()->setScale(glm::vec3(200,200,200));
-    
-    //UI Instance
-    ui = new UI("HUD", "assets/fonts/OratorStd.otf", 14, "Health: 100%");
-
-    //Instance of Main Camera
-    mainCamera=new Camera();
-    mainCamera->attached_transform->setPosition(glm::vec3(-0,10,-145));
-    
-    /*======MODEL LOADING=====*/
-    //Model Instance
-    terrain = new OBJModel("Model", "assets/models/stall.obj", "assets/textures/trans.png");
-    terrain->getTransform()->setPosition(glm::vec3(0,0,-200));
-    
     /*======COLLISION MANAGEMENT======*/
     collisionManager = new CollisionManager();
 
-    //Camera Collider
-    boxCollider = new BoxCollider(mainCamera->attached_transform->getPosition());
-    rigidbody = new Rigidbody(boxCollider, 0.0f, mainCamera->attached_transform->getPosition(),
-    mainCamera->attached_transform->getRotation(), mainCamera->attached_transform->getScale()); 
+    /*======SKYBOX======*/
+    //Skybox Instance
+    skybox = new Skybox("Mountains");
     
+    /*======CAMERA======*/
+    mainCamera=new Camera("Camera 1");
+    mainCamera->getTransform()->setPosition(glm::vec3(-0,10,-145));
+    boxCollider = new BoxCollider(mainCamera->getTransform()->getPosition());
+    rigidbody = new Rigidbody(boxCollider,  mainCamera->getTransform()->getPosition(),
+    mainCamera->getTransform()->getRotation(), mainCamera->getTransform()->getScale()); 
     
-
-    //Camera Collider
-    terrainBoxCollider = new BoxCollider(terrain->getTransform()->getPosition());
-    terrainRigidbody = new Rigidbody(terrainBoxCollider, 0.0f, terrain->getTransform()->getPosition(),
-    terrain->getTransform()->getRotation(), terrain->getTransform()->getScale());
+    /*======STALL=====*/
+    //Model Instance
+    stall = new OBJModel("Model", "assets/models/cube.obj", "assets/textures/plain.png");
+    stall->getTransform()->setPosition(glm::vec3(0,0,-200));
+    stallBoxCollider = new BoxCollider(stall->getTransform()->getPosition());
+    stallRigidbody = new Rigidbody(stallBoxCollider, stall->getTransform()->getPosition(),
+    stall->getTransform()->getRotation(), stall->getTransform()->getScale());
 
 }
 
@@ -139,24 +127,16 @@ void Engine::update()
     float sensitivity = 15.0f; 
     mainCamera->update(deltaTime, newSpeed, sensitivity);
 
-    skyboxRotation.y = deltaTime * newSpeed;
-    glm::vec3 newRotation = glm::vec3(0.0f, skyboxRotation.y, 0.0f);
-
-    skybox->getTransform()->rotate(newRotation);
-
     //COLLISION MANAGEMENT
     collisionManager->update(deltaTime);
+    
+    stallRigidbody->update(stall);
     
     //INPUT MANAGEMENT
     if(Input::keys[SDLK_ESCAPE])
     {
         isRunning = false;
     }
-
-    // if(Input::buttons[SDL_CONTROLLER_BUTTON_BACK])
-    // {
-    //     isRunning = false;
-    // }
 
 }
 
@@ -170,20 +150,18 @@ void Engine::render()
     skybox->render(mainCamera);
 
     //Draw rest of scene 
-    terrain->render(mainCamera);
-    ui->render(mainCamera);
+    stall->render(mainCamera);
 
 }
 
 void Engine::cleanUp(SDL_Window* window, SDL_GLContext &glContext) 
 {
-    // collisionManager->cleanUp();
-    ui->cleanUp();
-    terrain->cleanUp();
-    skybox->cleanUp();
-
-    SDL_GL_DeleteContext(glContext);
-    SDL_DestroyWindow(window);
     IMG_Quit();
     SDL_Quit();
+    
+    collisionManager->cleanUp();
+    stall->cleanUp();
+    skybox->cleanUp();
+    SDL_GL_DeleteContext(glContext);
+    SDL_DestroyWindow(window);
 }

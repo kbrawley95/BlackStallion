@@ -7,7 +7,7 @@ class GameObject
         GameObject(std::string givenName)
         {
             name = givenName;
-            attached_transform = new Transform();
+            transform = new Transform();
         }
 
         std::string getName()
@@ -21,10 +21,10 @@ class GameObject
 
         Transform* getTransform()
         {
-            return attached_transform;
+            return transform;
         }
 
-        virtual void render(Camera* mainCamera)
+        virtual void render()
         {
             
         }
@@ -34,7 +34,7 @@ class GameObject
         }    
     private:
         std::string name;
-        Transform* attached_transform;
+        Transform* transform;
 };
 
 #endif

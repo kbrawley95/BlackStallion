@@ -4,19 +4,10 @@
 class BoxCollider : public Collider
 {
     public:
-        BoxCollider(glm::vec3 position) 
+        BoxCollider(glm::vec3 position)
         {
-            box = new btBoxShape(btVector3(position.x, position.y, position.z));
+            shape = new btBoxShape(btVector3(position.x, position.y, position.z));
         }
-
-        ~BoxCollider()
-        {
-            delete box;
-        }
-
-
-    private:
-        btBoxShape* box;
 };
 
 

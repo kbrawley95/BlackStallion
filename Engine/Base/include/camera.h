@@ -1,12 +1,10 @@
 #ifndef _CAMERA_H
 #define _CAMERA_H
 
-class Camera
+class Camera : public GameObject
 {
     public:
-    std::shared_ptr<Transform> attached_transform;
-    
-    Camera();
+    Camera(std::string name);
     ~Camera();
 
     void update(float &deltaTime, float translationSpeed, float mouseSensitivity);

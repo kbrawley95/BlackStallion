@@ -31,6 +31,14 @@ glm::mat4x4 Transform::getModelToWorldMatrix()
     return model_matrix;
 }
 
+void Transform::setModelToWorldMatrix(glm::mat4x4 world_matrix)
+{
+    glm::mat4x4 sca = glm::scale(glm::mat4x4(1.0f), scale);
+    model_matrix = sca * world_matrix;
+    position = glm::vec3(model_matrix[3][0], model_matrix[3][1], model_matrix[3][2]);
+    rotation = glm::quat(model_matrix);
+}
+
 
 glm::vec3 Transform::forward()
 {
@@ -83,17 +91,16 @@ void Transform::setRotation(glm::quat newRot)
 void Transform::setScale(glm::vec3 newScale)
 {
     scale = newScale;
-   
-   createModelToWorldMatrix();
+    createModelToWorldMatrix();
 }
 
 void Transform::rotate(glm::vec3 newRot)
 {
-    glm::quat pitch     = glm::angleAxis(newRot.x, glm::vec3(1, 0, 0));
-    glm::quat yaw       = glm::angleAxis(newRot.y, glm::vec3(0, 1, 0));
-    glm::quat roll      = glm::angleAxis(newRot.z, glm::vec3(0, 0, 1));
+    glm::quat pitch = glm::angleAxis(newRot.x, glm::vec3(1, 0, 0));
+    glm::quat yaw  = glm::angleAxis(newRot.y, glm::vec3(0, 1, 0));
+    glm::quat roll = glm::angleAxis(newRot.z, glm::vec3(0, 0, 1));
     
-    rotation            = yaw * pitch * roll;
+    rotation = yaw * pitch * roll;
     createModelToWorldMatrix();
 }
 

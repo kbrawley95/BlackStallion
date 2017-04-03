@@ -1,7 +1,7 @@
 #ifndef _ENGINE_H 
 #define _ENGINE_H
 
-#include "Common.h"
+#include "../../../Engine/Common.h"
 
 class Engine
 {
@@ -14,8 +14,12 @@ class Engine
         Skybox* skybox;
         Graphics* graphics;
         Shader* cubeShader;
-        Camera* mainCamera;
         Cubemap* cubemap;
+
+        Camera* mainCamera;
+        CollisionManager* collisionManager;
+        BoxCollider* boxCollider;
+        Rigidbody* rigidbody;
 
         GLuint textureID;
         Texture* texture;
@@ -23,30 +27,18 @@ class Engine
         //Scene Objects
         std::vector<GameObject>sceneObjects; 
 
-        OBJModel* terrain;
+        OBJModel* stall;
+        BoxCollider* stallBoxCollider;
+        Rigidbody* stallRigidbody;
 
-        CollisionManager* collisionManager;
-        BoxCollider* boxCollider;
-        Rigidbody* rigidbody;
-
-        BoxCollider* terrainBoxCollider;
-        Rigidbody* terrainRigidbody;
-
-        UI* ui;
 
         //Booleans
-        bool isMoving;
         bool isRunning;
-
-        glm::vec2 skyboxRotation = glm::vec2(0.0f, 0.0f);
 
         //Update Floats
         float currentTime;
         float lastTime;
         float deltaTime;
-
-        float yaw;
-        float pitch;
 
         //Main Loop Method
         SDL_Window* createWindow(const char* windowName);

@@ -17,10 +17,12 @@ class OBJModel : public GameObject
 
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
+        
 
         GLuint VBO = 0;
         GLuint EBO = 0;
         GLuint VAO = 0;
+        
 };
 
 #include "../src/objmodel.cpp"

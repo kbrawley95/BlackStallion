@@ -85,6 +85,9 @@ bool Engine::initSDL()
 
 void Engine::initScene()
 {   
+     
+
+    /*======CLASS INSTANTIATION======*/
     //Skybox Instance
     skybox = new Skybox("Mountains");
     skybox->getTransform()->setScale(glm::vec3(200,200,200));
@@ -94,19 +97,33 @@ void Engine::initScene()
 
     //Instance of Main Camera
     mainCamera=new Camera();
-    mainCamera->attached_transform->setPosition(glm::vec3(-50,70,-145));
+    mainCamera->attached_transform->setPosition(glm::vec3(-0,10,-145));
     
-    // //Collision Management
-    // collisionManager = new CollisionManager();
-    // collisionManager->addRigidBodyToWorld(planeCollider->getRigidbody());
-
+    /*======MODEL LOADING=====*/
     //Model Instance
-    terrain = new OBJModel("Model", "assets/models/rock.obj", "assets/textures/dirt.jpg");
+    terrain = new OBJModel("Model", "assets/models/stall.obj", "assets/textures/trans.png");
     terrain->getTransform()->setPosition(glm::vec3(0,0,-200));
+    
+    /*======COLLISION MANAGEMENT======*/
+    collisionManager = new CollisionManager();
+
+    //Camera Collider
+    boxCollider = new BoxCollider(mainCamera->attached_transform->getPosition());
+    rigidbody = new Rigidbody(boxCollider, 0.0f, mainCamera->attached_transform->getPosition(),
+    mainCamera->attached_transform->getRotation(), mainCamera->attached_transform->getScale()); 
+    
+    
+
+    //Camera Collider
+    terrainBoxCollider = new BoxCollider(terrain->getTransform()->getPosition());
+    terrainRigidbody = new Rigidbody(terrainBoxCollider, 0.0f, terrain->getTransform()->getPosition(),
+    terrain->getTransform()->getRotation(), terrain->getTransform()->getScale());
+
 }
 
 void Engine::eventHandling(SDL_Event event)
 {
+    // Input::checkForControllers();
     Input::update(event);
 }
 
@@ -128,7 +145,7 @@ void Engine::update()
     skybox->getTransform()->rotate(newRotation);
 
     //COLLISION MANAGEMENT
-    // collisionManager->update(deltaTime);
+    collisionManager->update(deltaTime);
     
     //INPUT MANAGEMENT
     if(Input::keys[SDLK_ESCAPE])
@@ -136,8 +153,12 @@ void Engine::update()
         isRunning = false;
     }
 
-}
+    // if(Input::buttons[SDL_CONTROLLER_BUTTON_BACK])
+    // {
+    //     isRunning = false;
+    // }
 
+}
 
 void Engine::render()
 { 
@@ -150,19 +171,16 @@ void Engine::render()
 
     //Draw rest of scene 
     terrain->render(mainCamera);
-    // model->render(mainCamera);
     ui->render(mainCamera);
 
 }
 
 void Engine::cleanUp(SDL_Window* window, SDL_GLContext &glContext) 
 {
-
-    skybox->cleanUp();
-    terrain->cleanUp();
-    // model->cleanUp();
-    ui->cleanUp();
     // collisionManager->cleanUp();
+    ui->cleanUp();
+    terrain->cleanUp();
+    skybox->cleanUp();
 
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);

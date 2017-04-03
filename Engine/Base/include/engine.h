@@ -23,10 +23,14 @@ class Engine
         //Scene Objects
         std::vector<GameObject>sceneObjects; 
 
-        OBJModel* model;
         OBJModel* terrain;
-        // CollisionManager* collisionManager;
-        // PlaneCollider* planeCollider;
+
+        CollisionManager* collisionManager;
+        BoxCollider* boxCollider;
+        Rigidbody* rigidbody;
+
+        BoxCollider* terrainBoxCollider;
+        Rigidbody* terrainRigidbody;
 
         UI* ui;
 

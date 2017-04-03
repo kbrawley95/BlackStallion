@@ -4,14 +4,14 @@
 class Rigidbody
 {
     public:
-        Rigidbody();
+        Rigidbody(Collider* newCollider, float newMass,
+        glm::vec3 relativePosition, glm::quat relativeRotation, glm::vec3 relativeScale);
         ~Rigidbody();
 
         btRigidBody* getRigidbody();
-        btTransform* getTransform();
+        btTransform getTransform();
         btMotionState* getMotion();
-        btRigidBody::btRigidBodyConstructionInfo* getInfo();
-        btVector3* getInertia();
+        btVector3 getInertia();
         
         
     private:
@@ -22,7 +22,7 @@ class Rigidbody
         btRigidBody* rigidbody;
 
         //Transform realtive to Gameobject associated with
-        btTransform* transform;
+        btTransform transform;
         
         //Mass of the GameObject (Simulated by rigidbody)
         float mass;
@@ -30,11 +30,8 @@ class Rigidbody
         //Responsible for enacting forces on the rigidbody
         btMotionState* motion;
 
-        //Info use when creating rigidbody
-        btRigidBody::btRigidBodyConstructionInfo* info;
-
         //Inertia is the resistance to change in state of motion
-        btVector3* inertia;
+        btVector3 inertia;
 
         //Transform values
         btVector3 position;

@@ -3,8 +3,9 @@ OBJModel::OBJModel(std::string name, const char* path, std::string texturepath) 
     texture = new Texture();
     modelShader = new Shader("/textureVS.glsl", "/textureFS.glsl");
     textureID = texture->loadTextureFromFile(texturepath);
-
     IndexedModel model = OBJLoader(path).ToIndexedModel();
+    // ObjStructure model = ObjLoader::LoadObj(path);
+
     if (model.positions.size() == model.texCoords.size() && model.texCoords.size() == model.normals.size())
     {
         const int VERTS_LEN = model.positions.size();
@@ -27,6 +28,8 @@ OBJModel::OBJModel(std::string name, const char* path, std::string texturepath) 
             indices[i] = model.indices[i];
         }
     }
+
+
     init();
 }
 

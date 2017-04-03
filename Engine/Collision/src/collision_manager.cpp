@@ -23,16 +23,16 @@ void CollisionManager::update(float &deltaTime)
 
 void CollisionManager::cleanUp()
 {
+    delete broadphase;
     delete collisionConfig;
     delete dispatcher;
-    delete broadphase;
     delete world;
 }
 
-void CollisionManager::addRigidBodyToWorld(btRigidBody* body)
+void CollisionManager::addRigidBodyToWorld(btRigidBody* newRigidbody)
 {
-    world->addRigidBody(body);
-    rigidBodies.push_back(body);
+    world->addRigidBody(newRigidbody);
+    rigidBodies.push_back(newRigidbody);
 }
 
 btDynamicsWorld* CollisionManager::getWorld()

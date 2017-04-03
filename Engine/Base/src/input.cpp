@@ -1,5 +1,24 @@
+void Input::checkForControllers()
+{ 
+    SDL_GameController* controller = nullptr;
+
+    for(int i=0; i<SDL_NumJoysticks(); i++)
+    {
+        if(SDL_IsGameController(i))
+        {
+            controller = SDL_GameControllerOpen(i);
+            if (controller)
+            {
+                printf("Controller Found: %s\n", SDL_GameControllerName(controller));
+            } 
+            break;
+        }
+    }
+
+}
+
 bool Input::update(SDL_Event event)
-{
+{   
     while(SDL_PollEvent(&event))
     {
         switch(event.type)
@@ -23,6 +42,14 @@ bool Input::update(SDL_Event event)
                 }
                 else
                     inbounds = false;
+                break;
+
+            case SDL_CONTROLLERBUTTONDOWN:
+                buttons[event.cbutton.button]=true;
+                break;
+
+            case SDL_CONTROLLERBUTTONUP:
+                buttons[event.cbutton.button]=false;
                 break;
 
             case SDL_QUIT:

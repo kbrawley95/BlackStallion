@@ -30,6 +30,10 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_opengl.h>
 
+/*========TINY OBJ LOADER=======*/
+
+
+
 /*========BULLET PHYSICS========*/
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
@@ -73,6 +77,7 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 #include "../../Collision/include/collider.h"
 #include "../../Collision/include/plane_collider.h"
 #include "../../Collision/include/box_collider.h"
+#include "../../Collision/include/rigidbody.h"
 
 //Graphics
 #include "../../Graphics/include/graphics.h"
@@ -82,8 +87,9 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 
 //Model Loading
 #include "../../Model Loading/include/objloader.h"
+#include "../../Model Loading/include/objStructure.h"
+// #include "../../Model Loading/include/OBJLoader.h"
 #include "../../Model Loading/include/objmodel.h"
-
 
 
 #endif

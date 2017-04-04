@@ -81,10 +81,10 @@ void OBJModel::render(Camera* renderer)
 
 void OBJModel::cleanUp()
 {
-    glDeleteProgram(modelShader->getShaderProgram());
     glDeleteTextures(1, &textureID);
+    glDeleteProgram(modelShader->getShaderProgram());
 
-    glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &EBO);
     glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
 }

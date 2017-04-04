@@ -9,7 +9,6 @@ class Transform
         ~Transform();
 
         void createModelToWorldMatrix();
-        void setModelToWorldMatrix(glm::mat4x4 world_matrix);
         glm::mat4 getModelToWorldMatrix();
 
         //Translation Vectors

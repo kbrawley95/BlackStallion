@@ -1,7 +1,7 @@
 #ifndef _ENGINE_H 
 #define _ENGINE_H
 
-#include "../../../Engine/Common.h"
+#include "Common.h"
 
 class Engine
 {
@@ -12,16 +12,45 @@ class Engine
     private:
         
         Graphics* graphics;
+<<<<<<< HEAD
         Camera* mainCamera;
         CollisionManager* collisionManager;
+=======
+        Shader* cubeShader;
+        Camera* mainCamera;
+        Cubemap* cubemap;
+
+        GLuint textureID;
+        Texture* texture;
+
+        //Scene Objects
+        std::vector<GameObject>sceneObjects; 
+
+        OBJModel* terrain;
+
+        CollisionManager* collisionManager;
+        BoxCollider* boxCollider;
+        Rigidbody* rigidbody;
+
+        BoxCollider* terrainBoxCollider;
+        Rigidbody* terrainRigidbody;
+
+        UI* ui;
+>>>>>>> parent of 6c7ae85... Bullet Physics
 
         //Booleans
+        bool isMoving;
         bool isRunning;
+
+        glm::vec2 skyboxRotation = glm::vec2(0.0f, 0.0f);
 
         //Update Floats
         float currentTime;
         float lastTime;
         float deltaTime;
+
+        float yaw;
+        float pitch;
 
         //Main Loop Method
         SDL_Window* createWindow(const char* windowName);

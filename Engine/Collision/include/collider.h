@@ -6,7 +6,7 @@ class Collider
     public:
         Collider()
         {
-            
+
         }
         
         ~Collider()

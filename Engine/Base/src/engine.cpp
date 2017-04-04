@@ -85,12 +85,17 @@ bool Engine::initSDL()
 
 void Engine::initScene()
 {   
+<<<<<<< HEAD
 
     /*======COLLISION MANAGEMENT======*/
     collisionManager = new CollisionManager();
+=======
+     
+>>>>>>> parent of 6c7ae85... Bullet Physics
 
-    /*======SKYBOX======*/
+    /*======CLASS INSTANTIATION======*/
     //Skybox Instance
+<<<<<<< HEAD
     Cubemap* cubemap = new Cubemap();
     cubemap->cubemap->addComponent(cubemap);
     Scene::addGameObjectToScene(cubemap->cubemap);
@@ -103,9 +108,21 @@ void Engine::initScene()
     mainCamera->getTransform()->getRotation(), mainCamera->getTransform()->getScale());
     mainCamera->addComponent(rigidbody);
     Scene::addCameraToScene(mainCamera); 
+=======
+    skybox = new Skybox("Mountains");
+    skybox->getTransform()->setScale(glm::vec3(200,200,200));
     
-    /*======STALL=====*/
+    //UI Instance
+    ui = new UI("HUD", "assets/fonts/OratorStd.otf", 14, "Health: 100%");
+
+    //Instance of Main Camera
+    mainCamera=new Camera();
+    mainCamera->attached_transform->setPosition(glm::vec3(-0,10,-145));
+>>>>>>> parent of 6c7ae85... Bullet Physics
+    
+    /*======MODEL LOADING=====*/
     //Model Instance
+<<<<<<< HEAD
     GameObject* stallObj = new GameObject("Stall");
 
     OBJModel* stall = new OBJModel("Model", "assets/models/cube.obj", "assets/textures/plain.png");
@@ -117,6 +134,25 @@ void Engine::initScene()
 
     stallObj->addComponent(stall);
     stallObj->addComponent(stallRigidbody);
+=======
+    terrain = new OBJModel("Model", "assets/models/stall.obj", "assets/textures/trans.png");
+    terrain->getTransform()->setPosition(glm::vec3(0,0,-200));
+    
+    /*======COLLISION MANAGEMENT======*/
+    collisionManager = new CollisionManager();
+
+    //Camera Collider
+    boxCollider = new BoxCollider(mainCamera->attached_transform->getPosition());
+    rigidbody = new Rigidbody(boxCollider, 0.0f, mainCamera->attached_transform->getPosition(),
+    mainCamera->attached_transform->getRotation(), mainCamera->attached_transform->getScale()); 
+    
+    
+
+    //Camera Collider
+    terrainBoxCollider = new BoxCollider(terrain->getTransform()->getPosition());
+    terrainRigidbody = new Rigidbody(terrainBoxCollider, 0.0f, terrain->getTransform()->getPosition(),
+    terrain->getTransform()->getRotation(), terrain->getTransform()->getScale());
+>>>>>>> parent of 6c7ae85... Bullet Physics
 
     Scene::addGameObjectToScene(stallObj);
 }
@@ -139,16 +175,29 @@ void Engine::update()
     float sensitivity = 15.0f; 
     mainCamera->update(deltaTime, newSpeed, sensitivity);
 
+    skyboxRotation.y = deltaTime * newSpeed;
+    glm::vec3 newRotation = glm::vec3(0.0f, skyboxRotation.y, 0.0f);
+
+    skybox->getTransform()->rotate(newRotation);
+
     //COLLISION MANAGEMENT
     collisionManager->update(deltaTime);
     
+<<<<<<< HEAD
     // stallRigidbody->update(stall);
     
+=======
+>>>>>>> parent of 6c7ae85... Bullet Physics
     //INPUT MANAGEMENT
     if(Input::keys[SDLK_ESCAPE])
     {
         isRunning = false;
     }
+
+    // if(Input::buttons[SDL_CONTROLLER_BUTTON_BACK])
+    // {
+    //     isRunning = false;
+    // }
 
 }
 
@@ -158,17 +207,33 @@ void Engine::render()
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+<<<<<<< HEAD
     Scene::render(mainCamera);
+=======
+    //Draw rest of scene 
+    terrain->render(mainCamera);
+    ui->render(mainCamera);
+>>>>>>> parent of 6c7ae85... Bullet Physics
 
 }
 
 void Engine::cleanUp(SDL_Window* window, SDL_GLContext &glContext) 
 {
+<<<<<<< HEAD
     IMG_Quit();
     SDL_Quit();
     
     Scene::cleanUp();
    
+=======
+    // collisionManager->cleanUp();
+    ui->cleanUp();
+    terrain->cleanUp();
+    skybox->cleanUp();
+
+>>>>>>> parent of 6c7ae85... Bullet Physics
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
+    IMG_Quit();
+    SDL_Quit();
 }

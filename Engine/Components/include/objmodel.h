@@ -1,13 +1,13 @@
 #ifndef _OBJMODEL_H
 #define _OBJMODEL_H
 
-class OBJModel : public GameObject
+class OBJModel : public Component
 {
     public:
         OBJModel(std::string name, const char* path, std::string texturepath);
 
         void init();
-        void render(Camera* mainCamera);
+        void render(Camera* renderer);
         void cleanUp();
         
     private:
@@ -17,7 +17,6 @@ class OBJModel : public GameObject
 
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
-        
 
         GLuint VBO = 0;
         GLuint EBO = 0;

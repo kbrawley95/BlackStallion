@@ -30,11 +30,11 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_opengl.h>
 
-/*========OPENAL=======*/
-#include <AL/al.h>
-#include <AL/alc.h>
+/*========TINY OBJ LOADER=======*/
 
-// /*========BULLET PHYSICS========*/
+
+
+/*========BULLET PHYSICS========*/
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 
@@ -61,33 +61,72 @@ const std::string SOUND_PATH = ASSET_PATH + "/sound";
 /*========CLASS HEADERS========*/
 
 //Base
+<<<<<<< HEAD:Engine/common.h
 #include "Base/include/window.h"
 #include "Base/include/vertex.h"
 #include "Base/include/engine.h"
 #include "Base/include/transform.h"
 #include "Base/include/input.h"
+#include "Base/include/component.h"
 #include "Base/include/gameobject.h"
 #include "Base/include/camera.h"
+#include "Base/include/light.h"
+#include "Base/include/scene.h"
 #include "Base/include/shader.h"
-#include "Base/include/texture.h"
-#include "Base/include/ui.h"
+// #include "Base/include/ui.h"
+
+//Graphics
+#include "Graphics/include/texture.h"
+#include "Graphics/include/cube.h"
+#include "Graphics/include/graphics.h"
+#include "Graphics/include/skybox.h"
+#include "Graphics/include/cubemap.h"
 
 //Collision
 #include "Collision/include/collision_manager.h"
 #include "Collision/include/collider.h"
 #include "Collision/include/plane_collider.h"
 #include "Collision/include/box_collider.h"
-#include "Collision/include/rigidbody.h"
-
-//Graphics
-#include "Graphics/include/graphics.h"
-#include "Graphics/include/cubemap.h"
-#include "Graphics/include/cube.h"
-#include "Graphics/include/skybox.h"
 
 //Model Loading
 #include "Model Loading/include/objloader.h"
-#include "Model Loading/include/objmodel.h"
+
+//Components
+#include "Components/include/objmodel.h"
+#include "Components/include/rigidbody.h"
+
+
+=======
+#include "window.h"
+#include "vertex.h"
+#include "engine.h"
+#include "transform.h"
+#include "input.h"
+#include "camera.h"
+#include "gameobject.h"
+#include "shader.h"
+#include "texture.h"
+#include "ui.h"
+
+//Collision
+#include "../../Collision/include/collision_manager.h"
+#include "../../Collision/include/collider.h"
+#include "../../Collision/include/plane_collider.h"
+#include "../../Collision/include/box_collider.h"
+#include "../../Collision/include/rigidbody.h"
+
+//Graphics
+#include "../../Graphics/include/graphics.h"
+#include "../../Graphics/include/cubemap.h"
+#include "../../Graphics/include/cube.h"
+#include "../../Graphics/include/skybox.h"
+
+//Model Loading
+#include "../../Model Loading/include/objloader.h"
+#include "../../Model Loading/include/objStructure.h"
+// #include "../../Model Loading/include/OBJLoader.h"
+#include "../../Model Loading/include/objmodel.h"
+>>>>>>> parent of 6c7ae85... Bullet Physics:Engine/Base/include/common.h
 
 
 #endif

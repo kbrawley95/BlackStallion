@@ -4,10 +4,26 @@
 class GameObject
 {
     public:
+<<<<<<< HEAD
+        GameObject(std::string givenName);
+        ~GameObject();
+
+        std::string getName();
+        void setName(std::string value);
+      
+        Transform* getTransform();
+        void addComponent(Component* component);
+        std::vector<Component*> getAttachedComponents();
+        
+    protected:
+        std::string name;
+        Transform* transform;
+        std::vector<Component*> attached_components;
+=======
         GameObject(std::string givenName)
         {
             name = givenName;
-            transform = new Transform();
+            attached_transform = new Transform();
         }
 
         std::string getName()
@@ -21,10 +37,10 @@ class GameObject
 
         Transform* getTransform()
         {
-            return transform;
+            return attached_transform;
         }
 
-        virtual void render()
+        virtual void render(Camera* mainCamera)
         {
             
         }
@@ -34,7 +50,10 @@ class GameObject
         }    
     private:
         std::string name;
-        Transform* transform;
+        Transform* attached_transform;
+>>>>>>> parent of 6c7ae85... Bullet Physics
 };
+
+#include "../src/gameobject.cpp"
 
 #endif

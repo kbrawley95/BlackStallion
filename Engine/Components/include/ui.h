@@ -1,12 +1,12 @@
 #ifndef _UI_H
 #define _UI_H
 
-class UI : public GameObject
+class UI : public Component
 {
     public:
         UI(std::string name, std::string filepath, int fontSize, std::string caption);
         void init();
-        void render(Camera* mainCamera);
+        void render(Camera* renderer);
         void cleanUp();
 
     private:

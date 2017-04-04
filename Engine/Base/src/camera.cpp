@@ -32,20 +32,29 @@ void Camera::move(float &speed, float &deltaTime)
     /*================KEYBOARD INPUT================*/
     //SDL_Log("Left");
     if(Input::keys[SDLK_a])
+    {
         position += (getTransform()->right() * deltaTime * speed);
+    }
 
     //SDL_Log("Right");
     if(Input::keys[SDLK_d])
+    {
         position -= (getTransform()->right() * deltaTime * speed);
+    }
 
     //SDL_Log("Up");
     if(Input::keys[SDLK_w])
+    {
         position += (getTransform()->forward() * deltaTime * speed);
+    }
 
     //SDL_Log("Down");
     if(Input::keys[SDLK_s])
+    {
         position -= (getTransform()->forward() * deltaTime * speed);
+    }
 
+    getTransform()->setPosition(position);
 
     // /*================CONTROLLER INPUT================*/
     // if(Input::buttons[SDL_CONTROLLER_BUTTON_DPAD_LEFT])
@@ -62,7 +71,6 @@ void Camera::move(float &speed, float &deltaTime)
 
 
     // std::cout << glm::to_string(position) << std::endl;
-    getTransform()->setPosition(position);
 }
 
 void Camera::look(float &deltaTime, float sensitivity)
@@ -72,9 +80,9 @@ void Camera::look(float &deltaTime, float sensitivity)
     rotation.x -= Input::mouseDelta.y * deltaTime * sensitivity;
     rotation.y += Input::mouseDelta.x * deltaTime * sensitivity; 
 
+    glm::vec3 newRotation = glm::vec3(rotation.x, rotation.y, 0.0f);
     // std::cout<<"Rotation : "<<rotation.x<< ","<<rotation.y<<std::endl;
 
-    glm::vec3 newRotation = glm::vec3(rotation.x, rotation.y, 0.0f);
     getTransform()->rotate(newRotation);
 
     Input::mousePosition = glm::vec2(Input::xPos, Input::yPos);

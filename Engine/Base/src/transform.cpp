@@ -33,8 +33,8 @@ glm::mat4x4 Transform::getModelToWorldMatrix()
 
 void Transform::setModelToWorldMatrix(glm::mat4x4 world_matrix)
 {
-    glm::mat4x4 sca = glm::scale(glm::mat4x4(1.0f), scale);
-    model_matrix = sca * world_matrix;
+    glm::mat4x4 scale_matrix = glm::scale(glm::mat4x4(1.0f), scale);
+    model_matrix = scale_matrix * world_matrix;
     position = glm::vec3(model_matrix[3][0], model_matrix[3][1], model_matrix[3][2]);
     rotation = glm::quat(model_matrix);
 }
